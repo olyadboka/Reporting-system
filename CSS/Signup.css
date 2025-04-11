@@ -1,0 +1,120 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  background: linear-gradient(
+      to right,
+      rgba(50, 49, 49, 1),
+      rgba(128, 128, 128, 0.3)
+    ),
+    url("../images/e.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.signup-box {
+  background-color: blueviolet;
+  height: fit-content;
+  width: 600px;
+  background: linear-gradient(
+      to right,
+      rgba(50, 49, 49, 1),
+      rgba(128, 128, 128, 0.3)
+    ),
+    url("../images/e.jpg");
+  background-size: cover;
+  background-position: center;
+  margin-top: 3rem;
+  box-shadow: 0px 0px 10px #ffff;
+  border-radius: 2rem;
+  padding: 2rem;
+  color: #f8f8f8;
+  margin: 2rem;
+}
+
+.header {
+  text-align: center;
+  font-weight: bold;
+  /* color: #645bff; */
+}
+
+table tr td {
+  padding: 1rem;
+  font-weight: 600;
+}
+
+input:not([type="radio"]):not([type="submit"]) {
+  padding: 0.5rem;
+  border-radius: 10px;
+  width: 15rem;
+
+  outline: none;
+  border: 1px #645bff;
+}
+
+button {
+  --primary-color: #645bff;
+  --secondary-color: #fff;
+  --hover-color: #111;
+  --arrow-width: 10px;
+  --arrow-stroke: 2px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 20px;
+  color: var(--secondary-color);
+  padding: 1em 1.8em;
+  background: var(--primary-color);
+  display: flex;
+  transition: 0.2s background;
+  align-items: center;
+  gap: 0.6em;
+  font-weight: bold;
+}
+
+button .arrow-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button .arrow {
+  margin-top: 1px;
+  width: var(--arrow-width);
+  background: var(--primary-color);
+  height: var(--arrow-stroke);
+  position: relative;
+  transition: 0.2s;
+}
+
+button .arrow::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  border: solid var(--secondary-color);
+  border-width: 0 var(--arrow-stroke) var(--arrow-stroke) 0;
+  display: inline-block;
+  top: -3px;
+  right: 3px;
+  transition: 0.2s;
+  padding: 3px;
+  transform: rotate(-45deg);
+}
+
+button:hover {
+  background-color: var(--hover-color);
+}
+
+button:hover .arrow {
+  background: var(--secondary-color);
+}
+
+button:hover .arrow:before {
+  right: 0;
+}

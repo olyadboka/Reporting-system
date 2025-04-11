@@ -1,0 +1,69 @@
+body {
+  background-color: #f8f9fa;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 600px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+h1 {
+  text-align: center;
+  color: #007bff;
+  /* font-variant: small-caps; */
+  font-weight: 700;
+  margin-bottom: 8rem;
+}
+
+.form-control,
+.form-select {
+  font-size: 1.1rem;
+  padding: 10px;
+}
+
+button {
+  width: 100%;
+  font-size: 1.2rem;
+}
+
+.required::after {
+  content: "*";
+  color: orangered;
+  font-size: medium;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+table tr td {
+  padding: 1rem;
+}
+
+table tr td input {
+  padding: 1rem;
+  border-radius: 1rem;
+  outline: none;
+  border: none;
+  background-color: aliceblue;
+  width: 15rem;
+}

@@ -1,0 +1,44 @@
+/* ====== footer ===========  */
+footer {
+  background-color: #14141f;
+  color: #fff;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  grid-template-rows: repeat(6, auto);
+  text-align: center;
+  padding: 2rem;
+  width: 100vw;
+}
+.footer-top .kebele {
+  padding: 2rem;
+}
+
+.footer-top .contact {
+  padding: 2rem;
+}
+.kebele p a {
+  padding: 10px;
+  margin: 10px;
+  text-decoration: none;
+  color: #fff;
+}
+.footer-top .galary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 1rem;
+  margin-top: 2rem;
+}
+
+.footer-top .galary img {
+  margin: none;
+  border: 5px solid #fff;
+  border-radius: 5px;
+}
+
+.footer-top .newsletter {
+  padding: 2rem;
+}

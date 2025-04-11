@@ -1,0 +1,126 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Layout */
+body {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 270px;
+  background-color: #0e1c36;
+  padding: 2rem 1.5rem;
+  color: #fff;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-title {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: #f1c40f;
+  text-align: center;
+}
+
+.menu-container ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.menu-container ul li a {
+  color: #f8f8f8;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  display: block;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.menu-container ul li a:hover {
+  background-color: #1e3b68;
+  transform: translateX(5px);
+}
+
+/* Main content wrapper */
+.main-content {
+  margin-left: 270px;
+  width: calc(100% - 270px);
+  min-height: 100vh;
+}
+
+/* Profile Bar */
+.profile-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profile-pic {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid #0e1c36;
+}
+
+.admin-name {
+  font-size: 1rem;
+  color: #2c3e50;
+  margin-bottom: 2px;
+}
+
+.admin-role {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.logout-btn {
+  background-color: #e74c3c;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #c0392b;
+}
+
+/* Main Dashboard Section */
+.dashboard-content {
+  padding: 2rem;
+}
+
+.dashboard-content h1 {
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.dashboard-content p {
+  font-size: 1.1rem;
+  color: #555;
+}
