@@ -93,7 +93,7 @@
         <ul class="navbar-list">
 
           <li class="navbar-item">
-            <a href="#home" class="navbar-link hover-underline active">
+            <a href="../Hermata home/index.php" class="navbar-link hover-underline active">
               <div class="separator"></div>
 
               <span class="span">Home</span>

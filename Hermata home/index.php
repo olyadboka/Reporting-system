@@ -98,7 +98,7 @@
           <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
         </div>
 
-        <span class="span">www.Hermata Mentina Kebele@gamil.com</span>
+        <span class="span">www.Hermata Mentina Kebele@gmail.com</span>
       </a>
 
     </div>
@@ -126,15 +126,15 @@
         </button>
 
         <a href="#" class="logo">
-          <img src="./assets/images/logo.svg" width="160" height="50" alt="Grilli - Home">
+          <img src="./assets/img/Flag_of_Ethiopia.svg" width="160" height="50" alt="Ethiopia - Home">
+          <h2>Hermata-Mentina </h2>
         </a>
 
-        <ul class="navbar-list">
 
+        <ul class="navbar-list">
           <li class="navbar-item">
             <a href="#home" class="navbar-link hover-underline active">
               <div class="separator"></div>
-
               <span class="span">Home</span>
             </a>
           </li>
@@ -142,7 +142,6 @@
           <li class="navbar-item">
             <a href="#menu" class="navbar-link hover-underline">
               <div class="separator"></div>
-
               <span class="spans" id="spansss">objectives</span>
             </a>
           </li>
@@ -150,7 +149,6 @@
           <li class="navbar-item">
             <a href="#about" class="navbar-link hover-underline">
               <div class="separator"></div>
-
               <span class="span">About Us</span>
             </a>
           </li>
@@ -158,29 +156,24 @@
           <li class="navbar-item">
             <a href="#" class="navbar-link hover-underline">
               <div class="separator"></div>
-
-              <span class="span" id="rep">About Represntative</span>
+              <span class="span" id="rep">About Representative</span>
             </a>
           </li>
 
           <li class="navbar-item">
             <a href="#" class="navbar-link hover-underline">
               <div class="separator"></div>
-
               <span class="span" id="contactsss">Contact</span>
             </a>
           </li>
-          <li class="navbar-item">
-            <a href="#" class="navbar-link hover-underline">
-              <div class="separator"></div>
 
-              <span class="span" id="reports"><a href="../report.php" class="report-link">Report Now</a></span>
+          <li class="navbar-item">
+            <a href="../report.php" class="navbar-link hover-underline report-link">
+              <div class="separator"></div>
+              <span class="span" id="reports">Report Now</span>
             </a>
           </li>
-
-
         </ul>
-
         <div class="text-center">
           <p class="headline-1 navbar-title">Visit Us</p>
 
