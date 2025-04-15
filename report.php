@@ -2,7 +2,22 @@
 session_start();
 include "./reportDB/dbconnection.php";
 
-$sql = "SELECT * FROM reports";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $reportId = intval($_POST['report_id']);
+    $newCount = intval($_POST['new_count']);
+
+    $sql = "UPDATE reports SET count = ? WHERE report_id = ?";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "ii", $newCount, $reportId);
+
+    if (mysqli_stmt_execute($stmt)) {
+        echo json_encode(['success' => true]);
+    } else {
+        echo json_encode(['success' => false, 'error' => mysqli_error($con)]);
+    }
+}
+
+$sql = "SELECT * FROM reports ORDER BY created_at DESC";
 $result = mysqli_query($con, $sql);
 
 $reports = [];
@@ -34,7 +49,7 @@ if ($result) {
 
     <div class="header--text">
       <h1>Welcome to Report Page</h1>
-      <a href="#" class="report-now">Report Now</a>
+      <a href="./Report/reportForm.php" class="report-now">Report Now</a>
     </div>
   </div>
 
@@ -58,22 +73,35 @@ if ($result) {
             <p>Description: <?php echo htmlspecialchars($report['description']); ?></p>
           </div>
           <div class="hidden-details" id="report-images">
-            <?php 
+            <?php
+    $imageData = $report['image_url']; 
+    
+    if (!empty($imageData)) {
+        try {
        
-        $imageData = $report['image_url'];
-        
-        
-        if (!empty($imageData)) {
-            echo '<img src="data:image/*;base64,' . htmlspecialchars($imageData) . '" alt="Report Image">';
-        } else {
-            echo '<p>No image available.</p>';
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mime = $finfo->buffer($imageData);
+            
+            if (strpos($mime, 'image/') === 0) {
+            
+                $base64 = base64_encode($imageData);
+                echo '<img src="data:'.$mime.';base64,'.$base64.'" 
+                     alt="Report Image" style="max-width: 100%; height: auto;">';
+            } else {
+                echo '<p>Invalid image format. Detected type: '.htmlspecialchars($mime).'</p>';
+            }
+        } catch (Exception $e) {
+            echo '<p>Error displaying image: '.htmlspecialchars($e->getMessage()).'</p>';
         }
+    } else {
+        echo '<p>No image available.</p>';
+    }
     ?>
-
           </div>
           <div class="post-box--buttons">
             <button class="btn1 btn btn-primary" name="more" id="more">More</button>
-            <button class="btn1 btn btn-danger" name="consider">Consider</button>
+            <button class="btn1 btn btn-danger" name="consider"
+              data-report-id="<?php echo htmlspecialchars($report['report_id']); ?>">Consider</button>
           </div>
           <div class="post-box--top-right">
             <p class="btn btn-danger" name="count"><?php echo htmlspecialchars($report['count']); ?></p>
@@ -177,7 +205,7 @@ if ($result) {
             <p class="card-text">Easily report community issues and concerns to local authorities for quick
               resolution.
             </p>
-            <t href="#" class="btn btn-primary">Submit Report</t>
+            <t href="./Report/reportForm.php" class="btn btn-primary">Submit Report</t>
           </div>
         </div>
       </div>

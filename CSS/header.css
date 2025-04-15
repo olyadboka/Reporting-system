@@ -566,3 +566,20 @@ ol {
     font-size: 1rem;
   }
 }
+.nav-open-btn {
+  padding: 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (min-width: 992px) {
+  .nav-open-btn {
+    display: none;
+  }
+}

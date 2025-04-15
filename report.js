@@ -24,8 +24,31 @@ considers.forEach((consider, index) => {
       i--;
       counts[index].innerHTML = i;
     }
+
+    // Send the updated count to the server
+    const reportId = consider.dataset.reportId; // Ensure this is set in the HTML
+    updateCountInDatabase(reportId, i);
   });
 });
+
+function updateCountInDatabase(reportId, newCount) {
+  fetch("./report.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `report_id=${reportId}&new_count=${newCount}`,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (!data.success) {
+        console.error("Failed to update count:", data.error);
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
 
 moreButtons.forEach((more) => {
   more.addEventListener("click", function () {
@@ -54,3 +77,5 @@ links.forEach((link) => {
     this.classList.add("active");
   });
 });
+
+//for mostly viewed

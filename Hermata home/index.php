@@ -184,7 +184,7 @@
 
           <p class="body-4 navbar-text">Open: 8:30 am - 5.30pm</p>
 
-          <a href="mailto:booking@grilli.com" class="body-4 sidebar-link">hermatamentina@keble.org</a>
+          <a href="mailto:booking@gnail.com" class="body-4 sidebar-link">hermata-mentina@keble.org</a>
 
           <div class="separator"></div>
 
