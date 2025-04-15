@@ -15,6 +15,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo json_encode(['success' => false, 'error' => mysqli_error($con)]);
     }
+    
+    $isConsidered = intval($_POST['is_considered']);
+
+    $sqlconsidered = "UPDATE reports SET count = ?, is_considered = ? WHERE report_id = ?";
+    $stmt = mysqli_prepare($con, 
+    $sqlconsidered);
+    mysqli_stmt_bind_param($stmt, "iii", $newCount, $isConsidered, $reportId);
+
+    if (mysqli_stmt_execute($stmt)) {
+        echo json_encode(['success' => true]);
+    } else {
+        echo json_encode(['success' => false, 'error' => mysqli_error($con)]);
+    }
 }
 
 $sql = "SELECT * FROM reports ORDER BY created_at DESC";
@@ -100,8 +113,10 @@ if ($result) {
           </div>
           <div class="post-box--buttons">
             <button class="btn1 btn btn-primary" name="more" id="more">More</button>
-            <button class="btn1 btn btn-danger" name="consider"
-              data-report-id="<?php echo htmlspecialchars($report['report_id']); ?>">Consider</button>
+            <button class="btn1 btn <?php echo $report['is_considered'] ? 'btn-secondary considered' : 'btn-danger'; ?>"
+              name="consider" data-report-id="<?php echo htmlspecialchars($report['report_id']); ?>">
+              <?php echo $report['is_considered'] ? 'Considered' : 'Consider'; ?>
+            </button>
           </div>
           <div class="post-box--top-right">
             <p class="btn btn-danger" name="count"><?php echo htmlspecialchars($report['count']); ?></p>
@@ -420,6 +435,10 @@ if ($result) {
           if (category === "Reports") {
             box.style.display = "block";
           } else if (category === "Most Viewed" && count > 100) {
+
+
+
+
             box.style.display = "block";
           } else if (category === "Answered" && count > 50 && count <= 100) {
             box.style.display = "block";

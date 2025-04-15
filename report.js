@@ -6,8 +6,18 @@ const reportImage = document.getElementById("report-images");
 considers.forEach((consider, index) => {
   let i = parseInt(counts[index].innerHTML) || 0;
 
+  // Check initial state from the button's class
+  if (consider.classList.contains("considered")) {
+    consider.innerHTML = "Considered";
+    consider.classList.remove("btn-danger");
+    consider.classList.add("btn-secondary");
+  }
+
   consider.addEventListener("click", function () {
+    const reportId = consider.dataset.reportId; // Ensure this is set in the HTML
+
     if (!consider.classList.contains("considered")) {
+      // Mark as considered
       consider.classList.add("considered");
       consider.classList.remove("btn-danger");
       consider.classList.add("btn-secondary");
@@ -15,7 +25,11 @@ considers.forEach((consider, index) => {
 
       i++;
       counts[index].innerHTML = i;
+
+      // Update the server
+      updateConsiderState(reportId, i, true);
     } else {
+      // Unmark as considered
       consider.classList.remove("considered");
       consider.classList.remove("btn-secondary");
       consider.classList.add("btn-danger");
@@ -23,26 +37,27 @@ considers.forEach((consider, index) => {
 
       i--;
       counts[index].innerHTML = i;
-    }
 
-    // Send the updated count to the server
-    const reportId = consider.dataset.reportId; // Ensure this is set in the HTML
-    updateCountInDatabase(reportId, i);
+      // Update the server
+      updateConsiderState(reportId, i, false);
+    }
   });
 });
 
-function updateCountInDatabase(reportId, newCount) {
+function updateConsiderState(reportId, newCount, isConsidered) {
   fetch("./report.php", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: `report_id=${reportId}&new_count=${newCount}`,
+    body: `report_id=${reportId}&new_count=${newCount}&is_considered=${
+      isConsidered ? 1 : 0
+    }`,
   })
     .then((response) => response.json())
     .then((data) => {
       if (!data.success) {
-        console.error("Failed to update count:", data.error);
+        console.error("Failed to update consider state:", data.error);
       }
     })
     .catch((error) => {
