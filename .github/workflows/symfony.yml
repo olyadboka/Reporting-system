@@ -1,0 +1,58 @@
+name: Symfony Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  symfony-tests:
+    name: Symfony Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Set up PHP
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite
+          coverage: none
+          tools: composer:v2
+
+      # Checkout code
+      - uses: actions/checkout@v4
+
+      # Create .env.test.local if it doesn't exist
+      - name: Prepare environment file
+        run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
+
+      # Cache Composer dependencies
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      # Install dependencies
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest --no-interaction
+
+      # Create database directory and file
+      - name: Initialize SQLite database
+        run: |
+          mkdir -p var/data
+          touch var/data/test.db
+
+      # Run PHPUnit tests
+      - name: Run PHPUnit tests
+        env:
+          APP_ENV: test
+          DATABASE_URL: "sqlite:///%kernel.project_dir%/var/data/test.db"
+        run: vendor/bin/phpunit
