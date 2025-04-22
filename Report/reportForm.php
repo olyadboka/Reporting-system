@@ -103,7 +103,7 @@
 
   <div class="mb-3">
     <label class="form-label required" id="uploadImagesLabel">Upload Images</label>
-    <input class="form-control" type="file" id="images" name="images" multiple>
+    <input type="file" name="images[]" id="images" accept="image/*" multiple>
     <p class="error-images"></p>
   </div>
   <div class="mb-3">

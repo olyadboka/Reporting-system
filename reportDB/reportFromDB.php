@@ -15,21 +15,47 @@ $_SESSION["user_id"]= 1;
     $specificIssue = mysqli_real_escape_string($con, $_POST["SpecificIssue"]);
     $location = $_POST["reporter_address"];
     $created_at = date("Y-m-d H:i:s");
-    $count = 1;
+    $count = 0;
     $priority = "medium";
     $status = "Under Review";
 
     // File uploads handling
-    $images = $videos = $files = null;
-    if (!empty($_FILES['images']['tmp_name'])) {
-        $images = file_get_contents($_FILES['images']['tmp_name']);
+  
+    
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $uploadedImages = [];
+        $uploadDir = 'uploads/'; // Directory to store images
+    
+        // Ensure the directory exists
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+    
+        // Handle uploaded images
+        foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
+            if ($key < 4 && is_uploaded_file($tmpName)) { // Limit to 4 images
+                $fileName = basename($_FILES['images']['name'][$key]);
+                $targetFile = $uploadDir . uniqid() . '_' . $fileName;
+    
+                if (move_uploaded_file($tmpName, $targetFile)) {
+                    $uploadedImages[] = $targetFile;
+                }
+            }
+        }
+    
+        // Store image paths in the database
+        $imageUrls = json_encode($uploadedImages); // Use JSON to store multiple paths
+        $sql = "INSERT INTO reports (image_url) VALUES (?)";
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "s", $imageUrls);
+    
+        if (mysqli_stmt_execute($stmt)) {
+            echo "Report submitted successfully!";
+        } else {
+            echo "Error: " . mysqli_error($con);
+        }
     }
-    if (!empty($_FILES['videos']['tmp_name'])) {
-        $videos = file_get_contents($_FILES['videos']['tmp_name']);
-    }
-    if (!empty($_FILES['file']['tmp_name'])) {
-        $files = file_get_contents($_FILES['file']['tmp_name']);
-    }
+    
 
 
     $sql = "INSERT INTO reports (user_id, category, description, location, image_url, status, priority, created_at, count) 

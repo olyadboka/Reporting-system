@@ -30,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$sql = "SELECT * FROM reports ORDER BY created_at DESC";
-$result = mysqli_query($con, $sql);
+$sqlDis = "SELECT * FROM reports ORDER BY created_at DESC";
+$result = mysqli_query($con, $sqlDis);
 
 $reports = [];
 
@@ -87,29 +87,16 @@ if ($result) {
           </div>
           <div class="hidden-details" id="report-images">
             <?php
-    $imageData = $report['image_url']; 
-    
-    if (!empty($imageData)) {
-        try {
-       
-            $finfo = new finfo(FILEINFO_MIME_TYPE);
-            $mime = $finfo->buffer($imageData);
-            
-            if (strpos($mime, 'image/') === 0) {
-            
-                $base64 = base64_encode($imageData);
-                echo '<img src="data:'.$mime.';base64,'.$base64.'" 
-                     alt="Report Image" style="max-width: 100%; height: auto;">';
-            } else {
-                echo '<p>Invalid image format. Detected type: '.htmlspecialchars($mime).'</p>';
-            }
-        } catch (Exception $e) {
-            echo '<p>Error displaying image: '.htmlspecialchars($e->getMessage()).'</p>';
-        }
-    } else {
-        echo '<p>No image available.</p>';
-    }
-    ?>
+  $imageUrls = json_decode($report['image_url'], true); // Decode JSON to array
+
+  if (!empty($imageUrls)) {
+      foreach ($imageUrls as $imageUrl) {
+          echo '<img src="' . htmlspecialchars($imageUrl) . '" alt="Report Image" style="max-width: 100%; height: auto; display: none;">';
+      }
+  } else {
+      echo '<p>No images available.</p>';
+  }
+  ?>
           </div>
           <div class="post-box--buttons">
             <button class="btn1 btn btn-primary" name="more" id="more">More</button>

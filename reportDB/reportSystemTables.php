@@ -75,9 +75,14 @@ CREATE TABLE report_status_history (
 ";
 
 $sqll =  "ALTER TABLE reports ADD COLUMN is_considered TINYINT(1) DEFAULT 0";
+$sql2 = "ALTER TABLE reports 
+ADD COLUMN image_url_1 VARCHAR(255),
+ADD COLUMN image_url_2 VARCHAR(255),
+ADD COLUMN image_url_3 VARCHAR(255),
+ADD COLUMN image_url_4 VARCHAR(255)";
 
 
-if (mysqli_multi_query($con, $sqll)) {
+if (mysqli_multi_query($con, $sql2)) {
     echo "Tables created successfully.";
 } else {
     echo "Error creating tables: " . mysqli_error($con);
