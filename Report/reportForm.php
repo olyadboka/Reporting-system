@@ -1,3 +1,11 @@
+<?php
+session_start();
+if(!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
+  header("Location: ../login/login.php");
+  exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,20 +40,23 @@
           <td>
             <div class="name"></div> <label class="form-label required" id="reporter">Name</label>
           </td>
-          <td> <input type="text" name="reporter_name" id="reporter_name" class="reporter-name">
+          <td> <input type="text" name="reporter_name" id="reporter_name" class="reporter-name"
+              value="<?php echo $_SESSION['user_name'];?>" disabled>
 
   </div>
+
   </td>
   </tr>
   <tr>
 
     <td>
-      <div class="name"></div> <label class="form-label required" id="reporter-id">ID</label>
+      <div class="id"></div> <label class="form-label required" id="reporter-id">ID</label>
     </td>
-    <td> <input type="text" name="reporter-id" id="reporter-id" class="reporter-id">
+    <td> <input type="text" name="reporter-id" id="reporter-id" class="reporter-id"
+        value="<?php echo strtoupper($_SESSION['user_id']);?>" disabled>
 
       </div>
-      <p class="error-id"></p>
+
     </td>
   </tr>
 
@@ -54,10 +65,10 @@
   <tr>
 
     <td>
-      <div class="name"></div> <label class="form-label required" id="address">Address</label>
+      <div class="name"></div> <label class="form-label required" id="address" vlaue="Hermata metina">Address</label>
     </td>
     <td>
-      <input type="text" name="reporter_address" id="reporter_address">
+      <input type="text" name="reporter_address" id="reporter_address" disabled value="HERMATA MENINA">
 
       </div>
       <p class="error-address"></p>
