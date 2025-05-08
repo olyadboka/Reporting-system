@@ -30,7 +30,7 @@ $result = $conn->query($sql);
         }
 
         nav {
-            background-color: #4caf50;
+            background-color: rgb(22, 69, 255);
             color: white;
             padding: 10px 20px;
             display: flex;
@@ -68,7 +68,7 @@ $result = $conn->query($sql);
         }
 
         table th {
-            background-color: #4caf50;
+            background-color: rgb(22, 69, 255);
             color: white;
         }
 
@@ -93,7 +93,7 @@ $result = $conn->query($sql);
         }
 
         a {
-            color: #4caf50;
+            color: rgb(22, 69, 255);
             text-decoration: none;
         }
 
