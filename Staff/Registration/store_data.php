@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root"; 
 $password = ""; 
-$dbname = "registration_db"; 
+$dbname = "hmreportsystem"; 
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -11,7 +11,16 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$residence_id = random_int(100000, 999999);
+// Generate a unique residence_id
+do {
+    $residence_id = random_int(100000, 999999);
+    $check_sql = "SELECT COUNT(*) AS count FROM users WHERE residence_id = ?";
+    $check_stmt = $conn->prepare($check_sql);
+    $check_stmt->bind_param("s", $residence_id);
+    $check_stmt->execute();
+    $check_result = $check_stmt->get_result();
+    $row = $check_result->fetch_assoc();
+} while ($row['count'] > 0); // Repeat until a unique ID is found
 
 $fname = $_POST['fname'];
 $mname = $_POST['mname'];
