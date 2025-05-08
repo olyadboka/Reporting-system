@@ -12,7 +12,7 @@ if ($conn->connect_error) {
 }
 
 // Fetch reports from the database
-$sql = "SELECT report_id, user_id, category, description, location, status, priority, created_at FROM reports";
+$sql = "SELECT report_id, user_id, category, description, location, status, priority, created_at, images FROM reports";
 $result = $conn->query($sql);
 ?>
 
@@ -37,6 +37,21 @@ $result = $conn->query($sql);
                     <p><strong>Status:</strong> <?php echo ucfirst($row['status']); ?></p>
                     <p><strong>Priority:</strong> <?php echo ucfirst($row['priority']); ?></p>
                     <p><strong>Created At:</strong> <?php echo $row['created_at']; ?></p>
+                    
+                    <!-- Display attached images -->
+                    <?php if (!empty($row['images'])): ?>
+                        <div class="report-images">
+                            <?php 
+                            // Decode the BLOB data and display as base64 images
+                            $images = explode(',', $row['images']); // Assuming multiple images are stored as comma-separated BLOBs
+                            foreach ($images as $imageBlob): ?>
+                                <img src="data:image/jpeg;base64,<?php echo base64_encode($imageBlob); ?>" alt="Report Image" class="report-image">
+                            <?php endforeach; ?>
+                        </div>
+                    <?php else: ?>
+                        <p>No images attached.</p>
+                    <?php endif; ?>
+
                     <div class="actions">
                         <form action="process.php" method="POST">
                             <input type="hidden" name="report_id" value="<?php echo $row['report_id']; ?>">
