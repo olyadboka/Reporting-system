@@ -201,7 +201,7 @@
   <body>
     <nav>
       <h3>User Registration</h3>
-      <a href="#">Registered User List</a>
+      <a href="registered_users.php">Registered User List</a>
     </nav>
     <div class="header">
       <h3>Hermata Mentina Residents Registration Form</h3>
