@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>user-register</title>
-    <link rel="stylesheet" href="general styles/register.css" />
-    <link rel="stylesheet" href="general styles/all.min.css" />
+    <link rel="stylesheet" href="generalStyles/register.css" />
+    <link rel="stylesheet" href="generalStyles/all.min.css" />
     <script src="SCRIPT/javascript.js" defer></script>
     <script>
       function previewImage(event) {
