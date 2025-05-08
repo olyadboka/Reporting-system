@@ -1,11 +1,3 @@
-<?php
-session_start();
-if(!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
-  header("Location: ../login/login.php");
-  exit();
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -71,7 +63,7 @@ if(!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
       <input type="text" name="reporter_address" id="reporter_address" disabled value="HERMATA MENINA">
 
       </div>
-      <p class="error-address"></p>
+
     </td>
   </tr>
 
@@ -91,7 +83,7 @@ if(!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
       <option value="community" id="optionCommunity">Community & Infrastructure Issues</option>
       <option value="security" id="optionSecurity">Security & Law Enforcement Issues</option>
     </select>
-    <p class="error-reportType" id="selectReportType-error"></p>
+    <p class="error-reportType" id="selectReportType-error" style="color: red;"></p>
   </div>
 
   <!-- ===================== -->
@@ -137,6 +129,7 @@ if(!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
   </div>
 
   <script src="reportForm.js"></script>
+  <script src="reportFormValidation.js"></script>
 </body>
 
 </html>
