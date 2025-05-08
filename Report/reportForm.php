@@ -86,23 +86,25 @@ if(!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
   <div class="mb-3">
     <label class="form-label required" id="selectReportType">Select Report Type</label>
     <select class="form-select" id="reportType" name="reportType">
+      <option value="" disabled selected>Select Report Type</option>
       <option value="housing" id="optionHousing">Housing & Rental Issues</option>
       <option value="community" id="optionCommunity">Community & Infrastructure Issues</option>
       <option value="security" id="optionSecurity">Security & Law Enforcement Issues</option>
     </select>
-    <p class="error-reportType"></p>
+    <p class="error-reportType" id="selectReportType-error"></p>
   </div>
 
   <!-- ===================== -->
   <div id="reportDetails">
-    <p class="error-specificIssue"></p>
+
   </div>
   <!-- ===================== -->
   <div class="mb-3">
     <label class="form-label required" id="descriptionLabel">Description</label>
     <textarea class="form-control" id="description" name="description" rows="3"></textarea>
   </div>
-  <p class="error-description"></p>
+  <p class="description-error"></p>
+
   <!-- When is the start date of the report -->
 
   <div class="name">
