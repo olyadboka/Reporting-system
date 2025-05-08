@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin: 20px auto;
             background: white;
             padding: 20px 30px; /* Added padding for better spacing */
-            border-radius: 8px;
+            border-radius: 15px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
@@ -140,6 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            width: 100%;
         }
 
         .form-actions button:hover {
