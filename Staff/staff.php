@@ -12,7 +12,7 @@ if ($conn->connect_error) {
 }
 
 // Fetch reports from the database
-$sql = "SELECT report_id, user_id, category, description, location, status, priority, created_at, count FROM reports";
+$sql = "SELECT report_id, user_id, category, description, location, status, priority, created_at FROM reports";
 $result = $conn->query($sql);
 ?>
 
@@ -37,29 +37,11 @@ $result = $conn->query($sql);
                     <p><strong>Status:</strong> <?php echo ucfirst($row['status']); ?></p>
                     <p><strong>Priority:</strong> <?php echo ucfirst($row['priority']); ?></p>
                     <p><strong>Created At:</strong> <?php echo $row['created_at']; ?></p>
-                    <div class="images">
-                        <?php
-                        // Fetch images for the current report
-                        $report_id = $row['report_id'];
-                        $imageSql = "SELECT image_blob FROM report_images WHERE report_id = '$report_id'";
-                        $imageResult = $conn->query($imageSql);
-
-                        if ($imageResult->num_rows > 0) {
-                            while ($imageRow = $imageResult->fetch_assoc()) {
-                                $imageData = base64_encode($imageRow['image_blob']);
-                                echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Report Image" class="clickable-image">';
-                            }
-                        } else {
-                            echo '<p>No images available for this report.</p>';
-                        }
-                        ?>
-                    </div>
                     <div class="actions">
                         <form action="process.php" method="POST">
                             <input type="hidden" name="report_id" value="<?php echo $row['report_id']; ?>">
                             <input type="hidden" name="action" value="accept">
                             <button class="accept-btn">Accept</button>
-
                         </form>
                         <form action="process.php" method="POST">
                             <input type="hidden" name="report_id" value="<?php echo $row['report_id']; ?>">
@@ -79,13 +61,5 @@ $result = $conn->query($sql);
         <?php endif; ?>
         <?php $conn->close(); ?>
     </main>
-
-    <!-- Modal for fullscreen image -->
-    <div id="imageModal" class="modal">
-        <span class="close">&times;</span>
-        <img class="modal-content" id="modalImage">
-    </div>
-
-    <script src="js/modal.js"></script>
 </body>
 </html>

@@ -17,11 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $status = '';
     if ($action === 'accept') {
-        $status = 'accepted';
+        $status = 'Accepted';
     } elseif ($action === 'reject') {
-        $status = 'rejected';
+        $status = 'Rejected';
     } elseif ($action === 'forward') {
-        $status = 'forwarded';
+        $status = 'Forwarded';
     }
 
     if ($status) {
@@ -30,15 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("si", $status, $report_id);
 
         if ($stmt->execute()) {
-            // Optional: Log success message
+            echo "Report #$report_id has been $status.";
         } else {
-            // Optional: Log error message
+            echo "Error updating report: " . $stmt->error;
         }
 
         $stmt->close();
     }
 
-    // Redirect back to the requesting page (e.g., staff.php)
+    // Redirect back to the staff page
     header("Location: staff.php");
     exit();
 }
