@@ -51,6 +51,10 @@ $result = $conn->query($sql);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
+        .table-wrapper {
+            overflow-x: auto; /* Enable horizontal scrolling */
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -99,56 +103,58 @@ $result = $conn->query($sql);
             <h2>List of Registered Users</h2>
         </div>
         <?php if ($result->num_rows > 0): ?>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Photo</th>
-                        <th>Residence ID</th>
-                        <th>First Name</th>
-                        <th>Father's Name</th>
-                        <th>Grandfather's Name</th>
-                        <th>Age</th>
-                        <th>Birthdate</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                        <th>Address</th>
-                        <th>Father's Full Name</th>
-                        <th>Father's Phone</th>
-                        <th>Mother's Full Name</th>
-                        <th>Mother's Phone</th>
-                        <th>Emergency Contact</th>
-                        <th>Emergency Phone</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while ($row = $result->fetch_assoc()): ?>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
                         <tr>
-                            <td>
-                                <?php if (!empty($row['photo'])): ?>
-                                    <img src="data:image/jpeg;base64,<?php echo base64_encode($row['photo']); ?>" alt="Profile Picture" class="profile-img">
-                                <?php else: ?>
-                                    <img src="default-profile.png" alt="Default Profile" class="profile-img">
-                                <?php endif; ?>
-                            </td>
-                            <td><?php echo $row['residence_id']; ?></td>
-                            <td><?php echo $row['fname']; ?></td>
-                            <td><?php echo $row['mname']; ?></td>
-                            <td><?php echo $row['fathersName']; ?></td>
-                            <td><?php echo $row['age']; ?></td>
-                            <td><?php echo $row['birthdate']; ?></td>
-                            <td><?php echo $row['phone']; ?></td>
-                            <td><?php echo $row['email']; ?></td>
-                            <td><?php echo $row['address']; ?></td>
-                            <td><?php echo $row['fatherFullName']; ?></td>
-                            <td><?php echo $row['fatherPhone']; ?></td>
-                            <td><?php echo $row['motherFullName']; ?></td>
-                            <td><?php echo $row['motherPhone']; ?></td>
-                            <td><?php echo $row['emergencyName']; ?></td>
-                            <td><?php echo $row['emergencyPhone']; ?></td>
+                            <th>Photo</th>
+                            <th>Residence ID</th>
+                            <th>First Name</th>
+                            <th>Father's Name</th>
+                            <th>Grandfather's Name</th>
+                            <th>Age</th>
+                            <th>Birthdate</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>Father's Full Name</th>
+                            <th>Father's Phone</th>
+                            <th>Mother's Full Name</th>
+                            <th>Mother's Phone</th>
+                            <th>Emergency Contact</th>
+                            <th>Emergency Phone</th>
                         </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td>
+                                    <?php if (!empty($row['photo'])): ?>
+                                        <img src="data:image/jpeg;base64,<?php echo base64_encode($row['photo']); ?>" alt="Profile Picture" class="profile-img">
+                                    <?php else: ?>
+                                        <img src="default-profile.png" alt="Default Profile" class="profile-img">
+                                    <?php endif; ?>
+                                </td>
+                                <td><?php echo $row['residence_id']; ?></td>
+                                <td><?php echo $row['fname']; ?></td>
+                                <td><?php echo $row['mname']; ?></td>
+                                <td><?php echo $row['fathersName']; ?></td>
+                                <td><?php echo $row['age']; ?></td>
+                                <td><?php echo $row['birthdate']; ?></td>
+                                <td><?php echo $row['phone']; ?></td>
+                                <td><?php echo $row['email']; ?></td>
+                                <td><?php echo $row['address']; ?></td>
+                                <td><?php echo $row['fatherFullName']; ?></td>
+                                <td><?php echo $row['fatherPhone']; ?></td>
+                                <td><?php echo $row['motherFullName']; ?></td>
+                                <td><?php echo $row['motherPhone']; ?></td>
+                                <td><?php echo $row['emergencyName']; ?></td>
+                                <td><?php echo $row['emergencyPhone']; ?></td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+            </div>
         <?php else: ?>
             <p>No users found.</p>
         <?php endif; ?>
