@@ -30,7 +30,7 @@ $result = $conn->query($sql);
         }
 
         nav {
-            background-color: rgb(22, 69, 255);
+            background-color: #4caf50;
             color: white;
             padding: 10px 20px;
             display: flex;
@@ -68,7 +68,7 @@ $result = $conn->query($sql);
         }
 
         table th {
-            background-color: rgb(22, 69, 255);
+            background-color: #4caf50;
             color: white;
         }
 
@@ -90,6 +90,15 @@ $result = $conn->query($sql);
         .header {
             text-align: center;
             margin-bottom: 20px;
+        }
+
+        a {
+            color: #4caf50;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -135,7 +144,11 @@ $result = $conn->query($sql);
                                         <img src="default-profile.png" alt="Default Profile" class="profile-img">
                                     <?php endif; ?>
                                 </td>
-                                <td><?php echo $row['residence_id']; ?></td>
+                                <td>
+                                    <a href="edit_user.php?residence_id=<?php echo $row['residence_id']; ?>">
+                                        <?php echo $row['residence_id']; ?>
+                                    </a>
+                                </td>
                                 <td><?php echo $row['fname']; ?></td>
                                 <td><?php echo $row['mname']; ?></td>
                                 <td><?php echo $row['fathersName']; ?></td>
