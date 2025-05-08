@@ -10,7 +10,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$dbname = "registration_db";
+$dbname = "hmreportsystem";
 $sql = "CREATE DATABASE IF NOT EXISTS $dbname";
 if ($conn->query($sql) === TRUE) {
     echo "Database '$dbname' created successfully.<br>";
@@ -37,12 +37,20 @@ $sql = "CREATE TABLE IF NOT EXISTS users (
     motherPhone VARCHAR(15) NOT NULL,
     emergencyName VARCHAR(100) NOT NULL,
     emergencyPhone VARCHAR(15) NOT NULL,
-    photo VARCHAR(255)
+    photo LONGBLOB
 )";
 if ($conn->query($sql) === TRUE) {
     echo "Table 'users' created successfully.";
 } else {
     die("Error creating table: " . $conn->error);
+}
+
+// Alter the table to ensure the 'photo' column is of type LONGBLOB
+$sql = "ALTER TABLE users MODIFY photo LONGBLOB";
+if ($conn->query($sql) === TRUE) {
+    echo "Column 'photo' modified to LONGBLOB successfully.";
+} else {
+    die("Error modifying column: " . $conn->error);
 }
 
 $conn->close();
