@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             max-width: 800px;
             margin: 20px auto;
             background: white;
-            padding: 20px;
+            padding: 20px 30px; /* Added padding for better spacing */
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
@@ -114,10 +114,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .form-group input {
-            width: 100%;
+            width: calc(100% - 20px); /* Ensure input fields don't touch the container edges */
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            box-sizing: border-box; /* Include padding and border in width calculation */
         }
 
         .form-group img {
