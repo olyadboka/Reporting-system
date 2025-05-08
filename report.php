@@ -2,6 +2,11 @@
 session_start();
 include "./reportDB/dbconnection.php";
 
+// $slq3 = "ALTER TABLE reports
+// MODIFY COLUMN image_url TEXT; ";
+// mysqli_execute($sql3);
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $reportId = intval($_POST['report_id']);
     $newCount = intval($_POST['new_count']);
@@ -87,7 +92,7 @@ if ($result) {
           </div>
           <div class="hidden-details" id="report-images">
             <?php
-  $imageUrls = json_decode($report['image_url'], true); // Decode JSON to array
+  $imageUrls = json_decode($report['image_url'], true); 
 
   if (!empty($imageUrls)) {
       foreach ($imageUrls as $imageUrl) {

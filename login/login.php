@@ -23,10 +23,10 @@
             <td>
               <!-- for username -->
               <div class="name-container">
-                <label for="name">User Name :</label>
+                <label for="name">ID:</label>
             </td>
             <td>
-              <input type="text" name="name" placeholder="Enter your FullName...." id="name">
+              <input type="text" name="name" placeholder="Enter your ID...." id="name">
     </div>
     </td>
     </tr>
