@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 }
 
 // Fetch reports from the database
-$sql = "SELECT report_id, user_id, category, description, location, status, priority, created_at, images FROM reports";
+$sql = "SELECT report_id, user_id, category, description, location, status, priority, created_at FROM reports";
 $result = $conn->query($sql);
 ?>
 
@@ -41,19 +41,25 @@ $result = $conn->query($sql);
                     <p><strong>Priority:</strong> <?php echo ucfirst($row['priority']); ?></p>
                     <p><strong>Created At:</strong> <?php echo $row['created_at']; ?></p>
                     
-                    <!-- Display attached images -->
-                    <?php if (!empty($row['images'])): ?>
+                    <!-- Fetch and display attached images -->
+                    <?php
+                    $report_id = $row['report_id'];
+                    $image_sql = "SELECT image_blob FROM report_images WHERE report_id = ?";
+                    $stmt = $conn->prepare($image_sql);
+                    $stmt->bind_param("i", $report_id);
+                    $stmt->execute();
+                    $image_result = $stmt->get_result();
+                    ?>
+                    <?php if ($image_result->num_rows > 0): ?>
                         <div class="report-images">
-                            <?php 
-                            // Decode the BLOB data and display as base64 images
-                            $images = explode(',', $row['images']); // Assuming multiple images are stored as comma-separated BLOBs
-                            foreach ($images as $imageBlob): ?>
-                                <img src="data:image/jpeg;base64,<?php echo base64_encode($imageBlob); ?>" alt="Report Image" class="report-image">
-                            <?php endforeach; ?>
+                            <?php while ($image_row = $image_result->fetch_assoc()): ?>
+                                <img src="data:image/jpeg;base64,<?php echo base64_encode($image_row['image_blob']); ?>" alt="Report Image" class="clickable-image">
+                            <?php endwhile; ?>
                         </div>
                     <?php else: ?>
                         <p>No images attached.</p>
                     <?php endif; ?>
+                    <?php $stmt->close(); ?>
 
                     <div class="actions">
                         <form action="process.php" method="POST">
@@ -79,5 +85,13 @@ $result = $conn->query($sql);
         <?php endif; ?>
         <?php $conn->close(); ?>
     </main>
+
+     <!-- Modal for fullscreen image -->
+     <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script src="js/modal.js"></script>
 </body>
 </html>
