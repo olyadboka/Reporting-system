@@ -78,7 +78,7 @@
   <div class="mb-3">
     <label class="form-label required" id="selectReportType">Select Report Type</label>
     <select class="form-select" id="reportType" name="reportType">
-      <option value="" disabled selected>Select Report Type</option>
+      <option value="" disabled selected id="selectReportTypeChoose">Select Report Type</option>
       <option value="housing" id="optionHousing">Housing & Rental Issues</option>
       <option value="community" id="optionCommunity">Community & Infrastructure Issues</option>
       <option value="security" id="optionSecurity">Security & Law Enforcement Issues</option>

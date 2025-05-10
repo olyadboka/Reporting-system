@@ -6,11 +6,11 @@ document.getElementById("reportType").addEventListener("change", function () {
     details = `
         <label class="form-label required" id="descriptionLabel">Select Specific Issue</label>
         <select class="form-select" name="SpecificIssue">
-        <option value ="" selected disabled>Select Specific Issue</option>
+        <option value ="" selected disabled ="SelectSpecificIssue">Select Specific Issue</option>
 
-          <option value="maintenance">House Maintenance Problems</option>
-          <option value="rent">Rent Payment Issues</option>
-          <option value="eviction">Unauthorized Evictions</option>
+          <option value="maintenance" id="housing">House Maintenance Problems</option>
+          <option value="rent" id="rental">Rent Payment Issues</option>
+          <option value="eviction" id="eviction">Unauthorized Evictions</option>
         </select>
            <p class="specificIssue-error"></p>
         `;
@@ -56,6 +56,7 @@ const translations = {
   am: {
     reportTitle: "የሪፖርት ቅጽ",
     selectReportType: "የሪፖርት አይነት ይምረጡ",
+    selectReportTypeChoose: "የሪፖርት አይነት ይምረጡ",
     optionHousing: "የቤት እና ኪራይ ችግሮች",
     optionCommunity: "የማህበረሰብ እና መሠረተ ልማት ችግሮች",
     optionSecurity: "የደህንነት እና ህግ ማስፈጸሚያ ችግሮች",
@@ -63,10 +64,17 @@ const translations = {
     uploadImagesLabel: "ምስሎች ይጫኑ",
     uploadVideosLabel: "ቪዲዮዎች ይጫኑ",
     submitReportBtn: "ሪፖርት ያስገቡ",
+    //for the specific issue
+    descriptionLabel: "የተወሰነ ችግር ምረጥ",
+    SelectSpecificIssue: "የተወሰነ ችግር ምረጥ",
+    housing: "የቤት ጥገና ችግሮች (ቤት ማስተካከል)",
+    rental: "የኪራይ ክፍያ ችግሮች (ኪራይ ክፍያ)",
+    evication: "ያልተፈቀደ ማስወገድ (ያለማስታወቂያ ማስወገድ)",
   },
   or: {
     reportTitle: "Formii Gabaasa ",
     selectReportType: "Gosa Gabaasaa Filadhu",
+    selectReportTypeChoose: "Gosa Gabaassaa Filadhu",
     optionHousing: "Rakkoo Manaa fi Kiraa",
     optionCommunity: "Rakkoo Hawaasaa fi Ijaarsaa",
     optionSecurity: "Rakkoo Nageenyaa fi Seeraa Hojii Irratti",
@@ -74,6 +82,12 @@ const translations = {
     uploadImagesLabel: "Suuraalee Fe’ii",
     uploadVideosLabel: "Viidiyoo Fe’ii",
     submitReportBtn: "Gabaasa Galchi",
+    //for the specific issue
+    descriptionLabel: "Filannoo Rakkoo Addaa",
+    SelectSpecificIssue: "Filannoo Rakkoo Addaa",
+    housing: "Rakinni Mana (Dhibee Bulchiinsa Manaa)",
+    rental: "Dhibee Kaffaltii Mana (Kaffaltii Mana)",
+    evication: "Baqqisuu Hin Feenye (Baqqisuu Mirkaneeffatte)",
   },
 };
 
