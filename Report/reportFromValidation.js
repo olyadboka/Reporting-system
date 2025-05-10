@@ -9,15 +9,16 @@ document.addEventListener("DOMContentLoaded", function () {
   const startDateError = document.querySelector(".error-StartDate");
   const todayDate = new Date().toISOString().split("T")[0];
 
-  const formReport = document.querySelector("form");
+  const formReport = document.getElementById("reportForm");
 
   formReport.addEventListener("submit", (e) => {
     e.preventDefault();
 
     let isValid = true;
 
-    // Validation of the select report type
-    if (reportType.value === "") {
+    // Validation of the select report type....
+
+    if (reportType.value == "") {
       reportTypeError.textContent = "Report Type is not selected.";
       reportTypeError.style.color = "red";
       reportTypeError.style.fontSize = "12px";
@@ -26,7 +27,8 @@ document.addEventListener("DOMContentLoaded", function () {
       reportTypeError.textContent = "";
     }
 
-    // Validation of the description
+    // Validation of the description..........
+
     if (description.value.trim() === "") {
       descriptionError.textContent = "Description is required.";
       descriptionError.style.color = "red";
@@ -36,7 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
       descriptionError.textContent = "";
     }
 
-    // Validation of the starting date
     startDate.setAttribute("max", todayDate);
     if (startDate.value === "") {
       startDateError.textContent = "Start Date is not selected.";
@@ -46,18 +47,12 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       startDateError.textContent = "";
     }
-
-    // Validation of the images
     const maxImages = 4;
     const images = document.getElementById("images").files;
     const imageError = document.querySelector(".error-images");
+
     if (images.length > maxImages) {
       imageError.textContent = `You can only upload a maximum of ${maxImages} images.`;
-      imageError.style.color = "red";
-      imageError.style.fontSize = "12px";
-      isValid = false;
-    } else if (images.length === 0) {
-      imageError.textContent = "Please upload at least one image.";
       imageError.style.color = "red";
       imageError.style.fontSize = "12px";
       isValid = false;
@@ -65,8 +60,8 @@ document.addEventListener("DOMContentLoaded", function () {
       imageError.textContent = "";
     }
 
-    if (!isValid) {
-      e.preventDefault();
+    if (isValid) {
+      formReport.submit(); // Manually submit if valid
     }
   });
 });

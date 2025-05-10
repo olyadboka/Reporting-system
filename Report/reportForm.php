@@ -23,7 +23,7 @@
 
     <!-- Report form  -->
 
-    <form action="../reportDB/reportFromDB.php" method="post" enctype="multipart/form-data">
+    <form action="../reportDB/reportFromDB.php" method="post" enctype="multipart/form-data" id="reportForm">
       <!-- Pesonal of the reporter -->
       <table>
 
@@ -66,15 +66,7 @@
 
     </td>
   </tr>
-
-
-
-
   </table>
-
-
-
-
   <div class="mb-3">
     <label class="form-label required" id="selectReportType">Select Report Type</label>
     <select class="form-select" id="reportType" name="reportType">
@@ -129,7 +121,7 @@
   </div>
 
   <script src="reportForm.js"></script>
-  <script src="reportFormValidation.js"></script>
+  <script src="reportFromValidation.js"></script>
 </body>
 
 </html>
