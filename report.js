@@ -6,7 +6,6 @@ const reportImage = document.getElementById("report-images");
 considers.forEach((consider, index) => {
   let i = parseInt(counts[index].innerHTML) || 0;
 
-  // Check initial state from the button's class
   if (consider.classList.contains("considered")) {
     consider.innerHTML = "Considered";
     consider.classList.remove("btn-danger");
@@ -14,10 +13,9 @@ considers.forEach((consider, index) => {
   }
 
   consider.addEventListener("click", function () {
-    const reportId = consider.dataset.reportId; // Ensure this is set in the HTML
+    const reportId = consider.dataset.reportId;
 
     if (!consider.classList.contains("considered")) {
-      // Mark as considered
       consider.classList.add("considered");
       consider.classList.remove("btn-danger");
       consider.classList.add("btn-secondary");
@@ -26,10 +24,8 @@ considers.forEach((consider, index) => {
       i++;
       counts[index].innerHTML = i;
 
-      // Update the server
       updateConsiderState(reportId, i, true);
     } else {
-      // Unmark as considered
       consider.classList.remove("considered");
       consider.classList.remove("btn-secondary");
       consider.classList.add("btn-danger");
@@ -38,7 +34,6 @@ considers.forEach((consider, index) => {
       i--;
       counts[index].innerHTML = i;
 
-      // Update the server
       updateConsiderState(reportId, i, false);
     }
   });
