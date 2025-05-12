@@ -179,12 +179,19 @@ document.addEventListener("DOMContentLoaded", function () {
           .trim();
         const countElement = box.querySelector("p[name='count']");
         const count = parseInt(countElement.textContent.trim());
+        const priorty = box.querySelector("p[name='priority']");
 
         if (category === "Reports") {
           box.dataset.visible = "true";
         } else if (category === "Most Viewed" && count > 100) {
+          priorty.textContent = "High";
+          priorty.style.backgroundColor = "red";
+
           box.dataset.visible = "true";
         } else if (category === "Answered" && count > 50 && count <= 100) {
+          priorty.textContent = "Solved";
+          priorty.style.backgroundColor = "green";
+
           box.dataset.visible = "true";
         } else if (category === "My Reports" && count <= 50) {
           box.dataset.visible = "true";

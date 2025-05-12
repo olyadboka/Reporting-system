@@ -104,7 +104,8 @@ if ($result) {
           </div>
           <div class="post-box--top-right">
             <p class="btn btn-danger" name="count"><?php echo htmlspecialchars($report['count']); ?></p>
-            <p class="btn btn-warning">Priority: <?php echo htmlspecialchars($report['priority']); ?></p>
+            <p class="btn btn-warning" name="priority">Priority: <?php echo htmlspecialchars($report['priority']); ?>
+            </p>
           </div>
         </div>
         <?php endforeach; ?>
