@@ -24,7 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
 
-    $sql = "SELECT user_id, full_name, role, password FROM users WHERE email = ? AND role = 'staff'";
+    // Query to fetch staff details
+    $sql = "SELECT staff_id, full_name, role, password FROM staff WHERE email = ? AND role = 'staff'";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -33,11 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
 
-        if (password_verify($password, $user['password'])) {
+        // Compare plain text passwords (replace with password_verify if passwords are hashed)
+        if ($password === $user['password']) {
             // Set session variables
-            $_SESSION['user_id'] = $user['user_id'];
-            $_SESSION['full_name'] = $user['full_name'];
-            $_SESSION['role'] = $user['role'];
+            $_SESSION['user_id'] = $user['staff_id']; // Store staff_id in session
+            $_SESSION['role'] = $user['role'];       // Store role in session
 
             // Redirect to staff page
             header("Location: staff.php");

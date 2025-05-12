@@ -10,17 +10,36 @@ $dbname = "hmreportsystem";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Check if the user is logged in
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'staff') {
+    header("Location: stafflogin.php");
+    exit();
+}
+
+// Retrieve staff name using staff_id from session
+$staff_id = $_SESSION['user_id'];
+$sql = "SELECT full_name FROM staff WHERE staff_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $staff_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 1) {
+    $row = $result->fetch_assoc();
+    $staff_name = $row['full_name'];
+} else {
+    $staff_name = 'Unknown';
+}
+
+$stmt->close();
+
 // Fetch reports from the database
 $sql = "SELECT report_id, user_id, category, description, location, image_url, status, priority, created_at, handled_by FROM reports";
 $result = $conn->query($sql);
-
-// Get staff name from session
-$staff_name = isset($_SESSION['staff_name']) ? $_SESSION['staff_name'] : 'Unknown';
 ?>
 
 <!DOCTYPE html>
@@ -32,11 +51,13 @@ $staff_name = isset($_SESSION['staff_name']) ? $_SESSION['staff_name'] : 'Unknow
     <link rel="stylesheet" href="staffCSS/staff.css">
 </head>
 <body>
+
     <main>
         <div class="tabs">
             <button class="tab-button" onclick="showTab('new-requests')">New Reports</button>
             <button class="tab-button" onclick="showTab('accepted-reports')">Accepted Reports</button>
             <button class="tab-button" onclick="showTab('rejected-reports')">Rejected Reports</button>
+            <a href="logout.php" class="tab-link">Logout</a>
         </div>
 
         <!-- New Requests Tab -->
