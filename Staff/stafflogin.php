@@ -1,6 +1,12 @@
 <?php
 session_start();
 
+// Redirect to staff page if already logged in
+if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'staff') {
+    header("Location: staff.php");
+    exit();
+}
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -15,8 +21,8 @@ if ($conn->connect_error) {
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
 
     $sql = "SELECT user_id, full_name, role, password FROM users WHERE email = ? AND role = 'staff'";
     $stmt = $conn->prepare($sql);
@@ -34,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['role'] = $user['role'];
 
             // Redirect to staff page
-            header("Location: register.php");
+            header("Location: staff.php");
             exit();
         } else {
             $error = "Invalid username or password.";
@@ -55,7 +61,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff Login</title>
-    <link rel="stylesheet" href="Registration/generalSyles/style.css">
+    <link rel="stylesheet" href="Registration/generalStyles/style.css">
 </head>
 <body>
     <div class="container">
@@ -65,15 +71,15 @@ $conn->close();
             </div>
             <div class="form-container">
                 <?php if (!empty($error)): ?>
-                    <p style="color: red;"><?php echo $error; ?></p>
+                    <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
                 <?php endif; ?>
                 <form action="stafflogin.php" method="post">
                     <div>
-                        <label for="username"></label>
+                        <label for="username">Username</label>
                         <input type="text" id="username" name="username" placeholder="Enter your username" required>
                     </div>
                     <div>
-                        <label for="password"></label>
+                        <label for="password">Password</label>
                         <input type="password" id="password" name="password" placeholder="Enter your password" required>
                     </div>
                     <div>
