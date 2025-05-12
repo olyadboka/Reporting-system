@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   formReport.addEventListener("submit", (e) => {
     e.preventDefault();
-
+    ds;
     let isValid = true;
 
     // Validation of the select report type....

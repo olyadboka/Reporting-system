@@ -1,5 +1,4 @@
-/* Global Styles */
-* {
+Global Styles * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -260,6 +259,38 @@
 
 #report-images {
   display: none;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  padding: 10px;
+}
+
+.page-btn {
+  padding: 8px 16px;
+  margin: 0 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.page-btn:hover:not(:disabled) {
+  background-color: #0b5ed7;
+  color: white;
+}
+
+.page-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+#pageInfo {
+  font-size: 1rem;
+  color: #333;
+  margin: 0 15px;
 }
 
 @media screen and (max-width: 800px) {

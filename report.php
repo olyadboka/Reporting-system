@@ -2,11 +2,6 @@
 session_start();
 include "./reportDB/dbconnection.php";
 
-// $slq3 = "ALTER TABLE reports
-// MODIFY COLUMN image_url TEXT; ";
-// mysqli_execute($sql3);
-
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $reportId = intval($_POST['report_id']);
     $newCount = intval($_POST['new_count']);
@@ -24,8 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $isConsidered = intval($_POST['is_considered']);
 
     $sqlconsidered = "UPDATE reports SET count = ?, is_considered = ? WHERE report_id = ?";
-    $stmt = mysqli_prepare($con, 
-    $sqlconsidered);
+    $stmt = mysqli_prepare($con, $sqlconsidered);
     mysqli_stmt_bind_param($stmt, "iii", $newCount, $isConsidered, $reportId);
 
     if (mysqli_stmt_execute($stmt)) {
@@ -55,16 +49,15 @@ if ($result) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welcome to Report Page</title>
   <link rel="stylesheet" href="./CSS/report.css">
+
 </head>
 
 <body>
   <div>
     <?php include './common/header.php'; ?>
-
   </div>
 
   <div class="header-top">
-
     <div class="header--text">
       <h1>Welcome to Report Page</h1>
       <a href="./Report/reportForm.php" class="report-now">Report Now</a>
@@ -82,7 +75,7 @@ if ($result) {
 
       <div class="main--post" id="main--post">
         <?php foreach ($reports as $report) : ?>
-        <div class="post-box reveal">
+        <div class="post-box reveal" data-visible="true">
           <div class="post-box--report-type">
             <h1>Type: <?php echo htmlspecialchars($report['category']); ?></h1>
             <p>Reported date: <?php echo htmlspecialchars($report['created_at']); ?></p>
@@ -92,16 +85,15 @@ if ($result) {
           </div>
           <div class="hidden-details" id="report-images">
             <?php
-  $imageUrls = json_decode($report['image_url'], true); 
-
-  if (!empty($imageUrls)) {
-      foreach ($imageUrls as $imageUrl) {
-          echo '<img src="' . htmlspecialchars($imageUrl) . '" alt="Report Image" style="max-width: 100%; height: auto; display: none;">';
-      }
-  } else {
-      echo '<p>No images available.</p>';
-  }
-  ?>
+              $imageUrls = json_decode($report['image_url'], true); 
+              if (!empty($imageUrls)) {
+                  foreach ($imageUrls as $imageUrl) {
+                      echo '<img src="' . htmlspecialchars($imageUrl) . '" alt="Report Image" style="max-width: 100%; height: auto; display: none;">';
+                  }
+              } else {
+                  echo '<p>No images available.</p>';
+              }
+            ?>
           </div>
           <div class="post-box--buttons">
             <button class="btn1 btn btn-primary" name="more" id="more">More</button>
@@ -116,107 +108,28 @@ if ($result) {
           </div>
         </div>
         <?php endforeach; ?>
+      </div>
 
-
-        <!-- Box 2 -->
-
-
-        <div class="post-box reveal">
-          <div class="post-box--report-type">
-            <h1>Type: </h1>
-            <p>reported date</p>
-          </div>
-          <div class="post-box--report-description">
-            <p>
-              Description of the report
-            </p>
-          </div>
-          <div class="post-box--buttons">
-            <button class="btn1  btn btn-primary">More</button>
-            <button class="btn1 btn btn-danger" name="consider">Consider</button>
-          </div>
-          <div class="post-box--top-right">
-            <p class="btn btn-danger" name="count">130 </p>
-            <p class="btn btn-warning">priority</p>
-
-          </div>
-
-        </div>
-
-
-        <!-- Box 3 -->
-
-
-        <div class="post-box reveal">
-          <div class="post-box--report-type">
-            <h1>Type: </h1>
-            <p>reported date</p>
-          </div>
-          <div class="post-box--report-description">
-            <p>
-              Description of the report
-            </p>
-          </div>
-          <div class="post-box--buttons">
-            <button class="btn1  btn btn-primary">More</button>
-            <button class="btn1 btn btn-danger" name="consider">Consider</button>
-          </div>
-          <div class="post-box--top-right">
-            <p class="btn btn-danger" name="count">100 </p>
-            <p class="btn btn-warning">priority</p>
-
-          </div>
-
-        </div>
-
-
-        <!-- Box 4 -->
-
-
-        <div class="post-box reveal">
-          <div class="post-box--report-type">
-            <h1>Type: </h1>
-            <p>reported date</p>
-          </div>
-          <div class="post-box--report-description">
-            <p>
-              Description of the report
-            </p>
-          </div>
-          <div class="post-box--buttons">
-            <button class="btn1  btn btn-primary">More</button>
-            <button class="btn1 btn btn-danger" name="consider">Consider</button>
-          </div>
-          <div class="post-box--top-right">
-            <p class="btn btn-danger" name="count">50 </p>
-            <p class="btn btn-warning">priority</p>
-
-          </div>
-
-        </div>
-
-
-        <div class="pagination" id="pagination">
-          <button class="page-btn btn-secondary btn" id="prevBtn">Previous</button>
-          <button class="page-btn btn-secondary btn ms-2" id="nextBtn  ">Next</button>
-        </div>
-
+      <div class="pagination" id="pagination">
+        <button class="page-btn btn-primary btn" id="prevBtn">Previous</button>
+        <span id="pageInfo" class="mx-2">Page 1 of <?php echo ceil(count($reports)/4); ?></span>
+        <button class="page-btn btn-primary btn ms-2" id="nextBtn">Next</button>
       </div>
     </div>
-    <d class="right-topic">
+
+    <div class="right-topic">
       <div class="report-now--right">
         <div class="card" style="width: 18rem;">
           <img src="..." class="card-img-top" alt="...">
           <div class="card-body">
             <h5 class="card-title">Kebele Reporting System</h5>
-            <p class="card-text">Easily report community issues and concerns to local authorities for quick
-              resolution.
+            <p class="card-text">Easily report community issues and concerns to local authorities for quick resolution.
             </p>
-            <t href="./Report/reportForm.php" class="btn btn-primary">Submit Report</t>
+            <a href="./Report/reportForm.php" class="btn btn-primary">Submit Report</a>
           </div>
         </div>
       </div>
-      <h1>Releated Topic</h1>
+      <h1>Related Topic</h1>
       <div class="topics--">
         <div class="accordion accordion-flush" id="accordionFlushExample">
           <div class="accordion-item">
@@ -400,128 +313,16 @@ if ($result) {
           </div>
         </div>
       </div>
-  </div>
+    </div>
   </div>
   <section class="footer">
-    <?php 
-    include './common/footer.php';
-    
-    ?>
+    <?php include './common/footer.php'; ?>
   </section>
-  <script src="report.js"></script>
-  <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const reportLinks = document.querySelectorAll(".report-links li a");
-    const reportBoxes = document.querySelectorAll(".post-box");
 
-    reportLinks.forEach((link) => {
-      link.addEventListener("click", function(event) {
-        event.preventDefault();
-        const category = this.textContent.trim();
-
-        reportBoxes.forEach((box) => {
-          const countElement = box.querySelector("p[name='count']");
-          const count = parseInt(countElement.textContent.trim());
-          box.style.display = "none";
-
-          if (category === "Reports") {
-            box.style.display = "block";
-          } else if (category === "Most Viewed" && count > 100) {
-
-
-
-
-            box.style.display = "block";
-          } else if (category === "Answered" && count > 50 && count <= 100) {
-            box.style.display = "block";
-          } else if (category === "My Reports" && count <= 50) {
-            box.style.display = "block";
-          }
-        });
-      });
-    });
-  });
-  document.addEventListener("DOMContentLoaded", function() {
-    const reportLinks = document.querySelectorAll(".report-links li a");
-    const reportBoxes = document.querySelectorAll(".post-box");
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const reportsPerPage = 2;
-    let currentPage = 1;
-
-    function paginateReports() {
-
-      reportBoxes.forEach((box, index) => {
-        box.style.display = "none";
-      });
-
-
-      const startIndex = (currentPage - 1) * reportsPerPage;
-      const endIndex = startIndex + reportsPerPage;
-
-
-      reportBoxes.forEach((box, index) => {
-        if (index >= startIndex && index < endIndex) {
-          box.style.display = "block";
-        }
-      });
-
-      prevBtn.disabled = currentPage === 1;
-      nextBtn.disabled = currentPage * reportsPerPage >= reportBoxes.length;
-    }
-
-    prevBtn.addEventListener("click", function() {
-      if (currentPage > 1) {
-        currentPage--;
-        paginateReports();
-      }
-    });
-
-    nextBtn.addEventListener("click", function() {
-      if (currentPage * reportsPerPage < reportBoxes.length) {
-        currentPage++;
-        paginateReports();
-      }
-    });
-
-    reportLinks.forEach((link) => {
-      link.addEventListener("click", function(event) {
-        event.preventDefault();
-        const category = this.textContent.trim();
-        const filteredReports = Array.from(reportBoxes).filter((box) => {
-
-
-
-
-
-
-          return box.dataset.category === category || category === "all";
-        });
-
-        reportBoxes.forEach((box) => {
-          box.style.display = "none";
-        });
-
-        filteredReports.forEach((box) => {
-          box.style.display = "block";
-        });
-
-        currentPage = 1;
-        paginateReports();
-      });
-    });
-
-    paginateReports(); // Initial call to display reports
-  });
-  </script>
   <script src="../Hermata home/assets/js/script.js"></script>
-
-  <!-- 
-  - ionicon link
--->
+  <script src="./report.js"></script>
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
 </body>
 
 </html>
