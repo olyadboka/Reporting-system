@@ -44,12 +44,20 @@ if (is_uploaded_file($photo)) {
     $photo_blob = file_get_contents($photo); // Read the file as binary data
 }
 
-$sql = "INSERT INTO users (residence_id, fname, mname, fathersName, age, birthdate, phone, email, address, fatherFullName, fatherPhone, motherFullName, motherPhone, emergencyName, emergencyPhone, photo)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+// Generate a random password
+$random_password = bin2hex(random_bytes(4)); // Generates an 8-character password
+$hashed_password = password_hash($random_password, PASSWORD_DEFAULT); // Hash the password
+
+// Define the role explicitly
+$role = 'resident';
+
+// Insert data into the users table, excluding the auto_increment `id` column
+$sql = "INSERT INTO users (residence_id, fname, mname, fathersName, age, birthdate, phone, email, address, fatherFullName, fatherPhone, motherFullName, motherPhone, emergencyName, emergencyPhone, photo, role, hashed_password)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param(
-    "ssssisssssssssss",
+    "ssssisssssssssssss", // Updated to 18 characters
     $residence_id,
     $fname,
     $mname,
@@ -65,11 +73,15 @@ $stmt->bind_param(
     $motherPhone,
     $emergencyName,
     $emergencyPhone,
-    $photo_blob
+    $photo_blob,
+    $role, // Pass the role variable
+    $hashed_password // Pass the hashed password
 );
 
 if ($stmt->execute()) {
-    echo "New record created successfully. Residence ID: " . $residence_id;
+    echo "New record created successfully.<br>";
+    echo "Residence ID: " . $residence_id . "<br>";
+    echo "Generated Password: " . $random_password . "<br>"; // Display the generated password
 } else {
     echo "Error: " . $stmt->error;
 }
