@@ -6,7 +6,7 @@ if (isset($_SESSION['user_id'])) {
     if ($_SESSION['role'] === 'staff') {
         header("Location: staff.php");
     } else {
-        header("Location: report.php");
+        header("Location: ../report.php");
     }
     exit();
 }
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = trim($_POST['password']);
 
     // Query to fetch user details from the users table
-    $sql = "SELECT id AS user_id, fname AS full_name, role, password FROM users WHERE residence_id = ?";
+    $sql = "SELECT id AS user_id, fname AS full_name, role, hashed_password FROM users WHERE residence_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $residence_id);
     $stmt->execute();
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $result->fetch_assoc();
 
         // Verify the hashed password
-        if (password_verify($password, $user['password'])) {
+        if (password_verify($password, $user['hashed_password'])) { // Use 'hashed_password' here
             // Set session variables
             $_SESSION['user_id'] = $user['user_id']; // Store user_id in session
             $_SESSION['role'] = $user['role'];       // Store role in session

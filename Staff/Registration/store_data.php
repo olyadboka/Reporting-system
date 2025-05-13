@@ -51,13 +51,13 @@ $hashed_password = password_hash($random_password, PASSWORD_DEFAULT); // Hash th
 // Define the role explicitly
 $role = 'resident';
 
-// Insert data into the users table, including the hashed password
-$sql = "INSERT INTO users (residence_id, fname, mname, fathersName, age, birthdate, phone, email, address, fatherFullName, fatherPhone, motherFullName, motherPhone, emergencyName, emergencyPhone, photo, hashed_password, role)
+// Insert data into the users table, excluding the auto_increment `id` column
+$sql = "INSERT INTO users (residence_id, fname, mname, fathersName, age, birthdate, phone, email, address, fatherFullName, fatherPhone, motherFullName, motherPhone, emergencyName, emergencyPhone, photo, role, hashed_password)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param(
-    "ssssissssssssssss",
+    "ssssisssssssssssss", // Updated to 18 characters
     $residence_id,
     $fname,
     $mname,
@@ -74,8 +74,8 @@ $stmt->bind_param(
     $emergencyName,
     $emergencyPhone,
     $photo_blob,
-    $hashed_password,
-    $role // Pass the role variable
+    $role, // Pass the role variable
+    $hashed_password // Pass the hashed password
 );
 
 if ($stmt->execute()) {
