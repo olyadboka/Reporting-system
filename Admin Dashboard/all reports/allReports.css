@@ -1,0 +1,90 @@
+:root {
+  --primary-color: #4e73df;
+  --secondary-color: #858796;
+  --success-color: #1cc88a;
+  --info-color: #36b9cc;
+  --warning-color: #f6c23e;
+  --danger-color: #e74a3b;
+  --light-color: #f8f9fc;
+  --dark-color: #5a5c69;
+}
+
+body {
+  background-color: #f8f9fc;
+  font-family: "Nunito", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+}
+
+.card-header {
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 15px 15px 0 0 !important;
+  padding: 1.25rem 1.5rem;
+}
+
+.table-responsive {
+  border-radius: 0 0 15px 15px;
+}
+
+.table thead th {
+  background-color: var(--light-color);
+  color: var(--dark-color);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(78, 115, 223, 0.05);
+}
+
+.badge-pill {
+  border-radius: 10rem;
+  padding: 0.5em 0.8em;
+  font-weight: 600;
+}
+
+.status-open {
+  background-color: var(--primary-color);
+}
+
+.status-in-progress {
+  background-color: var(--info-color);
+}
+
+.status-resolved {
+  background-color: var(--success-color);
+}
+
+.status-closed {
+  background-color: var(--secondary-color);
+}
+
+.priority-high {
+  background-color: var(--danger-color);
+}
+
+.priority-medium {
+  background-color: var(--warning-color);
+  color: #000;
+}
+
+.priority-low {
+  background-color: var(--info-color);
+}
+
+.description-cell {
+  max-width: 300px;
+  white-space: normal;
+}
+
+.action-btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}

@@ -40,18 +40,25 @@ $sql = "CREATE TABLE IF NOT EXISTS users (
     photo LONGBLOB
 )";
 if ($conn->query($sql) === TRUE) {
-    echo "Table 'users' created successfully.";
+    echo "Table 'users' created successfully.<br>";
 } else {
     die("Error creating table: " . $conn->error);
+}
+
+// Alter the table to add the 'role' column
+$sql = "ALTER TABLE users ADD COLUMN role ENUM('resident', 'staff', 'admin') DEFAULT 'resident' NOT NULL";
+if ($conn->query($sql) === TRUE) {
+    echo "Column 'role' added successfully.<br>";
+} else {
+    echo "Error adding column 'role': " . $conn->error . "<br>";
 }
 
 // Alter the table to ensure the 'photo' column is of type LONGBLOB
 $sql = "ALTER TABLE users MODIFY photo LONGBLOB";
 if ($conn->query($sql) === TRUE) {
-    echo "Column 'photo' modified to LONGBLOB successfully.";
+    echo "Column 'photo' modified to LONGBLOB successfully.<br>";
 } else {
-    die("Error modifying column: " . $conn->error);
+    echo "Error modifying column 'photo': " . $conn->error . "<br>";
 }
 
 $conn->close();
-?>
