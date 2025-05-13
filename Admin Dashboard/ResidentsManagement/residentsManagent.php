@@ -1,38 +1,4 @@
-<?php
-include "../commonAdmin.php";
-include "../../reportDB/dbconnection.php";
 
-// Handle Delete User
-if (isset($_GET['delete_id'])) {
-    $delete_id = intval($_GET['delete_id']); // Sanitize input
-    $sql = "DELETE FROM users WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $delete_id);
-    $stmt->execute();
-    $stmt->close();
-    header("Location: residentsManagent.php"); // Refresh the page
-    exit();
-}
-
-// Handle Edit User
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_user'])) {
-    $edit_id = intval($_POST['id']); // Sanitize input
-    $fname = htmlspecialchars(trim($_POST['fname']));
-    $mname = htmlspecialchars(trim($_POST['mname']));
-    $fathersName = htmlspecialchars(trim($_POST['fathersName']));
-    $phone = htmlspecialchars(trim($_POST['phone']));
-    $email = htmlspecialchars(trim($_POST['email']));
-    $role = htmlspecialchars(trim($_POST['role']));
-
-    $sql = "UPDATE users SET fname = ?, mname = ?, fathersName = ?, phone = ?, email = ?, role = ? WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssi", $fname, $mname, $fathersName, $phone, $email, $role, $edit_id);
-    $stmt->execute();
-    $stmt->close();
-    header("Location: residentsManagent.php"); // Refresh the page
-    exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,17 +6,198 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_user'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Users Management</title>
+  <style>
+    :root {
+      --primary-color: #4e73df;
+      --secondary-color: #858796;
+      --success-color: #1cc88a;
+      --danger-color: #e74a3b;
+      --light-color: #f8f9fc;
+      --dark-color: #5a5c69;
+      --info-color: #36b9cc;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--light-color);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table th,
+    table td {
+      border: 1px solid var(--secondary-color);
+      padding: 10px;
+      text-align: left;
+    }
+
+    table th {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    table tr:nth-child(even) {
+      background-color: var(--light-color);
+    }
+
+    table tr:hover {
+      background-color: var(--info-color);
+      color: white;
+    }
+
+    .edit-btn {
+      background-color: var(--info-color);
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .edit-btn:hover {
+      background-color: var(--dark-color);
+    }
+
+    .delete-btn {
+      background-color: var(--danger-color);
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background-color: var(--dark-color);
+    }
+
+    .form-container {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: var(--light-color);
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container.active {
+      display: block;
+    }
+
+    .form-container h3 {
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+
+    .form-container label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--dark-color);
+    }
+
+    .form-container input,
+    .form-container select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid var(--secondary-color);
+      border-radius: 5px;
+    }
+
+    .form-container button {
+      background-color: var(--success-color);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .form-container button:hover {
+      background-color: var(--dark-color);
+    }
+  </style>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../dashboardHome.css">
 </head>
 
 <body>
+    <?php include "../commonAdmin.php"; ?>
+ 
   <div class="container">
-    <h1>Users Management</h1>
+    <h1>Residents Management</h1>
+
+    <?php
+    // Database connection
+     include "../../reportDB/dbconnection.php"; 
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "hmreportsystem";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Handle Delete User
+    if (isset($_GET['delete_id'])) {
+        $delete_id = intval($_GET['delete_id']); // Sanitize input
+        $sql = "DELETE FROM users WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $delete_id);
+        $stmt->execute();
+        $stmt->close();
+        header("Location: residentsManagement.php"); // Refresh the page
+        exit();
+    }
+
+    // Handle Edit User
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_user'])) {
+        $edit_id = intval($_POST['id']); // Sanitize input
+        $fname = htmlspecialchars(trim($_POST['fname']));
+        $mname = htmlspecialchars(trim($_POST['mname']));
+        $fathersName = htmlspecialchars(trim($_POST['fathersName']));
+        $phone = htmlspecialchars(trim($_POST['phone']));
+        $email = htmlspecialchars(trim($_POST['email']));
+        $role = htmlspecialchars(trim($_POST['role']));
+
+        $sql = "UPDATE users SET fname = ?, mname = ?, fathersName = ?, phone = ?, email = ?, role = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssssssi", $fname, $mname, $fathersName, $phone, $email, $role, $edit_id);
+        $stmt->execute();
+        $stmt->close();
+        header("Location: residentsManagement.php"); // Refresh the page
+        exit();
+    }
+    ?>
 
     <!-- Users Table -->
-    <table class="table table-bordered">
+    <table>
       <thead>
         <tr>
           <th>ID</th>
@@ -75,8 +222,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_user'])) {
                         <td>{$row['email']}</td>
                         <td>{$row['role']}</td>
                         <td>
-                          <button class='btn btn-info' onclick=\"editUser({$row['id']}, '{$row['fname']}', '{$row['mname']}', '{$row['fathersName']}', '{$row['phone']}', '{$row['email']}', '{$row['role']}')\">Edit</button>
-                          <a href='?delete_id={$row['id']}' class='btn btn-danger'>Delete</a>
+                          <button class='edit-btn' onclick=\"editUser({$row['id']}, '{$row['fname']}', '{$row['mname']}', '{$row['fathersName']}', '{$row['phone']}', '{$row['email']}', '{$row['role']}')\">Edit</button>
+                          <a href='?delete_id={$row['id']}' class='delete-btn'>Delete</a>
                         </td>
                       </tr>";
             }
@@ -108,7 +255,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_user'])) {
           <option value="staff">Staff</option>
           <option value="admin">Admin</option>
         </select>
-        <button type="submit" name="edit_user" class="btn btn-success">Save Changes</button>
+        <button type="submit" name="edit_user">Save Changes</button>
       </form>
     </div>
   </div>
