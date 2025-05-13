@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const startDate = document.getElementById("report_date");
   const startDateError = document.querySelector(".error-StartDate");
   const todayDate = new Date().toISOString().split("T")[0];
+  startDate.setAttribute("max", todayDate);
 
   const formReport = document.getElementById("reportForm");
 
@@ -38,7 +39,6 @@ document.addEventListener("DOMContentLoaded", function () {
       descriptionError.textContent = "";
     }
 
-    startDate.setAttribute("max", todayDate);
     if (startDate.value === "") {
       startDateError.textContent = "Start Date is not selected.";
       startDateError.style.color = "red";

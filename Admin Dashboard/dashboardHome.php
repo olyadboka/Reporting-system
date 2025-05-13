@@ -20,6 +20,7 @@
         <li><a href="#">👥 Residents Management</a></li>
         <li><a href="#">📁 Manage Categories</a></li>
         <li><a href="#">🗓️ Schedule & Assignments</a></li>
+        <li><a href="#">👩‍💻Login as resident</a></li>
         <li><a href="#">📊 Reports & Analytics</a></li>
         <li><a href="#">📬 Notifications</a></li>
         <li><a href="#">🧾 Activity Logs</a></li>
