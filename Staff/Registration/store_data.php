@@ -50,7 +50,7 @@ $hashed_password = password_hash($random_password, PASSWORD_DEFAULT); // Hash th
 
 // Insert data into the users table, including the hashed password
 $sql = "INSERT INTO users (residence_id, fname, mname, fathersName, age, birthdate, phone, email, address, fatherFullName, fatherPhone, motherFullName, motherPhone, emergencyName, emergencyPhone, photo, password, role)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'resident')";
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param(
@@ -71,7 +71,8 @@ $stmt->bind_param(
     $emergencyName,
     $emergencyPhone,
     $photo_blob,
-    $hashed_password
+    $hashed_password,
+    $role = 'resident' // Default role
 );
 
 if ($stmt->execute()) {
