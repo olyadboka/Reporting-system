@@ -47,7 +47,7 @@ if (is_uploaded_file($photo)) {
 // Generate a random password
 $random_password = bin2hex(random_bytes(4)); // Generates an 8-character password
 $hashed_password = password_hash($random_password, PASSWORD_DEFAULT); // Hash the password
-
+$role = 'resident';
 // Insert data into the users table, including the hashed password
 $sql = "INSERT INTO users (residence_id, fname, mname, fathersName, age, birthdate, phone, email, address, fatherFullName, fatherPhone, motherFullName, motherPhone, emergencyName, emergencyPhone, photo, hashed_password, role)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -72,7 +72,7 @@ $stmt->bind_param(
     $emergencyPhone,
     $photo_blob,
     $hashed_password, // Use the hashed password directly
-    $role = 'resident' // Default role
+    $role  // Default role
 );
 
 if ($stmt->execute()) {
