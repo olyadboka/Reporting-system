@@ -1,9 +1,13 @@
 <?php
 session_start();
 
-// Redirect to staff page if already logged in
-if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'staff') {
-    header("Location: staff.php");
+// Redirect to appropriate page if already logged in
+if (isset($_SESSION['user_id'])) {
+    if ($_SESSION['role'] === 'staff') {
+        header("Location: staff.php");
+    } else {
+        header("Location: report.php");
+    }
     exit();
 }
 
@@ -24,8 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
 
-    // Query to fetch staff details
-    $sql = "SELECT staff_id, full_name, role, password FROM staff WHERE email = ? AND role = 'staff'";
+    // Query to fetch user details from the users table
+    $sql = "SELECT id AS user_id, fname AS full_name, role, password FROM users WHERE email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -37,11 +41,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Compare plain text passwords (replace with password_verify if passwords are hashed)
         if ($password === $user['password']) {
             // Set session variables
-            $_SESSION['user_id'] = $user['staff_id']; // Store staff_id in session
+            $_SESSION['user_id'] = $user['user_id']; // Store user_id in session
             $_SESSION['role'] = $user['role'];       // Store role in session
 
-            // Redirect to staff page
-            header("Location: staff.php");
+            // Redirect based on role
+            if ($user['role'] === 'staff') {
+                header("Location: staff.php");
+            } else {
+                header("Location: report.php");
+            }
             exit();
         } else {
             $error = "Invalid username or password.";
