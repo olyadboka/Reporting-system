@@ -1,9 +1,13 @@
 <?php
 session_start();
 
-// Redirect to staff page if already logged in
-if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'staff') {
-    header("Location: staff.php");
+// Redirect to appropriate page if already logged in
+if (isset($_SESSION['user_id'])) {
+    if ($_SESSION['role'] === 'staff') {
+        header("Location: staff.php");
+    } else {
+        header("Location: ../report.php");
+    }
     exit();
 }
 
@@ -21,33 +25,37 @@ if ($conn->connect_error) {
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username']);
+    $residence_id = trim($_POST['residence_id']);
     $password = trim($_POST['password']);
 
-    // Query to fetch staff details
-    $sql = "SELECT staff_id, full_name, role, password FROM staff WHERE email = ? AND role = 'staff'";
+    // Query to fetch user details from the users table
+    $sql = "SELECT id AS user_id, fname AS full_name, role, hashed_password FROM users WHERE residence_id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $username);
+    $stmt->bind_param("s", $residence_id);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
 
-        // Compare plain text passwords (replace with password_verify if passwords are hashed)
-        if ($password === $user['password']) {
+        // Verify the hashed password
+        if (password_verify($password, $user['hashed_password'])) { // Use 'hashed_password' here
             // Set session variables
-            $_SESSION['user_id'] = $user['staff_id']; // Store staff_id in session
+            $_SESSION['user_id'] = $user['user_id']; // Store user_id in session
             $_SESSION['role'] = $user['role'];       // Store role in session
 
-            // Redirect to staff page
-            header("Location: staff.php");
+            // Redirect based on role
+            if ($user['role'] === 'staff') {
+                header("Location: staff.php");
+            } else {
+                header("Location: report.php");
+            }
             exit();
         } else {
-            $error = "Invalid username or password.";
+            $error = "Invalid residence ID or password.";
         }
     } else {
-        $error = "Invalid username or password.";
+        $error = "Invalid residence ID or password.";
     }
 
     $stmt->close();
@@ -76,8 +84,8 @@ $conn->close();
                 <?php endif; ?>
                 <form action="stafflogin.php" method="post">
                     <div>
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                        <label for="residence_id">Residence ID</label>
+                        <input type="text" id="residence_id" name="residence_id" placeholder="Enter your residence ID" required>
                     </div>
                     <div>
                         <label for="password">Password</label>

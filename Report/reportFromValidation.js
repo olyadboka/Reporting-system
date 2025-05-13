@@ -1,67 +1,110 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const reportType = document.getElementById("reportType");
-  const description = document.getElementById("description");
-  const descriptionError = document.querySelector(".description-error");
+document
+  .getElementById("reportForm")
+  .addEventListener("submit", function (event) {
+    let reportType = document.getElementById("reportType").value;
 
-  const reportTypeError = document.getElementById("selectReportType-error");
+    let description = document.getElementById("description").value;
 
-  const startDate = document.getElementById("report_date");
-  const startDateError = document.querySelector(".error-StartDate");
-  const todayDate = new Date().toISOString().split("T")[0];
+    let reportDate = document.getElementById("report_date").value;
 
-  const formReport = document.getElementById("reportForm");
+    let images = document.getElementById("images").files;
 
-  formReport.addEventListener("submit", (e) => {
-    e.preventDefault();
-    ds;
-    let isValid = true;
+    let errors = [];
 
-    // Validation of the select report type....
+    if (reportType === " ") {
+      errors.push("Please select a report type.");
 
-    if (reportType.value == "") {
-      reportTypeError.textContent = "Report Type is not selected.";
-      reportTypeError.style.color = "red";
-      reportTypeError.style.fontSize = "12px";
-      isValid = false;
+      document.getElementById("selectReportType-error").textContent =
+        "Please select a report type.";
+
+      event.preventDefault();
     } else {
-      reportTypeError.textContent = "";
+      document.getElementById("selectReportType-error").textContent = "";
     }
 
-    // Validation of the description..........
+    if (description.trim() === " ") {
+      errors.push("Please enter a description.");
 
-    if (description.value.trim() === "") {
-      descriptionError.textContent = "Description is required.";
-      descriptionError.style.color = "red";
-      descriptionError.style.fontSize = "12px";
-      isValid = false;
+      document.querySelector(".description-error").textContent =
+        "Please enter a description.";
+
+      event.preventDefault();
     } else {
-      descriptionError.textContent = "";
+      document.querySelector(".description-error").textContent = "";
     }
 
-    startDate.setAttribute("max", todayDate);
-    if (startDate.value === "") {
-      startDateError.textContent = "Start Date is not selected.";
-      startDateError.style.color = "red";
-      startDateError.style.fontSize = "12px";
-      isValid = false;
-    } else {
-      startDateError.textContent = "";
-    }
-    const maxImages = 4;
-    const images = document.getElementById("images").files;
-    const imageError = document.querySelector(".error-images");
+    if (reportDate === " ") {
+      errors.push("Please select a report start date.");
 
-    if (images.length > maxImages) {
-      imageError.textContent = `You can only upload a maximum of ${maxImages} images.`;
-      imageError.style.color = "red";
-      imageError.style.fontSize = "12px";
-      isValid = false;
+      document.querySelector(".error-StartDate").textContent =
+        "Please select a report start date.";
+
+      event.preventDefault();
     } else {
-      imageError.textContent = "";
+      let selectedDate = new Date(reportDate);
+
+      let currentDate = new Date();
+
+      currentDate.setHours(0, 0, 0, 0);
+
+      if (selectedDate > currentDate) {
+        errors.push("Report date cannot be in the future.");
+
+        document.querySelector(".error-StartDate").textContent =
+          "Report date cannot be in the future.";
+
+        event.preventDefault();
+      } else {
+        document.querySelector(".error-StartDate").textContent = "";
+      }
     }
 
-    if (isValid) {
-      formReport.submit(); // Manually submit if valid
+    if (images.length === 0) {
+      errors.push("Please upload at least one image.");
+
+      document.querySelector(".error-images").textContent =
+        "Please upload at least one image.";
+
+      event.preventDefault();
+    } else {
+      for (let i = 0; i < images.length; i++) {
+        let image = images[i];
+
+        let allowedTypes = ["image/jpeg", "image/png"];
+
+        if (allowedTypes.indexOf(image.type) === -1) {
+          errors.push("Invalid image file type.");
+
+          document.querySelector(".error-images").textContent =
+            "Invalid image file type.";
+
+          event.preventDefault();
+
+          break;
+        }
+
+        let maxSize = 2 * 1024 * 1024;
+
+        if (image.size > maxSize) {
+          errors.push("Image file size is too large.");
+
+          document.querySelector(".error-images").textContent =
+            "Image file size is too large.";
+
+          event.preventDefault();
+
+          break;
+        }
+      }
+
+      if (errors.length === 0) {
+        document.querySelector(".error-images").textContent = "";
+      }
+    }
+
+    if (errors.length > 0) {
+      event.preventDefault();
+
+      console.log("Validation Errors:", errors);
     }
   });
-});

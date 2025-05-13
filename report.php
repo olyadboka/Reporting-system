@@ -85,15 +85,14 @@ if ($result) {
           </div>
           <div class="hidden-details" id="report-images">
             <?php
-              $imageUrls = json_decode($report['image_url'], true); 
-              if (!empty($imageUrls)) {
-                  foreach ($imageUrls as $imageUrl) {
-                      echo '<img src="' . htmlspecialchars($imageUrl) . '" alt="Report Image" style="max-width: 100%; height: auto; display: none;">';
-                  }
-              } else {
-                  echo '<p>No images available.</p>';
-              }
-            ?>
+                    if (!empty($report['image_url'])) {
+                        
+                        $base64Image = 'data:image/jpeg;base64,' . base64_encode($report['image_url']);
+                        echo '<img src="' . $base64Image . '" alt="Report Image" style="max-width: 100%; height: auto; display: block; margin: 10px;">';
+                    } else {
+                        echo '<p>No images available.</p>';
+                    }
+                    ?>
           </div>
           <div class="post-box--buttons">
             <button class="btn1 btn btn-primary" name="more" id="more">More</button>
