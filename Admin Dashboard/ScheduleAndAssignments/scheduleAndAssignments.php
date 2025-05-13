@@ -35,20 +35,43 @@ if (isset($_GET['reject_id'])) {
     exit();
 }
 
-// Handle Schedule Fix
+// Handle Add or Edit Schedule Fix
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['schedule_fix'])) {
     $report_id = intval($_POST['report_id']); // Sanitize input
     $assigned_to = htmlspecialchars(trim($_POST['assigned_to']));
     $date = htmlspecialchars(trim($_POST['date']));
     $time = htmlspecialchars(trim($_POST['time']));
+    $schedule_id = isset($_POST['schedule_id']) ? intval($_POST['schedule_id']) : null;
 
-    $sql = "INSERT INTO schedules (report_id, assigned_to, date, time) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isss", $report_id, $assigned_to, $date, $time);
+    if ($schedule_id) {
+        // Update existing schedule
+        $sql = "UPDATE schedules SET assigned_to = ?, date = ?, time = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssi", $assigned_to, $date, $time, $schedule_id);
+    } else {
+        // Add new schedule
+        $sql = "INSERT INTO schedules (report_id, assigned_to, date, time) VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("isss", $report_id, $assigned_to, $date, $time);
+    }
+
     $stmt->execute();
     $stmt->close();
     header("Location: scheduleAndAssignments.php"); // Refresh the page
     exit();
+}
+
+// Retrieve existing schedule for editing
+$edit_schedule = null;
+if (isset($_GET['edit_schedule_id'])) {
+    $edit_schedule_id = intval($_GET['edit_schedule_id']);
+    $sql = "SELECT * FROM schedules WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $edit_schedule_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $edit_schedule = $result->fetch_assoc();
+    $stmt->close();
 }
 ?>
 <!DOCTYPE html>
@@ -58,125 +81,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['schedule_fix'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Schedule and Assignments</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f8f9fc;
-    }
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    .container {
-      max-width: 1200px;
-      margin: 20px auto;
-      padding: 20px;
-      background-color: white;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-      color: #4e73df;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    table th,
-    table td {
-      border: 1px solid #858796;
-      padding: 10px;
-      text-align: left;
-    }
-
-    table th {
-      background-color: #4e73df;
-      color: white;
-    }
-
-    table tr:nth-child(even) {
-      background-color: #f8f9fc;
-    }
-
-    table tr:hover {
-      background-color: #36b9cc;
-      color: white;
-    }
-
-    .btn-success {
-      background-color: #1cc88a;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .btn-success:hover {
-      background-color: #5a5c69;
-    }
-
-    .btn-danger {
-      background-color: #e74a3b;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .btn-danger:hover {
-      background-color: #5a5c69;
-    }
-
-    .form-container {
-      display: none;
-      margin-top: 20px;
-      padding: 20px;
-      background-color: #f8f9fc;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .form-container.active {
-      display: block;
-    }
-
-    .form-container label {
-      display: block;
-      margin-bottom: 5px;
-      color: #4e73df;
-    }
-
-    .form-container input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #858796;
-      border-radius: 5px;
-    }
-
-    .form-container button {
-      background-color: #1cc88a;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .form-container button:hover {
-      background-color: #5a5c69;
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../dashboardHome.css">
+  <link rel="stylesheet" href="scheduleAndAssignments.css">
 </head>
 
 <body>
+<?php include "../commonAdmin.php"; ?>
+  <?php include "../../reportDB/dbconnection.php"; ?>
   <div class="container">
     <h1>Schedule and Assignments</h1>
 
@@ -230,6 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['schedule_fix'])) {
           <th>Assigned To</th>
           <th>Date</th>
           <th>Time</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -245,34 +161,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['schedule_fix'])) {
                         <td>{$row['assigned_to']}</td>
                         <td>{$row['date']}</td>
                         <td>{$row['time']}</td>
+                        <td>
+                          <a href='?edit_schedule_id={$row['id']}' class='btn-success'>Edit</a>
+                        </td>
                       </tr>";
             }
         } else {
-            echo "<tr><td colspan='5'>No scheduled fixes found.</td></tr>";
+            echo "<tr><td colspan='6'>No scheduled fixes found.</td></tr>";
         }
         ?>
       </tbody>
     </table>
 
     <!-- Schedule Fix Form -->
-    <div id="scheduleFixForm" class="form-container">
-      <h3>Schedule Fix</h3>
+    <div class="form-container">
+      <h3><?php echo $edit_schedule ? 'Edit Schedule Fix' : 'Add Schedule Fix'; ?></h3>
       <form method="POST" action="">
-        <input type="hidden" name="report_id" id="report_id">
+        <?php if ($edit_schedule): ?>
+          <input type="hidden" name="schedule_id" value="<?php echo $edit_schedule['id']; ?>">
+        <?php endif; ?>
+        <input type="hidden" name="report_id" id="report_id" value="<?php echo $edit_schedule['report_id'] ?? ''; ?>">
         <label for="assigned_to">Assigned To:</label>
-        <input type="text" name="assigned_to" id="assigned_to" required>
+        <input type="text" name="assigned_to" id="assigned_to" value="<?php echo $edit_schedule['assigned_to'] ?? ''; ?>" required>
         <label for="date">Date:</label>
-        <input type="date" name="date" id="date" required>
+        <input type="date" name="date" id="date" value="<?php echo $edit_schedule['date'] ?? ''; ?>" required>
         <label for="time">Time:</label>
-        <input type="time" name="time" id="time" required>
-        <button type="submit" name="schedule_fix">Schedule</button>
+        <input type="time" name="time" id="time" value="<?php echo $edit_schedule['time'] ?? ''; ?>" required>
+        <button type="submit" name="schedule_fix"><?php echo $edit_schedule ? 'Update' : 'Add'; ?></button>
       </form>
     </div>
   </div>
 
   <script>
     function scheduleFix(reportId) {
-      document.getElementById('scheduleFixForm').classList.add('active');
       document.getElementById('report_id').value = reportId;
     }
   </script>
