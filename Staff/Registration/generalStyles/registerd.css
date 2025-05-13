@@ -1,0 +1,104 @@
+@font-face {
+  font-family: "myfont";
+  src: url("../fonts/Giphurs-SemiBold.ttf");
+}
+* {
+  padding: 0%;
+  margin: 0%;
+}
+
+body {
+  font-family: myfont, Arial, sans-serif;
+  background-color: #f4f4f9;
+  text-transform: capitalize;
+}
+
+nav {
+  background-color: rgb(153, 159, 180);
+  color: rgb(230, 226, 226);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 60px;
+  font-family: myfont, "Times New Roman", Times, serif;
+}
+
+nav h3 {
+  margin: 0;
+  font-size: 25px;
+  color: rgb(6, 22, 66);
+  margin-left: 30%;
+}
+
+nav a {
+  color: rgb(134, 133, 133);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+nav a:hover {
+  color: rgb(28, 87, 53);
+  text-decoration: underline;
+  transition: all 0.3s ease-in-out, text-decoration 0.6s ease-in-out;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 20px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.table-wrapper {
+  overflow-x: auto; /* Enable horizontal scrolling */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table th,
+table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+table th {
+  background-color: rgb(83, 86, 102);
+  color: white;
+}
+
+table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.profile-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+a {
+  color: rgb(22, 69, 255);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
