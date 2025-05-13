@@ -5,9 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>All Reports</title>
-  <!-- Bootstrap CSS -->
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../dashboardHome.css">
   <link rel="stylesheet" href="allReports.css">
@@ -59,7 +59,7 @@
               echo "<td><span class='badge bg-info text-dark'>".htmlspecialchars($row['category'])."</span></td>";
               echo "<td class='description-cell'>".nl2br(htmlspecialchars($row['description']))."</td>";
               echo "<td><i class='fas fa-map-marker-alt text-danger me-1'></i>".htmlspecialchars($row['location'])."</td>";
-              echo "<td><span class='badge badge-pill status-".strtolower(str_replace(' ', '-', $row['status']))."'>".htmlspecialchars($row['status'])."</span></td>";
+              echo "<td><span class='badge badge-pill status- allStatus".strtolower(str_replace(' ', '-', $row['status']))."'>".htmlspecialchars($row['status'])."</span></td>";
               echo "<td><span class='badge badge-pill priority-".strtolower($row['priority'])."'>".htmlspecialchars($row['priority'])."</span></td>";
               echo "<td><small class='text-muted'>".htmlspecialchars($row['created_at'])."</small></td>";
               echo "<td><span class='badge bg-dark rounded-circle'>".htmlspecialchars($row['count'])."</span></td>";

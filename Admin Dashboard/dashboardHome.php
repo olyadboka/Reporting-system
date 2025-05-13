@@ -16,16 +16,16 @@
     <nav class="menu-container">
       <ul>
         <li><a href="#">🏠 Dashboard (Home)</a></li>
-        <li><a href="#">🗂️ All Reports</a></li>
-        <li><a href="#">👥 Residents Management</a></li>
-        <li><a href="#">📁 Manage Categories</a></li>
-        <li><a href="#">🗓️ Schedule & Assignments</a></li>
-        <li><a href="#">👩‍💻Login as resident</a></li>
-        <li><a href="#">📊 Reports & Analytics</a></li>
-        <li><a href="#">📬 Notifications</a></li>
-        <li><a href="#">🧾 Activity Logs</a></li>
-        <li><a href="#">⚙️ System Settings</a></li>
-        <li><a href="#">🚪 Logout</a></li>
+        <li><a href="./all reports/allReports.php">🗂️ All Reports</a></li>
+        <li><a href="./ResidentsManagement/residentsManagent.php">👥 Residents Management</a></li>
+        <li><a href="./ManageCatagories/manageCategories.php">📁 Manage Categories</a></li>
+        <li><a href="./ScheduleAndAssignments/scheduleAndAssignments.php">🗓️ Schedule & Assignments</a></li>
+        <li><a href="../Hermata home/index.php">👩‍💻Login as resident</a></li>
+        <li><a href="./ReportsAndAnalytics/reportsAndAnalytics.php">📊 Reports & Analytics</a></li>
+        <li><a href="./Notification/notification.php">📬 Notifications</a></li>
+        <li><a href="./ActivityLogs/activityLogs.php">🧾 Activity Logs</a></li>
+        <li><a href="./SystemSettings/systemSetting.php">⚙️ System Settings</a></li>
+        <li><a href="../login/logout.php">🚪 Logout</a></li>
       </ul>
     </nav>
   </aside>
