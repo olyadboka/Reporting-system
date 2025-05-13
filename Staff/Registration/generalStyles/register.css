@@ -82,10 +82,11 @@ nav a:hover {
   font-weight: bold;
 }
 .gender {
-  width: 100%;
+  width: 50%;\
   height: 100px;
   flex-direction: row;
 }
+
 input[type="radio"] {
   margin-left: 100px; 
 }
@@ -158,3 +159,15 @@ input {
   text-align: center;
   font-size: 20px;
 }
+
+@media (max-width: 600px) {
+  .gender {
+  width: 100%;}
+
+  nav h3 {
+    font-size: 17px;
+  }
+   nav a {
+    font-size: 13px;
+  }
+  }
