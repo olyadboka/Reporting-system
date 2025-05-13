@@ -101,6 +101,9 @@
     <input type="file" name="images[]" id="images" accept="image/*" multiple>
     <p class="error-images"></p>
   </div>
+
+
+
   <div class="mb-3">
     <label class="form-label" id="uploadVideosLabel">Upload Videos</label>
     <input class="form-control" type="file" id="videos" name="videos" accept="video/*" multiple>

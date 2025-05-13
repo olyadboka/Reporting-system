@@ -148,7 +148,7 @@
   </div>
 
 
-
+  <script src="Singup.js"></script>
 </body>
 
 </html>

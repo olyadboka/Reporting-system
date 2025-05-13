@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Welcome to Admin Dashboard</title>
-  <link rel="stylesheet" href="dashboardHome.css" />
+  <!-- <link rel="stylesheet" href="dashboardHome.css" /> -->
 </head>
 
 <body>
@@ -15,7 +15,7 @@
     <h2 class="sidebar-title">🛠 Admin Panel</h2>
     <nav class="menu-container">
       <ul>
-        <li><a href="#">🏠 Dashboard (Home)</a></li>
+        <li><a href="./dashboardHome.php">🏠 Dashboard (Home)</a></li>
         <li><a href="./all reports/allReports.php">🗂️ All Reports</a></li>
         <li><a href="./ResidentsManagement/residentsManagent.php">👥 Residents Management</a></li>
         <li><a href="./ManageCatagories/manageCategories.php">📁 Manage Categories</a></li>
@@ -46,11 +46,3 @@
 
     <!-- Main Section -->
     <section class="dashboard-content">
-      <h1>Welcome, Admin 👋</h1>
-      <p>Select an option from the left sidebar to manage the system.</p>
-    </section>
-  </div>
-
-</body>
-
-</html>
