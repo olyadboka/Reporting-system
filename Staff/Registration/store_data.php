@@ -49,7 +49,7 @@ $random_password = bin2hex(random_bytes(4)); // Generates an 8-character passwor
 $hashed_password = password_hash($random_password, PASSWORD_DEFAULT); // Hash the password
 
 // Insert data into the users table, including the hashed password
-$sql = "INSERT INTO users (residence_id, fname, mname, fathersName, age, birthdate, phone, email, address, fatherFullName, fatherPhone, motherFullName, motherPhone, emergencyName, emergencyPhone, photo, password, role)
+$sql = "INSERT INTO users (residence_id, fname, mname, fathersName, age, birthdate, phone, email, address, fatherFullName, fatherPhone, motherFullName, motherPhone, emergencyName, emergencyPhone, photo, hashed_password, role)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
