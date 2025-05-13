@@ -71,7 +71,7 @@ $stmt->bind_param(
     $emergencyName,
     $emergencyPhone,
     $photo_blob,
-    $hashed_password,
+    $hashed_password, // Use the hashed password directly
     $role = 'resident' // Default role
 );
 
