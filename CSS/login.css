@@ -23,7 +23,7 @@ body {
 .login-box {
   background-color: blueviolet;
   height: fit-content;
-  width: 600px;
+  max-width: 600px;
   background: linear-gradient(
       to right,
       rgba(50, 49, 49, 1),
