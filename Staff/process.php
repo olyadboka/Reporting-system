@@ -12,7 +12,7 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the JSON data from the request
+   
     $data = json_decode(file_get_contents('php://input'), true);
 
     if (isset($data['report_id'], $data['action'], $data['staff_name'])) {

@@ -85,8 +85,7 @@
         <input type="password" class="form-control" name="create-password" id="create-password"
           placeholder="Enter your New password...." onkeyup="validatePassword()">
         <div class="invalid-feedback">Password must be at least 6 characters.</div>
-      </div>
-      <div class="col-md-6">
+
         <label for="confirm-password" class="form-label">Confirm Password:</label>
         <input type="password" class="form-control" name="confirm-password" id="confirm-password"
           placeholder="Enter your confirm password...." onkeyup="validateConfirmPassword()">
@@ -97,6 +96,9 @@
         <button type="submit" class="btn btn-primary px-4">
           Sign up
         </button>
+      </div>
+      <div class="hava-account">
+        <p style="color: green;">already I have an accout :<a href="./login.php">Login</a></p>
       </div>
 
     </form>

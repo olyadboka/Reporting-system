@@ -16,26 +16,40 @@
       <h1 class="header text-center mb-4">Login now</h1>
 
       <form action="./login/loginDB.php" method="post" enctype="multipart/form-data" class="row g-3">
+        <table>
 
-        <div class="col-12">
-          <label for="name" class="form-label">ID:</label>
-          <input type="text" class="form-control" name="name" id="name" placeholder="Enter your ID..."
-            onkeyup="validateLoginID()" />
-          <div class="invalid-feedback">ID must be at least 4 characters.</div>
-        </div>
-
-        <div class="col-12">
-          <label for="create-password" class="form-label">Password:</label>
-          <input type="password" class="form-control" name="create-password" id="create-password"
-            placeholder="Enter your password..." onkeyup="validateLoginPassword()" />
-          <div class="invalid-feedback">Password must be at least 6 characters.</div>
-        </div>
-
-        <div class="col-12 text-center">
-          <button type="submit" class="btn btn-primary px-4">Login</button>
-        </div>
-      </form>
+          <tr>
+            <div class="col-12"></div>
+            <td>
+              <label for="name" class="form-label">ID:</label>
     </div>
+    </td>
+    <td> <input type="text" class="form-control" name="name" id="name" placeholder="Enter your ID..."
+        onkeyup="validateLoginID()" /></td>
+    <div class="invalid-feedback">ID must be at least 4 characters.</div>
+    </tr>
+
+    <tr>
+      <div class="col-12"></div>
+      <td> <label for="create-password" class="form-label">Password:</label></td>
+      <td>
+        <input type="password" class="form-control" name="create-password" id="create-password"
+          placeholder="Enter your password..." onkeyup="validateLoginPassword()" />
+      </td>
+      <div class="invalid-feedback">Password must be at least 6 characters.</div>
+  </div>
+  </tr>
+  </table>
+
+  <div class="col-12 text-center">
+    <button type="submit" class="btn btn-primary px-4">Login</button>
+    <div>
+      <p class="register-question">Don't have account? </p>
+      <a href="./Signup.php" class="register-now">Register</a>
+    </div>
+  </div>
+  </form>
+  </div>
   </div>
 
   <script src="login.js"></script>

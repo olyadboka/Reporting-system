@@ -119,3 +119,14 @@ button:hover .arrow {
 button:hover .arrow:before {
   right: 0;
 }
+
+.register-question {
+  color: rgb(152, 17, 17);
+  font-style: italic;
+  margin-top: 2rem;
+}
+
+.register-now {
+  text-decoration: none;
+  color: green;
+}

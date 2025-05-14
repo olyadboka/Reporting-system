@@ -123,3 +123,7 @@ button:hover .arrow {
 button:hover .arrow:before {
   right: 0;
 }
+
+#confirm-password {
+  margin-bottom: 2rem;
+}
