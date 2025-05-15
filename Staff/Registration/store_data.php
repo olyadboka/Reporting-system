@@ -1,7 +1,8 @@
 <?php
 session_start();
 
-function redirectWithError($msg) {
+function redirectWithError($msg)
+{
     $_SESSION['reg_error'] = $msg;
     header("Location: register.php");
     exit();
@@ -39,20 +40,23 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     redirectWithError("Please enter a valid email address.");
 }
 
-// Optionally validate age if you have it as a field
-if (isset($_POST['age'])) {
-    $age = trim($_POST['age']);
-    if ($age === "" || !is_numeric($age) || $age <= 0) {
-        redirectWithError("Please enter a valid age.");
-    }
+// Validate age based on birthdate
+$birthdate = trim($_POST['birthdate']);
+$birthDateObj = new DateTime($birthdate);
+$today = new DateTime();
+$ageInterval = $today->diff($birthDateObj);
+$age = $ageInterval->y;
+
+if ($age < 18) {
+    redirectWithError("your're under age . Age must be 18 or older.");
 }
 
 // You can add more validation as needed for other fields...
 
 $servername = "localhost";
-$username = "root"; 
-$password = ""; 
-$dbname = "hmreportsystem"; 
+$username = "root";
+$password = "";
+$dbname = "hmreportsystem";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -131,9 +135,19 @@ if ($stmt->execute()) {
     echo "New record created successfully.<br>";
     echo "Residence ID: " . $residence_id . "<br>";
     echo "Generated Password: " . $random_password . "<br>"; // Display the generated password
+    $activity = "Registered new resident: $fname $mname ($residence_id)";
+    $user = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'staff'; // or use staff name if available
+    $timestamp = date('Y-m-d H:i:s');
+
+    $log_sql = "INSERT INTO activity_log (activity, user, timestamp) VALUES (?, ?, ?)";
+    $log_stmt = $conn->prepare($log_sql);
+    $log_stmt->bind_param("sss", $activity, $user, $timestamp);
+    $log_stmt->execute();
+    $log_stmt->close();
 } else {
     echo "Error: " . $stmt->error;
 }
+
 
 $stmt->close();
 $conn->close();
