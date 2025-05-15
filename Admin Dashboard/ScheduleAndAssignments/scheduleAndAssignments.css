@@ -1,0 +1,114 @@
+body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fc;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #4e73df;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table th,
+    table td {
+      border: 1px solid #858796;
+      padding: 10px;
+      text-align: left;
+    }
+
+    table th {
+      background-color: #4e73df;
+      color: white;
+    }
+
+    table tr:nth-child(even) {
+      background-color: #f8f9fc;
+    }
+
+    table tr:hover {
+      background-color: #36b9cc;
+      color: white;
+    }
+
+    .btn-success {
+      background-color: #1cc88a;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-success:hover {
+      background-color: #5a5c69;
+    }
+
+    .btn-danger {
+      background-color: #e74a3b;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-danger:hover {
+      background-color: #5a5c69;
+    }
+
+    .form-container {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f8f9fc;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container.active {
+      display: block;
+    }
+
+    .form-container label {
+      display: block;
+      margin-bottom: 5px;
+      color: #4e73df;
+    }
+
+    .form-container input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #858796;
+      border-radius: 5px;
+    }
+
+    .form-container button {
+      background-color: #1cc88a;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .form-container button:hover {
+      background-color: #5a5c69;
+    }

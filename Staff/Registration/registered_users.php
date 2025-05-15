@@ -21,91 +21,12 @@ $result = $conn->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registered Users</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
-
-        nav {
-            background-color: rgb(22, 69, 255);
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        nav h3 {
-            margin: 0;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .table-wrapper {
-            overflow-x: auto; /* Enable horizontal scrolling */
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        table th, table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-
-        table th {
-            background-color: rgb(22, 69, 255);
-            color: white;
-        }
-
-        table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        table tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        .profile-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        a {
-            color: rgb(22, 69, 255);
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
+  <link rel="stylesheet" href="../Registration/generalStyles/registerd.css">
+        <link rel="stylesheet" href="../Registration/generalStyles/all.min.css"></head>
 <body>
     <nav>
         <h3>Registered Users</h3>
-        <a href="register.php" style="color: white; text-decoration: none;">Register New User</a>
+        <a href="register.php" >Register New User</a>
     </nav>
     <div class="container">
         <div class="header">

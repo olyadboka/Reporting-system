@@ -5,68 +5,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Activity Log</title>
-  <style>
-    :root {
-      --primary-color: #4e73df;
-      --secondary-color: #858796;
-      --light-color: #f8f9fc;
-      --dark-color: #5a5c69;
-      --info-color: #36b9cc;
-    }
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: var(--light-color);
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 20px auto;
-      padding: 20px;
-      background-color: white;
-      border-radius: 15px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-      color: var(--primary-color);
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    table {
-      width: 100%;
-      border-radius: 15px;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    table th,
-    table td {
-      border: 1px solid var(--secondary-color);
-      padding: 10px;
-      text-align: left;
-    }
-
-    table th {
-      background-color: var(--primary-color);
-      color: white;
-    }
-
-    table tr:nth-child(even) {
-      background-color: var(--light-color);
-    }
-
-    table tr:hover {
-      background-color: var(--info-color);
-      color: white;
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../dashboardHome.css">
+  <link rel="stylesheet" href="activityLogs.css">
 </head>
 
 <body>
+  <?php include "../commonAdmin.php"; ?>
+  <?php include "../../reportDB/dbconnection.php"; ?>
   <div class="container">
     <h1>Activity Logs</h1>
 
