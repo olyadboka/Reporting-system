@@ -130,7 +130,7 @@ $stmt->bind_param(
     $role, // Pass the role variable
     $hashed_password // Pass the hashed password
 );
-
+$holder = "staff";
 if ($stmt->execute()) {
     echo "New record created successfully.<br>";
     echo "Residence ID: " . $residence_id . "<br>";
@@ -139,9 +139,9 @@ if ($stmt->execute()) {
     $user = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'staff'; // or use staff name if available
     $timestamp = date('Y-m-d H:i:s');
 
-    $log_sql = "INSERT INTO activity_log (activity, user, timestamp) VALUES (?, ?, ?)";
+    $log_sql = "INSERT INTO activity_logs (activity, user, timestamp) VALUES (?, ?, ?)";
     $log_stmt = $conn->prepare($log_sql);
-    $log_stmt->bind_param("sss", $activity, $user, $timestamp);
+    $log_stmt->bind_param("sss", $activity, $holder, $timestamp);
     $log_stmt->execute();
     $log_stmt->close();
 } else {
