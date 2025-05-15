@@ -1,3 +1,6 @@
+<?php
+session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,7 +36,7 @@
             <div class="name"></div> <label class="form-label required" id="reporter">Name</label>
           </td>
           <td> <input type="text" name="reporter_name" id="reporter_name" class="reporter-name"
-              value="<?php echo $_SESSION['user_name'];?>" disabled>
+              value="<?php echo $_SESSION['user_name'];?>" placeholder="<?php echo $_SESSION['user_name'];?>" disabled>
 
   </div>
 

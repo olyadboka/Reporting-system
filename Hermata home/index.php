@@ -1,3 +1,7 @@
+<?php 
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -170,11 +174,40 @@
 
       </nav>
 
-      <a href="../login/login.php" class="btn btn-secondary">
-        <span class="text text-1">Login</span>
+      <?php
+if (isset($_SESSION['user_id'])) {
+  $user_id = $_SESSION['user_id'];
+  $role = $_SESSION['role'];
+  $name = $_SESSION['user_name'];
+  $email = $_SESSION['user_email'];
+  $phone = $_SESSION['user_phone'];
+  $kebele_id = $_SESSION['user_kebele_id'];
 
-        <span class="text text-2" aria-hidden="true">Login</span>
-      </a>
+  $stmt = mysqli_prepare($con, "SELECT image FROM residents WHERE user_id = ?");
+  mysqli_stmt_bind_param($stmt, "s", $user_id);
+  mysqli_stmt_execute($stmt);
+  $result = mysqli_stmt_get_result($stmt);
+
+  $imageData = '';
+  if ($row = mysqli_fetch_assoc($result)) {
+    $imageData = base64_encode($row['image']); 
+  }
+
+  if ($role === 'admin') {
+    echo '<a href="../Admin Dashboard/dashboardhome.php" class="btn btn-primary">Dashboard</a>';
+  } elseif ($role === 'staff') {
+    echo '<a href="../staffCSS/staff.php" class="btn btn-primary">Dashboard</a>';
+  }
+
+  if ($imageData) {
+    echo '<a href="../editProfile/editProfile.php">';
+    echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width:40px;height:40px;border-radius:50%; object-fit:cover;">';
+    echo '</a>';
+  }}
+
+  echo "<a href='../login/logout.php' class='btn btn-danger'>Logout</a>";
+
+?>
 
       <button class="nav-open-btn" aria-label="open menu" data-nav-toggler>
         <span class="line line-1"></span>
@@ -218,10 +251,12 @@
               Your voice matters
             </p>
 
-            <a href="../login/login.php" class="btn btn-primary slider-reveal">
-              <span class="text text-1">Login</span>
 
-              <span class="text text-2" aria-hidden="true">Login</span>
+            <a href="../report.php" class="btn btn-primary slider-reveal">
+              <span class="text text-1">Report Now</span>
+
+              <span class="text text-2" aria-hidden="true">Report Now</span>
+
             </a>
 
           </li>
@@ -243,10 +278,10 @@
               we can improve our community
             </p>
 
-            <a href="../login/login.php" class="btn btn-primary slider-reveal">
-              <span class="text text-1">Login</span>
+            <a href="../report.php" class="btn btn-primary slider-reveal">
+              <span class="text text-1">Report Now</span>
 
-              <span class="text text-2" aria-hidden="true">Login</span>
+              <span class="text text-2" aria-hidden="true">Report Page</span>
             </a>
 
           </li>
@@ -268,10 +303,10 @@
               Let's build a better community together
             </p>
 
-            <a href="../login/login.php" class="btn btn-primary slider-reveal">
-              <span class="text text-1">Login</span>
+            <a href="../report.php" class="btn btn-primary slider-reveal">
+              <span class="text text-1">Report Now</span>
 
-              <span class="text text-2" aria-hidden="true">Login</span>
+              <span class="text text-2" aria-hidden="true">Report Page</span>
             </a>
 
           </li>

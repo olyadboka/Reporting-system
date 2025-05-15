@@ -1,3 +1,11 @@
+<?php
+session_start();
+// Generate CSRF token
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,46 +18,56 @@
 </head>
 
 <body>
-  <!-- Wrapper with max-width and centering -->
+
   <div class="container mt-5">
+    <?php
+    if(isset($_SESSION["SUCCESS"])){
+      echo "<div class='alert alert-success popup'>".htmlspecialchars($_SESSION["SUCCESS"])."</div>";
+      unset($_SESSION["SUCCESS"]);
+    } else if (isset($_SESSION["UNSUCCESS"])){
+      echo "<div class='alert alert-danger popup'>".htmlspecialchars($_SESSION["UNSUCCESS"])."</div>";
+      unset($_SESSION["UNSUCCESS"]);
+    }
+  ?>
     <div class="login-box mx-auto w-100" style="max-width: 600px;">
       <h1 class="header text-center mb-4">Login now</h1>
 
-      <form action="../loginSignUp/loginDB.php" method="post" enctype="multipart/form-data" class="row g-3">
-        <table>
+      <form action="../dataBasesls/loginSignUp/logindb.php" method="post" class="row g-3">
+        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
-          <tr>
-            <div class="col-12"></div>
-            <td>
-              <label for="name" class="form-label">ID:</label>
+        <div class="col-12">
+          <label for="user_id" class="form-label">ID:</label>
+          <input type="text" class="form-control" name="user_id" id="user_id" placeholder="Enter your ID..." required
+            onkeyup="validateLoginID()" />
+          <div class="invalid-feedback">ID must be at least 4 characters.</div>
+        </div>
+
+        <div class="col-12">
+          <label for="password" class="form-label">Password:</label>
+          <div class="input-group">
+            <input type="password" class="form-control" name="password" id="password"
+              placeholder="Enter your password..." required onkeyup="validateLoginPassword()" />
+            <button class="btn btn-outline-secondary" type="button" id="togglePassword">Show</button>
+          </div>
+          <div class="invalid-feedback">Password must be at least 6 characters.</div>
+        </div>
+
+        <div class="col-12 text-center">
+          <button type="submit" class="btn btn-primary px-4">Login</button>
+        </div>
+      </form>
     </div>
-    </td>
-    <td> <input type="text" class="form-control" name="name" id="name" placeholder="Enter your ID..."
-        onkeyup="validateLoginID()" /></td>
-    <div class="invalid-feedback">ID must be at least 4 characters.</div>
-    </tr>
-
-    <tr>
-      <div class="col-12"></div>
-      <td> <label for="create-password" class="form-label">Password:</label></td>
-      <td>
-        <input type="password" class="form-control" name="create-password" id="create-password"
-          placeholder="Enter your password..." onkeyup="validateLoginPassword()" />
-      </td>
-      <div class="invalid-feedback">Password must be at least 6 characters.</div>
-  </div>
-  </tr>
-  </table>
-
-  <div class="col-12 text-center">
-    <button type="submit" class="btn btn-primary px-4">Login</button>
-
-  </div>
-  </form>
-  </div>
   </div>
 
-  <script src="login.js"></script>
+  <script>
+  // Password visibility toggle
+  document.getElementById('togglePassword').addEventListener('click', function() {
+    const password = document.getElementById('password');
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    this.textContent = type === 'password' ? 'Show' : 'Hide';
+  });
+  </script>
 </body>
 
 </html>

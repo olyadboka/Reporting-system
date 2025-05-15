@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 include "./reportDB/dbconnection.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
