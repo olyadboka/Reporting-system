@@ -20,7 +20,7 @@ if ($conn->query($sql) === TRUE) {
 
 $conn->select_db($dbname);
 
-$sql = "CREATE TABLE IF NOT EXISTS users (
+$sql = "CREATE TABLE IF NOT EXISTS residents (
     id INT AUTO_INCREMENT PRIMARY KEY,
     residence_id VARCHAR(20) UNIQUE NOT NULL,
     fname VARCHAR(50) NOT NULL,
@@ -45,6 +45,7 @@ if ($conn->query($sql) === TRUE) {
     die("Error creating table: " . $conn->error);
 }
 
+
 // Alter the table to add the 'role' column
 $sql = "ALTER TABLE users ADD COLUMN role ENUM('resident', 'staff', 'admin') DEFAULT 'resident' NOT NULL";
 if ($conn->query($sql) === TRUE) {
@@ -54,6 +55,7 @@ if ($conn->query($sql) === TRUE) {
 }
 
 // Alter the table to ensure the 'photo' column is of type LONGBLOB
+
 $sql = "ALTER TABLE users MODIFY photo LONGBLOB";
 if ($conn->query($sql) === TRUE) {
     echo "Column 'photo' modified to LONGBLOB successfully.<br>";

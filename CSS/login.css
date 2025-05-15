@@ -23,7 +23,7 @@ body {
 .login-box {
   background-color: blueviolet;
   height: fit-content;
-  width: 600px;
+  max-width: 600px;
   background: linear-gradient(
       to right,
       rgba(50, 49, 49, 1),
@@ -118,4 +118,15 @@ button:hover .arrow {
 
 button:hover .arrow:before {
   right: 0;
+}
+
+.register-question {
+  color: rgb(152, 17, 17);
+  font-style: italic;
+  margin-top: 2rem;
+}
+
+.register-now {
+  text-decoration: none;
+  color: green;
 }
