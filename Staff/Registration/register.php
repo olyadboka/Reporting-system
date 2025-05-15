@@ -76,132 +76,13 @@
         return true;
       }
     </script>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f9;
-        margin: 0;
-        padding: 0;
-      }
-
-      nav {
-        background-color:rgb(22, 69, 255);
-        color: white;
-        padding: 10px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      nav h3 {
-        margin: 0;
-      }
-
-      nav a {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-      }
-
-      .header {
-        text-align: center;
-        margin: 20px 0;
-      }
-
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
-        background: white;
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      }
-
-      .section {
-        margin-bottom: 20px;
-      }
-
-      .input-box {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        margin-bottom: 15px;
-      }
-
-      .input-box label {
-        flex: 1 1 100%;
-        font-weight: bold;
-      }
-
-      .input-box input {
-        flex: 1 1 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-
-      .profile {
-        text-align: center;
-        margin-bottom: 20px;
-      }
-
-      .profile img {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid rgb(22, 69, 255);
-      }
-
-      .submit {
-        text-align: center;
-      }
-
-      .submit input {
-        background-color:rgb(22, 69, 255);
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-      }
-
-      .submit input:hover {
-        background-color: rgb(22, 69, 255);
-      }
-
-      #error-message {
-        color: red;
-        margin-bottom: 10px;
-        text-align: center;
-      }
-
-      /* Fix overlapping and ensure proper spacing */
-      label {
-        margin-bottom: 5px;
-        display: block;
-      }
-
-      input {
-        width: 100%;
-        box-sizing: border-box;
-      }
-
-      .input-box {
-        flex-direction: column;
-      }
-
-      .section h4 {
-        margin-bottom: 10px;
-        color: rgb(22, 69, 255);
-      }
-    </style>
+  <link rel="stylesheet" href="../Registration/generalStyles/register.css">
+        <link rel="stylesheet" href="../Registration/generalStyles/all.min.css">
   </head>
   <body>
     <nav>
       <h3>User Registration</h3>
-      <a href="registered_users.php">Registered User List</a>
+      <a href="registered_users.php"> <i class="fa-solid fa-circle-user"></i>Registered User List</a>
     </nav>
     <div class="header">
       <h3>Hermata Mentina Residents Registration Form</h3>
@@ -209,9 +90,9 @@
     <form action="store_data.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm(event)">
       <div id="error-message"></div>
       <div class="container">
-        <div class="section">
+        <div class="section display">
           <div class="profile">
-            <img src="" alt="No Image Selected" />
+            <img src="images/download.png" alt="" />
           </div>
           <label for="photo">Photo:</label>
           <input type="file" id="photo" name="photo" accept="image/*" onchange="previewImage(event)" />
@@ -231,6 +112,11 @@
           <div class="input-box">
             <label for="age">Age:</label>
             <input type="number" id="age" name="age" required />
+           <div class="gender display">
+             <label for="gender">Gender</label>
+          <input type="radio" name="gender" id="male"  require>male
+                    <input type="radio" name="gender" id="female"  require>female
+           </div>
 
             <label for="birthdate">Birthdate:</label>
             <input type="date" id="birthdate" name="birthdate" required />
