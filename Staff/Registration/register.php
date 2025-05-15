@@ -89,6 +89,68 @@
     </div>
     <?php
       session_start();
+
+      $error = '';
+      $success = '';
+
+      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+          // Collect and trim all fields
+          $fname         = trim($_POST['fname'] ?? '');
+          $mname         = trim($_POST['mname'] ?? '');
+          $fathersName   = trim($_POST['fathersName'] ?? '');
+          $house_number  = trim($_POST['house-number'] ?? '');
+          $gender        = trim($_POST['gender'] ?? '');
+          $birthdate     = trim($_POST['birthdate'] ?? '');
+          $address       = trim($_POST['address'] ?? '');
+          $phone         = trim($_POST['phone'] ?? '');
+          $email         = trim($_POST['email'] ?? '');
+          $fatherFullName = trim($_POST['fatherFullName'] ?? '');
+          $fatherPhone    = trim($_POST['fatherPhone'] ?? '');
+          $motherFullName = trim($_POST['motherFullName'] ?? '');
+          $motherPhone    = trim($_POST['motherPhone'] ?? '');
+          $emergencyName  = trim($_POST['emergencyName'] ?? '');
+          $emergencyPhone = trim($_POST['emergencyPhone'] ?? '');
+
+          // Required fields
+          if ($fname === '')            $error = "First Name is required.";
+          elseif ($fathersName === '')  $error = "Grandfather's Name is required.";
+          elseif ($birthdate === '')    $error = "Birthdate is required.";
+          elseif ($phone === '')        $error = "Phone is required.";
+          elseif ($email === '')        $error = "Email is required.";
+          elseif ($address === '')      $error = "Address is required.";
+
+          // Phone validation
+          elseif (!preg_match('/^(\+2519\d{8}|09\d{8})$/', $phone)) {
+              $error = "Phone must start with +251 and 9 digits or 09 and 8 digits.";
+          }
+
+          // Email validation
+          elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+              $error = "Please enter a valid email address.";
+          }
+
+          // Age validation (must be 18+)
+          else {
+              try {
+                  $birthDateObj = new DateTime($birthdate);
+                  $today = new DateTime();
+                  $age = $today->diff($birthDateObj)->y;
+                  if ($age < 18) {
+                      $error = "You're under age. Age must be 18 or older.";
+                  }
+              } catch (Exception $e) {
+                  $error = "Invalid birthdate format.";
+              }
+          }
+
+          // If no error, you can proceed to store_data.php or insert into DB here
+          if (!$error) {
+              // Example: include 'store_data.php';
+              // Or put your DB insert code here
+              // $success = "Registration successful!";
+          }
+      }
+
       if (isset($_SESSION['reg_error'])) {
         echo '<div id="error-message" style="color:red;">' . htmlspecialchars($_SESSION['reg_error']) . '</div>';
         unset($_SESSION['reg_error']);
