@@ -1,9 +1,62 @@
 <?php
+session_start();
+
+function redirectWithError($msg)
+{
+    $_SESSION['reg_error'] = $msg;
+    header("Location: register.php");
+    exit();
+}
+
+// Validate required fields
+if (empty($_POST['fname'])) {
+    redirectWithError("First Name is required.");
+}
+if (empty($_POST['fathersName'])) {
+    redirectWithError("Grandfather's Name is required.");
+}
+if (empty($_POST['birthdate'])) {
+    redirectWithError("Birthdate is required.");
+}
+if (empty($_POST['phone'])) {
+    redirectWithError("Phone is required.");
+}
+if (empty($_POST['email'])) {
+    redirectWithError("Email is required.");
+}
+if (empty($_POST['address'])) {
+    redirectWithError("Address is required.");
+}
+
+// Validate phone number
+$phone = trim($_POST['phone']);
+if (!preg_match('/^(\+2519\d{8}|09\d{8})$/', $phone)) {
+    redirectWithError("Phone must start with +251 and 9 digits or 09 and 8 digits.");
+}
+
+// Validate email
+$email = trim($_POST['email']);
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    redirectWithError("Please enter a valid email address.");
+}
+
+// Validate age based on birthdate
+$birthdate = trim($_POST['birthdate']);
+$birthDateObj = new DateTime($birthdate);
+$today = new DateTime();
+$ageInterval = $today->diff($birthDateObj);
+$age = $ageInterval->y;
+
+if ($age < 18) {
+    redirectWithError("your're under age . Age must be 18 or older.");
+}
+
+// You can add more validation as needed for other fields...
 
 $servername = "localhost";
-$username = "root"; 
-$password = ""; 
-$dbname = "hmreportsystem"; 
+$username = "root";
+$password = "";
+$dbname = "hmreportsystem";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -25,10 +78,9 @@ do {
 $fname = $_POST['fname'];
 $mname = $_POST['mname'];
 $fathersName = $_POST['fathersName'];
-$age = $_POST['age'];
+$house_number = $_POST['house-number'];
+$gender = $_POST['gender'];
 $birthdate = $_POST['birthdate'];
-$phone = $_POST['phone'];
-$email = $_POST['email'];
 $address = $_POST['address'];
 $fatherFullName = $_POST['fatherFullName'];
 $fatherPhone = $_POST['fatherPhone'];
@@ -52,17 +104,18 @@ $hashed_password = password_hash($random_password, PASSWORD_DEFAULT); // Hash th
 $role = 'resident';
 
 // Insert data into the users table, excluding the auto_increment `id` column
-$sql = "INSERT INTO residents (residence_id, fname, mname, fathersName, age, birthdate, phone, email, address, fatherFullName, fatherPhone, motherFullName, motherPhone, emergencyName, emergencyPhone, photo, role, hashed_password)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO residents (residence_id, fname, mname, fathersName, house_number,gender, birthdate, phone, email, address, fatherFullName, fatherPhone, motherFullName, motherPhone, emergencyName, emergencyPhone, photo, role, hashed_password)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param(
-    "ssssisssssssssssss", // Updated to 18 characters
+    "ssssissssssssssssss", // Updated to 18 characters
     $residence_id,
     $fname,
     $mname,
     $fathersName,
-    $age,
+    $house_number,
+    $gender,
     $birthdate,
     $phone,
     $email,
@@ -77,14 +130,25 @@ $stmt->bind_param(
     $role, // Pass the role variable
     $hashed_password // Pass the hashed password
 );
-
+$holder = "staff";
 if ($stmt->execute()) {
     echo "New record created successfully.<br>";
     echo "Residence ID: " . $residence_id . "<br>";
     echo "Generated Password: " . $random_password . "<br>"; // Display the generated password
+    $activity = "Registered new resident: $fname $mname ($residence_id)";
+    $user = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'staff'; // or use staff name if available
+    $timestamp = date('Y-m-d H:i:s');
+
+    $log_sql = "INSERT INTO activity_logs (activity, user, timestamp) VALUES (?, ?, ?)";
+    $log_stmt = $conn->prepare($log_sql);
+    $log_stmt->bind_param("sss", $activity, $holder, $timestamp);
+    $log_stmt->execute();
+    $log_stmt->close();
 } else {
     echo "Error: " . $stmt->error;
 }
 
+
 $stmt->close();
 $conn->close();
+?>

@@ -33,8 +33,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sql = "UPDATE reports SET status = ?, handled_by = ? WHERE report_id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("ssi", $status, $staff_name, $report_id);
-
+            $holder = "staff";
             if ($stmt->execute()) {
+                // Store activity log
+                $activity = "Report #$report_id has been $status by $staff_name";
+                $user = $staff_name;
+                $timestamp = date('Y-m-d H:i:s');
+                $log_sql = "INSERT INTO activity_logs (activity, user, timestamp) VALUES (?, ?, ?)";
+                $log_stmt = $conn->prepare($log_sql);
+                $log_stmt->bind_param("sss", $activity, $holder, $timestamp);
+                $log_stmt->execute();
+                $log_stmt->close();
+
                 echo json_encode(['success' => true, 'message' => "Report #$report_id has been $status."]);
             } else {
                 echo json_encode(['success' => false, 'error' => $stmt->error]);

@@ -87,6 +87,13 @@
     <div class="header">
       <h3>Hermata Mentina Residents Registration Form</h3>
     </div>
+    <?php
+      session_start();
+      if (isset($_SESSION['reg_error'])) {
+        echo '<div id="error-message" style="color:red;">' . htmlspecialchars($_SESSION['reg_error']) . '</div>';
+        unset($_SESSION['reg_error']);
+      }
+    ?>
     <form action="store_data.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm(event)">
       <div id="error-message"></div>
       <div class="container">
@@ -110,10 +117,10 @@
             <input type="text" id="fathersName" name="fathersName" required />
           </div>
           <div class="input-box">
-            <label for="age">Age:</label>
-            <input type="number" id="age" name="age" required />
+            <label for="house-number:">House-Number:</label>
+            <input type="number" id="house-number" name="house-number" required />
            <div class="gender display">
-             <label for="gender">Gender</label>
+             <label for="gender">Gender:</label>
           <input type="radio" name="gender" id="male"  require>male
                     <input type="radio" name="gender" id="female"  require>female
            </div>
