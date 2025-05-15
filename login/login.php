@@ -2,76 +2,57 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up</title>
-  <link rel="stylesheet" href="../CSS/login.css
-  ">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="stylesheet" href="../CSS/login.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 
 <body>
-  <div class="login-box">
+  <!-- Wrapper with max-width and centering -->
+  <div class="container mt-5">
+    <div class="login-box mx-auto w-100" style="max-width: 600px;">
+      <h1 class="header text-center mb-4">Login now</h1>
 
-    <h1 class="header">Login now</h1>
-    <div class="from">
-      <form action="./login/loginDB.php" method="post" enctype="multipart/form-data">
+      <form action="./login/loginDB.php" method="post" enctype="multipart/form-data" class="row g-3">
         <table>
 
           <tr>
+            <div class="col-12"></div>
             <td>
-              <!-- for username -->
-              <div class="name-container">
-                <label for="name">ID:</label>
-            </td>
-            <td>
-              <input type="text" name="name" placeholder="Enter your ID...." id="name">
+              <label for="name" class="form-label">ID:</label>
     </div>
     </td>
+    <td> <input type="text" class="form-control" name="name" id="name" placeholder="Enter your ID..."
+        onkeyup="validateLoginID()" /></td>
+    <div class="invalid-feedback">ID must be at least 4 characters.</div>
     </tr>
 
     <tr>
-      <!-- for  password
-  
-   -->
+      <div class="col-12"></div>
+      <td> <label for="create-password" class="form-label">Password:</label></td>
       <td>
-        <div class="create-password">
-          <label for="create-password">Password :</label>
+        <input type="password" class="form-control" name="create-password" id="create-password"
+          placeholder="Enter your password..." onkeyup="validateLoginPassword()" />
       </td>
-      <td>
-        <input type="text" name="create-password" placeholder="Enter yourpassword...." id="create-password">
-
+      <div class="invalid-feedback">Password must be at least 6 characters.</div>
   </div>
-  </td>
-
-
-  </tr>
-
-
-  <tr align="center">
-    <td colspan="2">
-      <button>
-        Login
-        <div class="arrow-wrapper">
-          <div class="arrow"></div>
-
-        </div>
-      </button>
-    </td>
-
   </tr>
   </table>
 
-
-
-
-
+  <div class="col-12 text-center">
+    <button type="submit" class="btn btn-primary px-4">Login</button>
+    <div>
+      <p class="register-question">Don't have account? </p>
+      <a href="./Signup.php" class="register-now">Register</a>
+    </div>
+  </div>
   </form>
   </div>
+  </div>
 
-
-
+  <script src="login.js"></script>
 </body>
 
 </html>

@@ -1,69 +1,53 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const loginForm = document.getElementById("loginForm");
-  if (loginForm) {
-    loginForm.addEventListener("submit", function (event) {
-      event.preventDefault();
-      let usernameEmail = document.getElementById("usernameEmail").value.trim();
-      let password = document.getElementById("password").value.trim();
-      let errors = [];
+const nameInput = document.getElementById("name");
+const houseNumberInput = document.getElementById("house-number");
+const idInput = document.getElementById("id-no");
+const phoneInput = document.getElementById("phone-number");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("create-password");
+const confirmPasswordInput = document.getElementById("confirm-password");
 
-      function displayError(fieldId, message) {
-        const errorElement =
-          document.getElementById(fieldId + "-error") ||
-          document.querySelector("." + fieldId + "-error");
-        if (errorElement) {
-          errorElement.textContent = message;
-        } else {
-          console.error(`Error element for ${fieldId} not found.`);
-        }
-      }
+function validateName() {
+  const regex = /^[a-zA-Z\s]+$/;
+  validateInput(nameInput, regex.test(nameInput.value.trim()));
+}
 
-      function clearError(fieldId) {
-        const errorElement =
-          document.getElementById(fieldId + "-error") ||
-          document.querySelector("." + fieldId + "-error");
-        if (errorElement) {
-          errorElement.textContent = "";
-        }
-      }
+function validateHouseNumber() {
+  validateInput(houseNumberInput, houseNumberInput.value > 0);
+}
 
-      // Clear previous errors
-      clearError("usernameEmail");
-      clearError("password");
+function validateId() {
+  validateInput(idInput, idInput.value.length >= 5);
+}
 
-      // Validate username or email
-      if (usernameEmail === "") {
-        errors.push("Please enter your username or email.");
-        displayError("usernameEmail", "Please enter your username or email.");
-        event.preventDefault();
-      } else {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (
-          !emailRegex.test(usernameEmail) &&
-          usernameEmail.indexOf(" ") !== -1
-        ) {
-          errors.push("Invalid email format or username contains spaces.");
-          displayError(
-            "usernameEmail",
-            "Invalid email format or username contains spaces."
-          );
-          event.preventDefault();
-        }
-      }
+function validatePhone() {
+  const regex = /^\+?\d{10,15}$/;
+  validateInput(phoneInput, regex.test(phoneInput.value.trim()));
+}
 
-      // Validate password
-      if (password === "") {
-        errors.push("Please enter your password.");
-        displayError("password", "Please enter your password.");
-        event.preventDefault();
-      }
+function validateEmail() {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  validateInput(emailInput, regex.test(emailInput.value.trim()));
+}
 
-      // Log validation errors if any
-      if (errors.length > 0) {
-        console.log("Validation Errors:", errors);
-      }
-    });
+function validatePassword() {
+  const valid = passwordInput.value.length >= 6;
+  validateInput(passwordInput, valid);
+  if (confirmPasswordInput.value) validateConfirmPassword();
+}
+
+function validateConfirmPassword() {
+  const match =
+    confirmPasswordInput.value === passwordInput.value &&
+    passwordInput.value.length >= 6;
+  validateInput(confirmPasswordInput, match);
+}
+
+function validateInput(inputElement, isValid) {
+  if (isValid) {
+    inputElement.classList.add("is-valid");
+    inputElement.classList.remove("is-invalid");
   } else {
-    console.error("Login form element with ID 'loginForm' not found.");
+    inputElement.classList.add("is-invalid");
+    inputElement.classList.remove("is-valid");
   }
-});
+}
