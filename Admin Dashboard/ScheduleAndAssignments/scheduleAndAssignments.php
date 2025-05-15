@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 // Database connection
 $servername = "localhost";
 $username = "root";
@@ -61,10 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['schedule_fix'])) {
     exit();
 }
 
-// Retrieve existing schedule for editing
-$edit_schedule = null;
+// Retrieve the schedule ID from the query string
 if (isset($_GET['edit_schedule_id'])) {
-    $edit_schedule_id = intval($_GET['edit_schedule_id']);
+    $edit_schedule_id = intval($_GET['edit_schedule_id']); // Sanitize input
     $sql = "SELECT * FROM schedules WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $edit_schedule_id);
@@ -72,6 +73,29 @@ if (isset($_GET['edit_schedule_id'])) {
     $result = $stmt->get_result();
     $edit_schedule = $result->fetch_assoc();
     $stmt->close();
+
+    // Store the schedule data in the session
+    $_SESSION['edit_schedule'] = $edit_schedule;
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_schedule'])) {
+    // Handle the form submission to update the schedule
+    $schedule_id = intval($_POST['schedule_id']);
+    $assigned_to = htmlspecialchars(trim($_POST['assigned_to']));
+    $date = htmlspecialchars(trim($_POST['date']));
+    $time = htmlspecialchars(trim($_POST['time']));
+
+    $sql = "UPDATE schedules SET assigned_to = ?, date = ?, time = ? WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssi", $assigned_to, $date, $time, $schedule_id);
+    $stmt->execute();
+    $stmt->close();
+
+    // Redirect back to the main page
+    header("Location: scheduleAndAssignments.php");
+    exit();
+} else {
+    // If no schedule ID is provided, redirect back to the main page
+    header("Location: scheduleAndAssignments.php");
+    exit();
 }
 ?>
 <!DOCTYPE html>
@@ -162,7 +186,7 @@ if (isset($_GET['edit_schedule_id'])) {
                         <td>{$row['date']}</td>
                         <td>{$row['time']}</td>
                         <td>
-                          <a href='?edit_schedule_id={$row['id']}' class='btn-success'>Edit</a>
+                          <a href=\"editSchedule.php?edit_schedule_id={$row['id']}\" class=\"btn-success\">Edit</a>
                         </td>
                       </tr>";
             }
@@ -194,8 +218,49 @@ if (isset($_GET['edit_schedule_id'])) {
 
   <script>
     function scheduleFix(reportId) {
-      document.getElementById('report_id').value = reportId;
+        console.log("Schedule Fix clicked for Report ID:", reportId); // Debugging output
+        const reportInput = document.getElementById('report_id');
+        if (reportInput) {
+            reportInput.value = reportId; // Set the report ID in the hidden input field
+            console.log("Report ID set in form:", reportInput.value); // Debugging output
+        } else {
+            console.error("Report ID input field not found!"); // Debugging output
+        }
+        const formContainer = document.querySelector('.form-container');
+        if (formContainer) {
+            formContainer.scrollIntoView({ behavior: 'smooth' }); // Scroll to the form
+            console.log("Form scrolled into view."); // Debugging output
+        } else {
+            console.error("Form container not found!"); // Debugging output
+        }
     }
+
+    // Handle "Schedule Fix" button click
+    document.querySelectorAll('.btn-success').forEach(button => {
+      if (button.textContent.trim() === 'Schedule Fix') {
+        button.addEventListener('click', function () {
+          const reportId = this.getAttribute('onclick').match(/\d+/)[0]; // Extract report ID
+          document.getElementById('report_id').value = reportId; // Set the report ID in the hidden input field
+          document.querySelector('.form-container').scrollIntoView({ behavior: 'smooth' }); // Scroll to the form
+        });
+      }
+    });
+
+    // Handle "Edit" button click
+    document.querySelectorAll('.btn-success').forEach(button => {
+      if (button.textContent.trim() === 'Edit') {
+        button.addEventListener('click', function (event) {
+          event.preventDefault(); // Prevent default link behavior
+          const editScheduleId = this.getAttribute('href').match(/\d+/)[0]; // Extract schedule ID
+          console.log("Edit button clicked for Schedule ID:", editScheduleId); // Debugging output
+          if (editScheduleId) {
+              window.location.href = `?edit_schedule_id=${editScheduleId}`; // Redirect with the edit_schedule_id
+          } else {
+              console.error("Edit Schedule ID not found!"); // Debugging output
+          }
+        });
+      }
+    });
   </script>
 </body>
 
