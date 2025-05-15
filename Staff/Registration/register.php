@@ -87,6 +87,13 @@
     <div class="header">
       <h3>Hermata Mentina Residents Registration Form</h3>
     </div>
+    <?php
+session_start();
+if (isset($_SESSION['reg_error'])) {
+    echo '<div id="error-message" style="color:red;">' . htmlspecialchars($_SESSION['reg_error']) . '</div>';
+    unset($_SESSION['reg_error']);
+}
+?>
     <form action="store_data.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm(event)">
       <div id="error-message"></div>
       <div class="container">
