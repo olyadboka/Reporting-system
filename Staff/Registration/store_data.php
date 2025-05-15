@@ -135,9 +135,19 @@ if ($stmt->execute()) {
     echo "New record created successfully.<br>";
     echo "Residence ID: " . $residence_id . "<br>";
     echo "Generated Password: " . $random_password . "<br>"; // Display the generated password
+    $activity = "Registered new resident: $fname $mname ($residence_id)";
+    $user = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'staff'; // or use staff name if available
+    $timestamp = date('Y-m-d H:i:s');
+
+    $log_sql = "INSERT INTO activity_log (activity, user, timestamp) VALUES (?, ?, ?)";
+    $log_stmt = $conn->prepare($log_sql);
+    $log_stmt->bind_param("sss", $activity, $user, $timestamp);
+    $log_stmt->execute();
+    $log_stmt->close();
 } else {
     echo "Error: " . $stmt->error;
 }
+
 
 $stmt->close();
 $conn->close();
