@@ -46,7 +46,7 @@ $hashedPassword = password_hash($row["password"], PASSWORD_DEFAULT);
         $_SESSION['user_email'] = $row["email"];
         $_SESSION['user_phone'] = $row["phone"];
         $_SESSION['user_image'] = $row["image"];
-        $_SESSION['user_kebele_id'] = $row["kebele_id"];
+        $_SESSION['kebele_id'] = $row["kebele_id"];
         $_SESSION['role'] = $row["role"];
         $_SESSION['status'] = $row["status"];
 

@@ -48,7 +48,7 @@ session_start(); ?>
       <div class="id"></div> <label class="form-label required" id="reporter-id">ID</label>
     </td>
     <td> <input type="text" name="reporter-id" id="reporter-id" class="reporter-id"
-        value="<?php echo strtoupper($_SESSION['user_id']);?>" disabled>
+        value="<?php echo strtoupper($_SESSION['kebele_id']);?>" disabled alt="">
 
       </div>
 

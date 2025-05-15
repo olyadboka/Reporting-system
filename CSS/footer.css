@@ -1,44 +1,318 @@
-/* ====== footer ===========  */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+}
+
+.content {
+  flex: 1;
+  padding: 2rem;
+}
+
+/* Footer Styles */
 footer {
-  background-color: #14141f;
+  background: linear-gradient(135deg, #14141f 0%, #1a1a2e 100%);
   color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at 20% 30%,
+    rgba(76, 0, 255, 0.05) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
 }
 
 .footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem 2rem;
   display: grid;
-  grid-template-columns: repeat(4, auto);
-  grid-template-rows: repeat(6, auto);
-  text-align: center;
-  padding: 2rem;
-  width: 100vw;
-}
-.footer-top .kebele {
-  padding: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
 }
 
-.footer-top .contact {
-  padding: 2rem;
+.footer-section {
+  padding: 0 1rem;
 }
-.kebele p a {
-  padding: 10px;
-  margin: 10px;
-  text-decoration: none;
+
+.footer-section h3 {
   color: #fff;
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 0.5rem;
 }
-.footer-top .galary {
+
+.footer-section h3::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, #4f46e5, #818cf8);
+  border-radius: 3px;
+}
+
+/* Company Section */
+.kebele ul {
+  list-style: none;
+}
+
+.kebele ul li {
+  margin-bottom: 0.8rem;
+}
+
+.kebele ul li a {
+  color: #d1d5db;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+  position: relative;
+}
+
+.kebele ul li a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -3px;
+  left: 0;
+  background-color: #818cf8;
+  transition: width 0.3s ease;
+}
+
+.kebele ul li a:hover {
+  color: #fff;
+  transform: translateX(5px);
+}
+
+.kebele ul li a:hover::after {
+  width: 100%;
+}
+
+/* Contact Section */
+.contact p {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: #d1d5db;
+}
+
+.contact p i {
+  margin-right: 10px;
+  width: 20px;
+  color: #818cf8;
+}
+
+.social-icons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.social-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-icons a:hover {
+  background-color: #4f46e5;
+  transform: translateY(-3px);
+}
+
+/* Gallery Section */
+.gallery-images {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin: 1rem;
-  margin-top: 2rem;
+  gap: 0.5rem;
 }
 
-.footer-top .galary img {
-  margin: none;
-  border: 5px solid #fff;
-  border-radius: 5px;
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  aspect-ratio: 1/1;
 }
 
-.footer-top .newsletter {
-  padding: 2rem;
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.1);
+}
+
+.gallery-item::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gallery-item:hover::after {
+  opacity: 1;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+  text-align: center;
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.footer-bottom a {
+  color: #818cf8;
+  text-decoration: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .footer-container {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .gallery-images {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .footer-section h3::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .kebele ul li a:hover {
+    transform: translateX(0);
+  }
+
+  .contact p {
+    justify-content: center;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+}
+
+/* Animation for newsletter form */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.newsletter form {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Back to top button */
+.back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #4f46e5;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 999;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.back-to-top:hover {
+  background-color: #4338ca;
+  transform: translateY(-3px);
+}
+
+.kebele ul {
+  list-style: none;
+  padding: 0;
+}
+
+.kebele ul li {
+  margin-bottom: 0.8rem;
+}
+
+.kebele ul li a {
+  color: #d1d5db;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+  position: relative;
+}
+
+.kebele ul li a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -3px;
+  left: 0;
+  background-color: #818cf8;
+  transition: width 0.3s ease;
+}
+
+.kebele ul li a:hover {
+  color: #fff;
+  transform: translateX(5px);
+}
+
+.kebele ul li a:hover::after {
+  width: 100%;
 }
