@@ -25,7 +25,8 @@ do {
 $fname = $_POST['fname'];
 $mname = $_POST['mname'];
 $fathersName = $_POST['fathersName'];
-$age = $_POST['age'];
+$house_number = $_POST['house-number'];
+$gender = $_POST['gender'];
 $birthdate = $_POST['birthdate'];
 $phone = $_POST['phone'];
 $email = $_POST['email'];
@@ -36,6 +37,7 @@ $motherFullName = $_POST['motherFullName'];
 $motherPhone = $_POST['motherPhone'];
 $emergencyName = $_POST['emergencyName'];
 $emergencyPhone = $_POST['emergencyPhone'];
+
 
 $photo = $_FILES['photo']['tmp_name'];
 $photo_blob = null;
@@ -52,17 +54,18 @@ $hashed_password = password_hash($random_password, PASSWORD_DEFAULT); // Hash th
 $role = 'resident';
 
 // Insert data into the users table, excluding the auto_increment `id` column
-$sql = "INSERT INTO residents (residence_id, fname, mname, fathersName, age, birthdate, phone, email, address, fatherFullName, fatherPhone, motherFullName, motherPhone, emergencyName, emergencyPhone, photo, role, hashed_password)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO residents (residence_id, fname, mname, fathersName, house_number,gender, birthdate, phone, email, address, fatherFullName, fatherPhone, motherFullName, motherPhone, emergencyName, emergencyPhone, photo, role, hashed_password)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param(
-    "ssssisssssssssssss", // Updated to 18 characters
+    "ssssissssssssssssss", // Updated to 18 characters
     $residence_id,
     $fname,
     $mname,
     $fathersName,
-    $age,
+    $house_number,
+    $gender,
     $birthdate,
     $phone,
     $email,
