@@ -15,7 +15,7 @@
     <div class="login-box mx-auto w-100" style="max-width: 600px;">
       <h1 class="header text-center mb-4">Login now</h1>
 
-      <form action="./login/loginDB.php" method="post" enctype="multipart/form-data" class="row g-3">
+      <form action="../loginSignUp/loginDB.php" method="post" enctype="multipart/form-data" class="row g-3">
         <table>
 
           <tr>
@@ -43,10 +43,7 @@
 
   <div class="col-12 text-center">
     <button type="submit" class="btn btn-primary px-4">Login</button>
-    <div>
-      <p class="register-question">Don't have account? </p>
-      <a href="./Signup.php" class="register-now">Register</a>
-    </div>
+
   </div>
   </form>
   </div>

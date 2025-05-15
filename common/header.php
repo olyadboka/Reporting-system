@@ -1,11 +1,11 @@
-<!--<?php
-// session_start();
-
-// if (!isset($_SESSION['username'])) {
-//     header('Location: ../register.html/login.php');
-//     exit(); 
-// }
-// ?>-->
+<?php
+session_start();
+include '../dataBase.all/dbconnection.php';
+if (!isset($_SESSION['username'])) {
+    header('Location: ../login/login.php');
+    exit(); 
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -139,14 +139,38 @@
 
         </ul>
 
+        <?php 
 
 
-        <a href="#" class="btn btn-secondary">
-          <span class="text text-1">Register</span>
+if(isset($_SESSION['user_id'])){
+       $user_id = $_SESSION['user_id'];
+       $sql = "SELECT * FROM users WHERE user_id = '$user_id'";
+       $result = mysqli_query($con, $sql);
+       if(mysqli_num_rows($result)> 0){
+           $row = mysqli_fetch_array($result);
+           $full_name = $row['full_name'];
+           $role = $row['role'];
+           $status = $row['status'];
+           $email = $row['email'];
+           $phone = $row['phone'];
+           $image = $row['image'];
+           $kebele_id = $row['kebele_id'];
+               
+          }
+          if($role == 'admin'){
+            echo '<a href= "../Admin Dashboard/dashboardhome.php" class="btn btn-primary"> Dashboard</a>';
+          } else if($role == 'stuff'){
+            echo '<a href= "../staffCSS/staff.php" class="btn btn-primary"> Dashboard</a>';
+          }
+      
+          echo '<a href="../editProfile/editProfile.php"><img src="' . htmlspecialchars($image) . '" alt="Profile" style="width:40px;height:40px;border-radius:50%;"></a>';
 
+            echo "<a href= '../login/logout.php' class= 'btn btn-danger'>Logout</a>";
+            }else{
+              echo '<a href= "../login/login.php" class ="btn btn-primary">Login</a>';
+            }
 
-        </a>
-
+?>
         <button class="nav-open-btn" aria-label="open menu" data-nav-toggler>
           <span class="line line-1"></span>
           <span class="line line-2"></span>
