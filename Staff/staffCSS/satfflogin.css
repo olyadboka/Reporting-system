@@ -1,0 +1,133 @@
+@font-face {
+  font-family: "myfont";
+  src: url("../Registration/fonts/Giphurs-SemiBold.ttf");
+}
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: #c4bfbf;
+  font-family: Arial, sans-serif;
+  text-transform: capitalize;
+  font-family: myfont, "Times New Roman", Times, serif;
+}
+
+nav {
+  background-color: rgb(153, 159, 180);
+  color: rgb(230, 226, 226);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 60px;
+  font-family: myfont, "Times New Roman", Times, serif;
+}
+
+nav h3 {
+  margin: 0;
+  font-size: 25px;
+  color: rgb(6, 22, 66);
+}
+
+.container {
+  width: 100%;
+  height: 700px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-image: url(/Staff/satffimages/workers.png);
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+.hidden {
+  opacity: 0;
+  filter: blur(2px);
+  transform: translatey(15%);
+  transition: all 0.8s;
+}
+.show {
+  opacity: 1;
+  filter: blur(0);
+  transform: translatey(0);
+  transition: all 1.5s;
+}
+.hidden:nth-of-type(2) {
+  transform: translatey(-15%);
+  /* transition: all 3s ; */
+}
+.show:nth-of-type(2) {
+  transform: translatey(0);
+  /* transition: all 3s ; */
+}
+.login-container {
+  width: 500px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #c4c2c2;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px 0px #000;
+  margin: 5% 0 0 50px;
+}
+.back-img {
+  width: 600px;
+  height: 100%;
+  background-image: url(/images/4892811.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.head {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  color: #1b245a;
+}
+.form-container {
+  width: 400px;
+  height: 80%;
+  /* background-color: #f9f9f9; */
+  background-color: #c4c2c2;
+
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+input {
+  width: 350px;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #b7bbd4;
+}
+input::placeholder {
+  font-size: 14px;
+  color: #13132b;
+  font-weight: bold;
+}
+input[type="submit"] {
+  width: 80px;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #1b245a;
+  color: #fff;
+  cursor: pointer;
+}
+label {
+  font-weight: bolder;
+}
