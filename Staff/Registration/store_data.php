@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 // Generate a unique residence_id
 do {
     $residence_id = random_int(100000, 999999);
-    $check_sql = "SELECT COUNT(*) AS count FROM users WHERE residence_id = ?";
+    $check_sql = "SELECT COUNT(*) AS count FROM residents WHERE residence_id = ?";
     $check_stmt = $conn->prepare($check_sql);
     $check_stmt->bind_param("s", $residence_id);
     $check_stmt->execute();
@@ -52,7 +52,7 @@ $hashed_password = password_hash($random_password, PASSWORD_DEFAULT); // Hash th
 $role = 'resident';
 
 // Insert data into the users table, excluding the auto_increment `id` column
-$sql = "INSERT INTO users (residence_id, fname, mname, fathersName, age, birthdate, phone, email, address, fatherFullName, fatherPhone, motherFullName, motherPhone, emergencyName, emergencyPhone, photo, role, hashed_password)
+$sql = "INSERT INTO residents (residence_id, fname, mname, fathersName, age, birthdate, phone, email, address, fatherFullName, fatherPhone, motherFullName, motherPhone, emergencyName, emergencyPhone, photo, role, hashed_password)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
@@ -88,4 +88,3 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
-?>
