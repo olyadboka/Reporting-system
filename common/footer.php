@@ -36,7 +36,7 @@
   </div>
 
   <div class="footer-bottom">
-    <p>&copy; 2023 Hermata Mentina. All rights reserved. | Designed by <a href="#">Hermata Team</a></p>
+    <p>&copy; 2025 Hermata Mentina. All rights reserved. | Designed by <a href="#">Hermata Team</a></p>
   </div>
 
   <a href="#" class="back-to-top" aria-label="Back to Top">
