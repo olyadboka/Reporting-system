@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    $sql = "SELECT * FROM users WHERE kebele_id = ?";
+    $sql = "SELECT * FROM residents WHERE residence_id = ?";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, "s", $idNumber);
     mysqli_stmt_execute($stmt);
@@ -33,22 +33,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $row = mysqli_fetch_array($result);
 
-$hashedPassword = password_hash($row["password"], PASSWORD_DEFAULT);
+// $hashedPassword = password_hash($row["password"], PASSWORD_DEFAULT);
 
   
-    if (password_verify($passwordInput, $hashedPassword)) {
+    if (password_verify($passwordInput, $row["hashed_password"])) {
 
         session_regenerate_id(true);
 
         $_SESSION['SUCCESS'] = "Logged in successfully";
-        $_SESSION['user_id'] = $row["user_id"];
-        $_SESSION['user_name'] = $row["full_name"];
+        $_SESSION['user_id'] = $row["residence_id"];
+        $_SESSION['user_name'] = $row["fname"]." ".$row["mname"]." ".$row["fathersName"];
         $_SESSION['user_email'] = $row["email"];
         $_SESSION['user_phone'] = $row["phone"];
-        $_SESSION['user_image'] = $row["image"];
-        $_SESSION['kebele_id'] = $row["kebele_id"];
+        $_SESSION['user_image'] = $row["photo"];
+        $_SESSION['kebele_id'] = $row["residence_id"];
         $_SESSION['role'] = $row["role"];
-        $_SESSION['status'] = $row["status"];
+        // $_SESSION['status'] = $row["status"];
 
         switch ($row["role"]) {
             case "admin":
@@ -57,7 +57,7 @@ $hashedPassword = password_hash($row["password"], PASSWORD_DEFAULT);
             case "staff":
                 header("Location: ../../Staff/staff.php");
                 break;
-            case "user":
+            case "resident":
                 header("Location: ../../Hermata home/index.php");
                 break;
             default:

@@ -176,21 +176,22 @@ session_start();
 
       <?php
 if (isset($_SESSION['user_id'])) {
+  include '../dataBasesls/dbConnection.php';
   $user_id = $_SESSION['user_id'];
   $role = $_SESSION['role'];
   $name = $_SESSION['user_name'];
   $email = $_SESSION['user_email'];
   $phone = $_SESSION['user_phone'];
-  $kebele_id = $_SESSION['user_kebele_id'];
+  $kebele_id = $_SESSION['kebele_id'];
 
-  $stmt = mysqli_prepare($con, "SELECT image FROM residents WHERE user_id = ?");
+  $stmt = mysqli_prepare($con, "SELECT photo FROM residents WHERE residence_id = ?");
   mysqli_stmt_bind_param($stmt, "s", $user_id);
   mysqli_stmt_execute($stmt);
   $result = mysqli_stmt_get_result($stmt);
 
   $imageData = '';
   if ($row = mysqli_fetch_assoc($result)) {
-    $imageData = base64_encode($row['image']); 
+    $imageData = base64_encode($row['photo']); 
   }
 
   if ($role === 'admin') {
@@ -201,7 +202,7 @@ if (isset($_SESSION['user_id'])) {
 
   if ($imageData) {
     echo '<a href="../editProfile/editProfile.php">';
-    echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width:40px;height:40px;border-radius:50%; object-fit:cover;">';
+    echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width:100px;height:100px;border-radius:50%; object-fit:cover;">';
     echo '</a>';
   }}
 
