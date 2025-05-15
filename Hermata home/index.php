@@ -6,18 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- 
-    - primary meta tags
-  -->
-
   <title>hermata mentina kebele Report Management</title>
 
   <meta name="title" content="Hirmata Mentina - Kebele & Report Managment System">
   <meta name="description" content="This is a ReportSystem made by 3rd year Students">
 
-  <!-- 
-    - favicon
-  -->
   <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
 
   <!-- 
@@ -27,14 +20,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Forum&display=swap" rel="stylesheet">
 
-  <!-- 
-    - custom css link
-  -->
   <link rel="stylesheet" href="../CSS/style.css">
 
-  <!-- 
-    - preload images
-  -->
   <link rel="preload" as="image" href="./assets/images/hero-slider-1.jpg">
   <link rel="preload" as="image" href="./assets/images/hero-slider-2.jpg">
   <link rel="preload" as="image" href="./assets/images/hero-slider-3.jpg">
@@ -51,11 +38,6 @@
     <div class="circle"></div>
     <p class="text">Hermata Mentina Kebele Report Management System </p>
   </div>
-
-
-
-
-
   <!-- 
     - #TOP BAR
   -->
@@ -74,15 +56,6 @@
       </address>
 
       <div class="separator"></div>
-
-      <!-- <div class="topbar-item item-2">
-        <div class="icon">
-          <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
-        </div>
-
-        <span class="span">Morning 2.00 - 6.00 && Afternoon 8:00 - 11:00 </span>
-      </div> -->
-
       <a href="tel:+11234567890" class="topbar-item link">
         <div class="icon">
           <ion-icon name="call-outline" aria-hidden="true"></ion-icon>
@@ -116,7 +89,7 @@
     <div class="container">
 
       <a href="#" class="logo">
-        <img src="./assets/img/Flag_of_Ethiopia.svg" width="140" height="40" alt="Ethiopian-logo ">
+        <img src="./assets/img/Flag_of_the_Oromia_Region.svg.png" width="140" height="40" alt="Ethiopian-logo ">
       </a>
 
       <nav class="navbar" data-navbar>
@@ -197,10 +170,10 @@
 
       </nav>
 
-      <a href="#" class="btn btn-secondary">
-        <span class="text text-1">Register</span>
+      <a href="../login/login.php" class="btn btn-secondary">
+        <span class="text text-1">Login</span>
 
-        <span class="text text-2" aria-hidden="true">Register</span>
+        <span class="text text-2" aria-hidden="true">Login</span>
       </a>
 
       <button class="nav-open-btn" aria-label="open menu" data-nav-toggler>
@@ -245,10 +218,10 @@
               Your voice matters
             </p>
 
-            <a href="#" class="btn btn-primary slider-reveal">
-              <span class="text text-1">LOg in</span>
+            <a href="../login/login.php" class="btn btn-primary slider-reveal">
+              <span class="text text-1">Login</span>
 
-              <span class="text text-2" aria-hidden="true">LOg in</span>
+              <span class="text text-2" aria-hidden="true">Login</span>
             </a>
 
           </li>
@@ -270,10 +243,10 @@
               we can improve our community
             </p>
 
-            <a href="#" class="btn btn-primary slider-reveal">
-              <span class="text text-1">LOg in</span>
+            <a href="../login/login.php" class="btn btn-primary slider-reveal">
+              <span class="text text-1">Login</span>
 
-              <span class="text text-2" aria-hidden="true">LOg in</span>
+              <span class="text text-2" aria-hidden="true">Login</span>
             </a>
 
           </li>
@@ -295,10 +268,10 @@
               Let's build a better community together
             </p>
 
-            <a href="#" class="btn btn-primary slider-reveal">
-              <span class="text text-1">LOg in</span>
+            <a href="../login/login.php" class="btn btn-primary slider-reveal">
+              <span class="text text-1">Login</span>
 
-              <span class="text text-2" aria-hidden="true">LOg in</span>
+              <span class="text text-2" aria-hidden="true">Login</span>
             </a>
 
           </li>
@@ -316,15 +289,6 @@
 
 
       </section>
-
-
-
-
-
-
-
-
-
       <!-- 
         - #ABOUT
       -->

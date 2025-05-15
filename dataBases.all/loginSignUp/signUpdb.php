@@ -13,10 +13,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirmPassword = trim($_POST["confirm-password"]);
     $kebele = trim($_POST["kebele"]);
     $phoneNumber = trim($_POST["phone-number"]);
-    $role ="user";
+    $role = "user";
     $created_at = date('Y-m-d H:i:s');
     $status = "active";
+    $photo = null;
 
+    // Validate required fields
     if (
         $name == "" || $houseNumber == "" || $idNumber == "" || $gender == "" ||
         $email == "" || $password == "" || $confirmPassword == "" || $kebele == "" || $phoneNumber == ""
@@ -25,7 +27,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    
     if (is_numeric($name) || strlen($name) < 3) {
         echo "Name must be at least 3 characters and not a number!";
         exit;
@@ -35,31 +36,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Password and confirm password do not match!";
         exit;
     }
-if(!preg_match("/^[0-9]{10}$/", $phoneNumber)){
-  echo "Phone number must be 10 digists!";
-  exit;
-}
-if(!filter_var($email, FILTER_FLAG_EMAIL_UNICODE)){
-  echo 'Email is not valid!';
-  exit;
-}
-    $sqll = "SELECT residence_id FROM residents WHERE residence_id = '$idNumber'";
-    $result = mysqli_query($con, $sqll);
-    if (mysqli_num_rows($result) == 0) {
+
+    if (!preg_match("/^[0-9]{10}$/", $phoneNumber)) {
+        echo "Phone number must be 10 digits!";
+        exit;
+    }
+
+    // Optional email validation
+    // if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    //     echo "Email is not valid!";
+    //     exit;
+    // }
+
+    // Check resident
+    $sqll = "SELECT residence_id, photo FROM residents WHERE residence_id = ?";
+    $stmt = mysqli_prepare($con, $sqll);
+    mysqli_stmt_bind_param($stmt, "s", $idNumber);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+
+    if (mysqli_num_rows($res) == 0) {
         echo "Resident with this ID number does not exist!";
         exit;
     }
 
-    $sql2 = "INSERT INTO users (full_name, email, password, phone, role, created_at)
-             VALUES ('$name', '$email', '$password', '$phoneNumber', 'user', '$created_at')";
-    $result2 = mysqli_query($con, $sql2);
+    $row = mysqli_fetch_assoc($res);
+    $residence_id = $row['residence_id'];
+    $photo = isset($row['photo']) ? $row['photo'] : null;
 
-    if ($result2) {
-      $_SESSION['SUCCESS'] = "user created successfully";
+    // Use prepared statement for insert
+    $sql2 = "INSERT INTO users (
+                full_name, email, password, phone, role, created_at, kebele_id, gender, house_no, photo
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    $stmt2 = mysqli_prepare($con, $sql2);
+    mysqli_stmt_bind_param($stmt2, "ssssssssss", 
+        $name, $email, $password, $phoneNumber, $role, $created_at, 
+        $residence_id, $gender, $houseNumber, $photo
+    );
+
+    if (mysqli_stmt_execute($stmt2)) {
+        $_SESSION['SUCCESS'] = "User created successfully";
         header("Location: ../login/login.php");
         exit;
     } else {
-       $_SESSION['UNSUCCESS'] = "user not created";
+        $_SESSION['UNSUCCESS'] = "User not created";
         echo "Error: " . mysqli_error($con);
         header("Location: ../login/Signup.php");
         exit;
