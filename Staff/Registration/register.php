@@ -113,7 +113,7 @@
             <label for="age">Age:</label>
             <input type="number" id="age" name="age" required />
            <div class="gender display">
-             <label for="gender">Gender</label>
+             <label for="gender">Gender:</label>
           <input type="radio" name="gender" id="male"  require>male
                     <input type="radio" name="gender" id="female"  require>female
            </div>

@@ -77,18 +77,19 @@ nav a:hover {
   font-weight: bolder;
 }
 
-.input-box label , .gender label {
+.input-box label,
+.gender label {
   flex: 1 1 100%;
   font-weight: bold;
 }
 .gender {
-  width: 50%;\
+  width: 40%;
   height: 100px;
   flex-direction: row;
 }
 
 input[type="radio"] {
-  margin-left: 100px; 
+  margin-left: 60px;
 }
 
 .input-box input {
@@ -160,14 +161,27 @@ input {
   font-size: 20px;
 }
 
-@media (max-width: 600px) {
+
+@media (max-width:600px) {
   .gender {
-  width: 100%;}
+    width: 80%;
+  }
 
   nav h3 {
     font-size: 17px;
   }
-   nav a {
+  nav a {
     font-size: 13px;
   }
+}
+
+@media (max-width:700px) {
+   .gender {
+    width: 70%;
   }
+}
+@media (max-width:1200px) {
+   .gender {
+    width: 40%;
+  }
+}
