@@ -13,7 +13,7 @@
   --white-alpha-20: hsla(0, 0%, 100%, 0.2);
   --white-alpha-10: hsla(0, 0%, 100%, 0.1);
   --black: hsla(0, 0%, 0%, 1);
-  --black-alpha-80: hsla(234, 29%, 28%, 0.8);
+  --black-alpha-80: hsla(235, 16%, 85%, 0.8);
   --black-alpha-15: hsla(0, 0%, 0%, 0.15);
 
   --loading-text-gradient: linear-gradient(
@@ -769,10 +769,11 @@ body.nav-active {
 .report-link,
 .navbar-link {
   position: relative;
-  font-size: 2rem;
+  font-size: 1.6rem;
   text-transform: uppercase;
   padding-block: 10px;
   max-width: unset;
+  color: rgb(231, 227, 204);
 }
 
 .navbar-link::after {
