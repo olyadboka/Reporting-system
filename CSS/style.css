@@ -1269,7 +1269,7 @@ textarea.input-field {
   #FOOTER
 \*-----------------------------------*/
 
-.footer-top {
+/* .footer-top {
   margin-block-end: 70px;
 }
 
@@ -1378,7 +1378,7 @@ textarea.input-field {
   display: inline;
   color: var(--gold-crayola);
   text-decoration: underline;
-}
+} */
 
 /*-----------------------------------*\
   #BACK TO TOP
@@ -1600,7 +1600,7 @@ textarea.input-field {
    * FOOTER
    */
 
-  .footer-brand > * {
+  /* .footer-brand > * {
     max-width: 460px;
     margin-inline: auto;
   }
@@ -1621,7 +1621,7 @@ textarea.input-field {
     bottom: 0;
     min-width: max-content;
   }
-}
+} */
 
 /**
  * responsive for larger than 768px screen

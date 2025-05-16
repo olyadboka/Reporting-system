@@ -26,9 +26,10 @@ session_start();
 
   <link rel="stylesheet" href="../CSS/style.css">
 
-  <link rel="preload" as="image" href="./assets/images/hero-slider-1.jpg">
+  <!-- <link rel="preload" as="image" href="./assets/images/hero-slider-1.jpg">
   <link rel="preload" as="image" href="./assets/images/hero-slider-2.jpg">
-  <link rel="preload" as="image" href="./assets/images/hero-slider-3.jpg">
+  <link rel="preload" as="image" href="./assets/images/hero-slider-3.jpg"> -->
+  <link rel="stylesheet" href="../CSS/footer.css">
 
 </head>
 
@@ -548,124 +549,11 @@ if (isset($_SESSION['user_id'])) {
     - #FOOTER
   -->
 
-  <footer class="footer section has-bg-image text-center" style="background-image: url('./assets/img/form-pattern.png')"
-    id="footerss">
-    <div class="container">
 
-      <div class="footer-top grid-list">
+  <?php 
 
-        <div class="footer-brand has-before has-after">
-
-          <a href="#" class="logo">
-            <img src="./assets/img/Flag_of_Ethiopia.svg" width="160" height="60" loading="lazy" alt="grilli home">
-            <br>
-            <br>
-            <img src="./assets/img/Flag_of_the_Oromia_Region.svg.png" width="160" height="60">
-          </a>
-
-          <address class="body-4">
-            Hermata mentina, jimma City, Oromia 9578, Ethiopia
-          </address>
-
-          <a href="hermatamentinakebele@gmail.com" class="body-4 contact-link">"hermatamentinakebele@gmail.com</a>
-
-          <a href="tel:+88123123456" class="body-4 contact-link">Phone no : +251-123-123456</a>
-
-
-
-          <div class="wrapper">
-            <div class="separator"></div>
-            <div class="separator"></div>
-            <div class="separator"></div>
-          </div>
-
-          <p class="title-1">We are Family</p>
-
-
-
-          <form action="" class="input-wrapper">
-            <div class="icon-wrapper">
-              <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
-
-              <input type="file" name="email_address" placeholder="Your email" autocomplete="off" class="input-field">
-            </div>
-
-            <button type="submit" class="btn btn-secondary">
-              <span class="text text-1">Submite</span>
-
-              <span class="text text-2" aria-hidden="true">Submite</span>
-            </button>
-          </form>
-
-        </div>
-
-        <ul class="footer-list">
-
-          <li>
-            <a href="#" id class="label-2 footer-link hover-underline">Home</a>
-          </li>
-
-          <li>
-            <a href="#whyus" class="label-2 footer-link hover-underline">objectives</a>
-          </li>
-
-          <li>
-            <a href="#about" class="label-2 footer-link hover-underline">About Us</a>
-          </li>
-
-          <li>
-            <a href="#lover" class="label-2 footer-link hover-underline">About Represntative</a>
-          </li>
-
-          <li>
-            <a href="#footerss" id="contactsss" class="label-2 footer-link hover-underline">Contact</a>
-          </li>
-          <li>
-            <a href="#represntative" class="label-2 footer-link hover-underline">Report</a>
-          </li>
-
-        </ul>
-
-        <ul class="footer-list">
-
-          <li>
-            <a href="#" class="label-2 footer-link hover-underline">Facebook</a>
-          </li>
-
-          <li>
-            <a href="#" class="label-2 footer-link hover-underline">Instagram</a>
-          </li>
-
-          <li>
-            <a href="#" class="label-2 footer-link hover-underline">Twitter</a>
-          </li>
-
-          <li>
-            <a href="#" class="label-2 footer-link hover-underline">Youtube</a>
-          </li>
-
-          <li>
-            <a href="https://www.google.com/maps/place/Hermata+Kebele+Adminstration+Office/@7.6753577,36.8268682,1003m/data=!3m1!1e3!4m15!1m8!3m7!1s0x17adb882f6e6a723:0xf45a83bb90208fd8!2sJimma!3b1!8m2!3d7.6753269!4d36.8372893!16zL20vMDZwcG5q!3m5!1s0x17adb986136ad31f:0x118e5f177492d41!8m2!3d7.674528!4d36.8325806!16s%2Fg%2F11pztbq07j?entry=ttu&g_ep=EgoyMDI1MDMwNC4wIKXMDSoASAFQAw%3D%3D"
-              class="label-2 footer-link hover-underline">location</a>
-          </li>
-
-        </ul>
-
-      </div>
-
-      <div class="footer-bottom">
-
-        <p class="copyright">
-          &copy; hermatamentinakebele. All Rights Reserved |</a>
-        </p>
-
-      </div>
-
-    </div>
-  </footer>
-
-
-
+include '../common/footer.php';
+?>
 
 
   <!-- 

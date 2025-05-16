@@ -105,9 +105,9 @@ if (!isset($_SESSION['user_id'])) {
           $name = $_SESSION['user_name'];
           $email = $_SESSION['user_email'];
           $phone = $_SESSION['user_phone'];
-          $kebele_id = $_SESSION['user_kebele_id'];
+          $kebele_id = $_SESSION['kebele_id'];
 
-          $stmt = mysqli_prepare($con, "SELECT photo FROM users WHERE kebele_id = ?");
+          $stmt = mysqli_prepare($con, "SELECT photo FROM residents WHERE residence_id = ?");
           mysqli_stmt_bind_param($stmt, "s", $kebele_id);
           mysqli_stmt_execute($stmt);
           $result = mysqli_stmt_get_result($stmt);
