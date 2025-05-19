@@ -17,7 +17,7 @@ if (empty($_SESSION['csrf_token'])) {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 
-<body>
+<body  >
 
   <div class="container mt-5">
     <?php
@@ -45,9 +45,9 @@ if (empty($_SESSION['csrf_token'])) {
         <div class="col-12">
           <label for="password" class="form-label">Password:</label>
           <div class="input-group">
-            <input type="password" class="form-control" name="password" id="password"
+            <input type="password" class="form-control" name="password" id="password" style="width: 240px; flex: none;"
               placeholder="Enter your password..." required onkeyup="validateLoginPassword()" />
-            <button class="btn btn-outline-secondary" type="button" id="togglePassword">Show</button>
+            <button class="btn btn-outline-secondary" type="button" id="togglePassword" style="color: white; font-weight:bold">Show</button>
           </div>
           <div class="invalid-feedback">Password must be at least 6 characters.</div>
         </div>

@@ -766,6 +766,7 @@ body.nav-active {
   border-block-start: 1px solid var(--white-alpha-20);
 }
 
+
 .report-link,
 .navbar-link {
   position: relative;

@@ -6,11 +6,11 @@
       <p><i class="fas fa-phone-alt"></i> +251 93 242 342</p>
       <p><i class="fas fa-envelope"></i> HermataMentina@gmail.com</p>
       <div class="social-icons">
-        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="Twitter" id="twt"><i class="fab fa-twitter"></i></a>
+        <a href="#" aria-label="Facebook" id="face"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="YouTube" id="you"><i class="fab fa-youtube"></i></a>
+        <a href="#" aria-label="LinkedIn" id="link"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" aria-label="Instagram" id="inst"><i class="fab fa-instagram"></i></a>
       </div>
     </div>
 
@@ -26,7 +26,7 @@
     <div class="footer-section kebele">
       <h3>Company</h3>
       <ul>
-        <li><a href="#">About Us</a></li>
+        <li><a href="#" id="">About Us</a></li>
         <li><a href="#">Contact Us</a></li>
         <li><a href="#">Privacy Policy</a></li>
         <li><a href="#">Terms & Condition</a></li>
