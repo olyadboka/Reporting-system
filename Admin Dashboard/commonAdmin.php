@@ -41,7 +41,9 @@
           <p class="admin-role">Admin</p>
         </div>
       </div>
-      <button class="logout-btn">Logout</button>
+      <form action="logout.php" method="post" style="margin:0;">
+        <button type="submit" class="../dataBasesls/loginSignUp/logout-btn">Logout</button>
+      </form>
     </header>
 
     <!-- Main Section -->
