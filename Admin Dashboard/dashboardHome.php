@@ -148,34 +148,29 @@
   </div>
 
   <?php
-  // These functions would need to be implemented to query your database
+
   function getResidentCount() {
-    // Query database for resident count
-    // Example: "SELECT COUNT(*) FROM residents"
-    return "42"; // Replace with actual count
+  
+    return "42";
   }
   
   function getTotalReportCount() {
-    // Query database for total report count
-    // Example: "SELECT COUNT(*) FROM reports"
-    return "127"; // Replace with actual count
+  
+    return "127"; 
   }
   
   function getSolvedReportCount() {
-    // Query database for solved reports count
-    // Example: "SELECT COUNT(*) FROM reports WHERE status = 'solved'"
-    return "89"; // Replace with actual count
+   
+    return "89"; 
   }
   
   function getPendingReportCount() {
-    // Query database for pending reports count
-    // Example: "SELECT COUNT(*) FROM reports WHERE status = 'pending'"
+   
     return "38"; // Replace with actual count
   }
   
   function getTableRowCount($tableName) {
-    // Query database for row count in specified table
-    // Example: "SELECT COUNT(*) FROM $tableName"
+   
     switch($tableName) {
       case 'residents': return "42";
       case 'reports': return "127";
