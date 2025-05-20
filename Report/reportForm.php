@@ -101,10 +101,25 @@ session_start(); ?>
 
   <div class="mb-3">
     <label class="form-label required" id="uploadImagesLabel">Upload Images</label>
-    <input type="file" name="images[]" id="images" accept="image/*" multiple>
-    <p class="error-images"></p>
+    <input type="file" name="image1" id="image1" accept="image/*">
+    <p class="error-images1"></p>
   </div>
 
+  <div class="mb-3">
+    <label class="form-label required" id="uploadImagesLabel">Upload Images</label>
+    <input type="file" name="image2" id="image2" accept="image/*">
+    <p class="error-images2"></p>
+  </div>
+  <div class="mb-3">
+    <label class="form-label required" id="uploadImagesLabel">Upload Images</label>
+    <input type="file" name="image3" id="image3" accept="image/*">
+    <p class="error-images3"></p>
+  </div>
+  <div class="mb-3">
+    <label class="form-label required" id="uploadImagesLabel">Upload Images</label>
+    <input type="file" name="image4" id="image4" accept="image/*">
+    <p class="error-images4"></p>
+  </div>
 
 
   <div class="mb-3">

@@ -67,7 +67,9 @@ moreButtons.forEach((more) => {
       more.classList.remove("btn-tertiary");
       more.classList.add("btn-secondary");
       more.innerHTML = "Less";
-      reportImage.style.display = "block";
+      reportImage.style.display = "flex";
+      reportImage.style.flexWrap = "wrap";
+      reportImage.style.gap = "10px";
     } else {
       more.classList.remove("considered");
       more.classList.remove("btn-secondary");
@@ -75,6 +77,38 @@ moreButtons.forEach((more) => {
       more.innerHTML = "More";
       reportImage.style.display = "none";
     }
+  });
+});
+
+// for the images;......
+document.querySelectorAll(".zoomable-image").forEach((img) => {
+  img.addEventListener("click", function () {
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.top = 0;
+    overlay.style.left = 0;
+    overlay.style.width = "100vw";
+    overlay.style.height = "100vh";
+    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.85)";
+    overlay.style.display = "flex";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.zIndex = 9999;
+
+    const largeImg = document.createElement("img");
+    largeImg.src = img.src;
+    largeImg.style.maxWidth = "90%";
+    largeImg.style.maxHeight = "90%";
+    largeImg.style.borderRadius = "12px";
+    largeImg.style.boxShadow = "0 0 20px rgba(255,255,255,0.3)";
+
+    overlay.appendChild(largeImg);
+    document.body.appendChild(overlay);
+
+    // Click to close
+    overlay.addEventListener("click", () => {
+      document.body.removeChild(overlay);
+    });
   });
 });
 
