@@ -51,7 +51,7 @@ if (!isset($_SESSION['user_id'])) {
     <div class="container">
 
       <a href="#" class="logo">
-        <img src="../Hermata home/assets/img/Flag_of_Ethiopia.svg" width="140" height="40" alt="Ethiopian-logo ">
+        <!-- <img src="../Hermata home/assets/img/Flag_of_Ethiopia.svg" width="140" height="40" alt="Ethiopian-logo "> -->
         <img src="../Hermata home/assets/img/Flag_of_the_Oromia_Region.svg.png" width="160" height="50"
           alt="flag- Home">
       </a>
@@ -79,14 +79,14 @@ if (!isset($_SESSION['user_id'])) {
           <li class="navbar-item">
             <a href="#about" class="navbar-link hover-underline">
               <div class="separator"></div>
-              <span class="span">About Us</span>
+              <span class="span">AboutUs</span>
             </a>
           </li>
 
           <li class="navbar-item">
             <a href="#" class="navbar-link hover-underline">
               <div class="separator"></div>
-              <span class="span" id="rep">About Representative</span>
+              <span class="span" id="rep">Representative</span>
             </a>
           </li>
 
@@ -105,9 +105,9 @@ if (!isset($_SESSION['user_id'])) {
           $name = $_SESSION['user_name'];
           $email = $_SESSION['user_email'];
           $phone = $_SESSION['user_phone'];
-          $kebele_id = $_SESSION['user_kebele_id'];
+          $kebele_id = $_SESSION['kebele_id'];
 
-          $stmt = mysqli_prepare($con, "SELECT photo FROM users WHERE kebele_id = ?");
+          $stmt = mysqli_prepare($con, "SELECT photo FROM residents WHERE residence_id = ?");
           mysqli_stmt_bind_param($stmt, "s", $kebele_id);
           mysqli_stmt_execute($stmt);
           $result = mysqli_stmt_get_result($stmt);
@@ -125,7 +125,7 @@ if (!isset($_SESSION['user_id'])) {
 
           if ($imageData) {
             echo '<a href="../editProfile/editProfile.php">';
-            echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width:100px;height:100px;border-radius:50%; object-fit:cover;">';
+            echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width: 80px;height: 70px;border-radius:50%; object-fit:cover;">';
             echo '</a>';
           }
 

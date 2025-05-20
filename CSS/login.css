@@ -17,7 +17,8 @@ body {
     url("../images/e.jpg");
   background-size: cover;
   background-position: center;
-  padding-top: 10rem;
+  padding-top: 7rem;
+  margin-bottom: 50px;
 }
 
 .login-box {

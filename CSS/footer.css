@@ -15,7 +15,7 @@ footer {
   background: linear-gradient(135deg, #14141f 0%, #1a1a2e 100%);
   color: #fff;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 footer::before {
@@ -315,4 +315,34 @@ footer::before {
 
 .kebele ul li a:hover::after {
   width: 100%;
+}
+#twt{
+ background-image: url("../images/x.jpg");
+background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat;
+}
+#face{
+ background-image: url('../images/Facebook_Logo_(2019).png');
+background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat;
+}
+#inst{
+ background-image: url('../images/instagram.jpg');
+background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat;
+}
+#link{
+ background-image: url('../images/LinkedIn.png');
+background-size: cover; 
+  background-position: center;
+  background-repeat: no-repeat;
+}
+#you{
+ background-image: url("../images/Youtube_logo.png");
+background-size: cover;
+  background-position: center; 
+  background-repeat: no-repeat;
 }

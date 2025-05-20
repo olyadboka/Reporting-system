@@ -110,7 +110,7 @@ ol {
   background-size: cover;
   background-position: center;
   height: 80vh;
-  padding: 3rem;
+  padding: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -299,23 +299,26 @@ ol {
 
 .navbar-link {
   position: relative;
-  font-size: 1rem;
+  /* font-size: 0.4rem; Decrease this value to make the text smaller */
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
+  text-transform: capitalize;
+  font-size: 15px;
   padding: 18px 0;
+  /* border:solid white 5px ; */
   color: var(--white);
   letter-spacing: var(--letterSpacing-3);
   transition: all 0.4s ease;
   display: flex;
   align-items: center;
   text-decoration: none;
+  margin-left: 5%;
 }
 
 .navbar-link .span {
   position: relative;
   transition: all 0.4s ease;
   display: inline-block;
-  padding-right: 10px;
+  /* padding-right: 10px; */
 }
 
 .navbar-link .separator {

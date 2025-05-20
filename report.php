@@ -1,39 +1,30 @@
 <?php
-// session_start();
+// session_start(); // Uncomment if needed
 include "./reportDB/dbconnection.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $reportId = intval($_POST['report_id']);
     $newCount = intval($_POST['new_count']);
+    $isConsidered = intval($_POST['is_considered']);
 
+    // First update
     $sql = "UPDATE reports SET count = ? WHERE report_id = ?";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, "ii", $newCount, $reportId);
+    mysqli_stmt_execute($stmt);
 
-    if (mysqli_stmt_execute($stmt)) {
-        echo json_encode(['success' => true]);
-    } else {
-        echo json_encode(['success' => false, 'error' => mysqli_error($con)]);
-    }
-    
-    $isConsidered = intval($_POST['is_considered']);
-
+    // Second update
     $sqlconsidered = "UPDATE reports SET count = ?, is_considered = ? WHERE report_id = ?";
     $stmt = mysqli_prepare($con, $sqlconsidered);
     mysqli_stmt_bind_param($stmt, "iii", $newCount, $isConsidered, $reportId);
-
-    if (mysqli_stmt_execute($stmt)) {
-        echo json_encode(['success' => true]);
-    } else {
-        echo json_encode(['success' => false, 'error' => mysqli_error($con)]);
-    }
+    mysqli_stmt_execute($stmt);
 }
 
+// Fetch all reports
 $sqlDis = "SELECT * FROM reports ORDER BY created_at DESC";
 $result = mysqli_query($con, $sqlDis);
 
 $reports = [];
-
 if ($result) {
     while ($row = mysqli_fetch_assoc($result)) {
         $reports[] = $row;
@@ -49,7 +40,24 @@ if ($result) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welcome to Report Page</title>
   <link rel="stylesheet" href="./CSS/report.css">
+  <style>
+  #report-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
 
+  #report-images div {
+    width: 48%;
+  }
+
+  #report-images img {
+    width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  </style>
 </head>
 
 <body>
@@ -83,17 +91,25 @@ if ($result) {
           <div class="post-box--report-description">
             <p>Description: <?php echo htmlspecialchars($report['description']); ?></p>
           </div>
-          <div class="hidden-details" id="report-images">
-            <?php
-                    if (!empty($report['image_url'])) {
-                        
-                        $base64Image = 'data:image/jpeg;base64,' . base64_encode($report['image_url']);
-                        echo '<img src="' . $base64Image . '" alt="Report Image" style="max-width: 100%; height: auto; display: block; margin: 10px;">';
-                    } else {
-                        echo '<p>No images available.</p>';
-                    }
-                    ?>
+          <div class="hidden-details" id="report-images" style="display: none;">
+            <?php if (!empty($report['image_url_1'])): ?>
+            <img src="data:image/jpeg;base64,<?= base64_encode($report['image_url_1']) ?>" alt="Report Image"
+              class="zoomable-image">
+            <?php endif; ?>
+            <?php if (!empty($report['image_url_2'])): ?>
+            <img src="data:image/jpeg;base64,<?= base64_encode($report['image_url_2']) ?>" alt="Report Image"
+              class="zoomable-image">
+            <?php endif; ?>
+            <?php if (!empty($report['image_url_3'])): ?>
+            <img src="data:image/jpeg;base64,<?= base64_encode($report['image_url_3']) ?>" alt="Report Image"
+              class="zoomable-image">
+            <?php endif; ?>
+            <?php if (!empty($report['image_url_4'])): ?>
+            <img src="data:image/jpeg;base64,<?= base64_encode($report['image_url_4']) ?>" alt="Report Image"
+              class="zoomable-image">
+            <?php endif; ?>
           </div>
+
           <div class="post-box--buttons">
             <button class="btn1 btn btn-primary" name="more" id="more">More</button>
             <button class="btn1 btn <?php echo $report['is_considered'] ? 'btn-secondary considered' : 'btn-danger'; ?>"
