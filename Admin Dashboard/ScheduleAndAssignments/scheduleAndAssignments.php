@@ -92,10 +92,6 @@ if (isset($_GET['edit_schedule_id'])) {
     // Redirect back to the main page
     header("Location: scheduleAndAssignments.php");
     exit();
-} else {
-    // If no schedule ID is provided, redirect back to the main page
-    header("Location: scheduleAndAssignments.php");
-    exit();
 }
 ?>
 <!DOCTYPE html>
