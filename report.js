@@ -1,8 +1,61 @@
 const counts = document.getElementsByName("count");
 const considers = document.getElementsByName("consider");
 const moreButtons = document.getElementsByName("more");
-const reportImage = document.getElementById("report-images");
+const reportImages = document.querySelectorAll(".hidden-details");
+const cancelButtons = document.querySelectorAll(".cancel-report-btn");
+const cancelModal = document.getElementById("cancelModal");
+const cancelCancelBtn = document.getElementById("cancelCancelBtn");
+const confirmCancelBtn = document.getElementById("confirmCancelBtn");
+const cancelReason = document.getElementById("cancelReason");
+let currentReportId = null;
 
+// Cancel Report functionality
+cancelButtons.forEach((btn) => {
+  btn.addEventListener("click", function () {
+    currentReportId = this.dataset.reportId;
+    cancelModal.style.display = "flex";
+  });
+});
+
+cancelCancelBtn.addEventListener("click", function () {
+  cancelModal.style.display = "none";
+  cancelReason.value = "";
+});
+
+confirmCancelBtn.addEventListener("click", function () {
+  if (!cancelReason.value.trim()) {
+    alert("Please provide a reason for cancelling the report.");
+    return;
+  }
+
+  fetch("./report.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `report_id=${currentReportId}&cancel_reason=${encodeURIComponent(
+      cancelReason.value
+    )}&cancel_report=true`,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        alert("Report cancelled successfully.");
+        location.reload();
+      } else {
+        alert("Failed to cancel report: " + data.error);
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("An error occurred while cancelling the report.");
+    });
+
+  cancelModal.style.display = "none";
+  cancelReason.value = "";
+});
+
+// Consider functionality
 considers.forEach((consider, index) => {
   let i = parseInt(counts[index].innerHTML) || 0;
 
@@ -48,28 +101,22 @@ function updateConsiderState(reportId, newCount, isConsidered) {
     body: `report_id=${reportId}&new_count=${newCount}&is_considered=${
       isConsidered ? 1 : 0
     }`,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (!data.success) {
-        console.error("Failed to update consider state:", data.error);
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  }).catch((error) => {
+    console.error("Error:", error);
+  });
 }
 
-moreButtons.forEach((more) => {
+// More/Less button functionality
+moreButtons.forEach((more, index) => {
   more.addEventListener("click", function () {
+    const reportImage = reportImages[index];
+
     if (!more.classList.contains("considered")) {
       more.classList.add("considered");
       more.classList.remove("btn-tertiary");
       more.classList.add("btn-secondary");
       more.innerHTML = "Less";
       reportImage.style.display = "flex";
-      reportImage.style.flexWrap = "wrap";
-      reportImage.style.gap = "10px";
     } else {
       more.classList.remove("considered");
       more.classList.remove("btn-secondary");
@@ -80,7 +127,7 @@ moreButtons.forEach((more) => {
   });
 });
 
-// for the images;......
+// Image zoom functionality
 document.querySelectorAll(".zoomable-image").forEach((img) => {
   img.addEventListener("click", function () {
     const overlay = document.createElement("div");
@@ -105,138 +152,8 @@ document.querySelectorAll(".zoomable-image").forEach((img) => {
     overlay.appendChild(largeImg);
     document.body.appendChild(overlay);
 
-    // Click to close
     overlay.addEventListener("click", () => {
       document.body.removeChild(overlay);
     });
   });
-});
-
-const links = document.querySelectorAll(".report-links a");
-
-links.forEach((link) => {
-  link.addEventListener("click", function (e) {
-    e.preventDefault();
-    links.forEach((l) => l.classList.remove("active"));
-    this.classList.add("active");
-  });
-});
-
-// for the pagination part
-
-document.addEventListener("DOMContentLoaded", function () {
-  const reportLinks = document.querySelectorAll(".report-links li a");
-  const reportBoxes = document.querySelectorAll(".post-box");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
-  const pageInfo = document.getElementById("pageInfo");
-  const reportsPerPage = 2;
-  let currentPage = 1;
-  let totalPages = Math.ceil(reportBoxes.length / reportsPerPage);
-
-  function updatePaginationButtons() {
-    prevBtn.disabled = currentPage === 1;
-    nextBtn.disabled = currentPage === totalPages;
-
-    if (prevBtn.disabled) {
-      prevBtn.classList.remove("btn-primary");
-      prevBtn.classList.add("btn-secondary");
-    } else {
-      prevBtn.classList.remove("btn-secondary");
-      prevBtn.classList.add("btn-primary");
-    }
-
-    if (nextBtn.disabled) {
-      nextBtn.classList.remove("btn-primary");
-      nextBtn.classList.add("btn-secondary");
-    } else {
-      nextBtn.classList.remove("btn-secondary");
-      nextBtn.classList.add("btn-primary");
-    }
-  }
-
-  function showCurrentPage() {
-    const visibleBoxes = Array.from(reportBoxes).filter(
-      (box) => box.dataset.visible === "true"
-    );
-    totalPages = Math.max(1, Math.ceil(visibleBoxes.length / reportsPerPage));
-
-    if (currentPage > totalPages) {
-      currentPage = totalPages;
-    }
-
-    reportBoxes.forEach((box, index) => {
-      box.style.display = "none";
-    });
-
-    const startIndex = (currentPage - 1) * reportsPerPage;
-    const endIndex = startIndex + reportsPerPage;
-
-    let visibleCount = 0;
-    reportBoxes.forEach((box, index) => {
-      if (box.dataset.visible === "true") {
-        if (visibleCount >= startIndex && visibleCount < endIndex) {
-          box.style.display = "block";
-        }
-        visibleCount++;
-      }
-    });
-
-    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-    updatePaginationButtons();
-  }
-
-  prevBtn.addEventListener("click", function () {
-    if (currentPage > 1) {
-      currentPage--;
-      showCurrentPage();
-    }
-  });
-
-  nextBtn.addEventListener("click", function () {
-    if (currentPage < totalPages) {
-      currentPage++;
-      showCurrentPage();
-    }
-  });
-
-  reportLinks.forEach((link) => {
-    link.addEventListener("click", function (event) {
-      event.preventDefault();
-      const category = this.textContent.trim();
-      currentPage = 1;
-
-      reportBoxes.forEach((box) => {
-        const boxCategory = box
-          .querySelector(".post-box--report-type h1")
-          .textContent.replace("Type: ", "")
-          .trim();
-        const countElement = box.querySelector("p[name='count']");
-        const count = parseInt(countElement.textContent.trim());
-        const priorty = box.querySelector("p[name='priority']");
-
-        if (category === "Reports") {
-          box.dataset.visible = "true";
-        } else if (category === "Most Viewed" && count > 100) {
-          priorty.textContent = "High";
-          priorty.style.backgroundColor = "red";
-
-          box.dataset.visible = "true";
-        } else if (category === "Answered" && count > 50 && count <= 100) {
-          priorty.textContent = "Solved";
-          priorty.style.backgroundColor = "green";
-
-          box.dataset.visible = "true";
-        } else if (category === "My Reports" && count <= 50) {
-          box.dataset.visible = "true";
-        } else {
-          box.dataset.visible = "false";
-        }
-      });
-
-      showCurrentPage();
-    });
-  });
-
-  showCurrentPage();
 });

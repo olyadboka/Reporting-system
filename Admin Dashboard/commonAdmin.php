@@ -41,8 +41,7 @@
           <p class="admin-role">Admin</p>
         </div>
       </div>
-      <form action="logout.php" method="post" style="margin:0;">
-        <button type="submit" class="../dataBasesls/loginSignUp/logout-btn">Logout</button>
+      <p style="color:gray; font-size: 1rem;">HERMATA MENTINA RMS</p>
       </form>
     </header>
 
