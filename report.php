@@ -1,5 +1,5 @@
 <?php
-session_start(); // Uncomment if needed
+session_start();
 include "./reportDB/dbconnection.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -12,22 +12,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = mysqli_prepare($con, $sql);
         mysqli_stmt_bind_param($stmt, "si", $cancelReason, $reportId);
         mysqli_stmt_execute($stmt);
+        
+        echo json_encode(['success' => true]);
+        exit;
     } else {
         $reportId = intval($_POST['report_id']);
         $newCount = intval($_POST['new_count']);
         $isConsidered = intval($_POST['is_considered']);
 
-        // First update
-        $sql = "UPDATE reports SET count = ? WHERE report_id = ?";
+        // Single update query
+        $sql = "UPDATE reports SET count = ?, is_considered = ? WHERE report_id = ?";
         $stmt = mysqli_prepare($con, $sql);
-        mysqli_stmt_bind_param($stmt, "ii", $newCount, $reportId);
-        mysqli_stmt_execute($stmt);
-
-        // Second update
-        $sqlconsidered = "UPDATE reports SET count = ?, is_considered = ? WHERE report_id = ?";
-        $stmt = mysqli_prepare($con, $sqlconsidered);
         mysqli_stmt_bind_param($stmt, "iii", $newCount, $isConsidered, $reportId);
-        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_execute($stmt);
+        
+        if ($result) {
+            echo json_encode(['success' => true, 'new_count' => $newCount]);
+        } else {
+            echo json_encode(['success' => false, 'error' => mysqli_error($con)]);
+        }
+        exit;
     }
 }
 
@@ -53,6 +57,12 @@ if ($result) {
         $myreports[] = $row;
     }
 }
+
+// for checking the status of the report 
+$reportStatus = "SELECT status from reports ";
+$stmttt = mysqli_prepare($con,$reportStatus);
+mysqli_stmt_execute($stmttt);
+$statusResult = mysqli_stmt_get_result($stmttt); 
 ?>
 
 <!DOCTYPE html>
@@ -63,6 +73,7 @@ if ($result) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welcome to Report Page</title>
   <link rel="stylesheet" href="./CSS/report.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
   #report-images {
     display: flex;
@@ -114,6 +125,19 @@ if ($result) {
 
   .my-report {
     display: none;
+  }
+
+  .status-button {
+    min-width: 120px;
+  }
+
+  .btn-success {
+    background-color: #28a745;
+  }
+
+  .btn-warning {
+    background-color: #ffc107;
+    color: #212529;
   }
   </style>
 </head>
@@ -172,19 +196,65 @@ if ($result) {
           <div class="post-box--buttons">
             <button class="btn1 btn btn-primary" name="more" id="more">More</button>
             <?php if($report['user_id'] == $_SESSION['user_id']): ?>
+            <?php if($report['status'] == 'pending'): ?>
             <button class="btn1 btn btn-danger cancel-report-btn" name="cancel_report"
               data-report-id="<?php echo htmlspecialchars($report['report_id']); ?>">
               Cancel Report
             </button>
             <?php else: ?>
-            <button class="btn1 btn <?php echo $report['is_considered'] ? 'btn-secondary considered' : 'btn-danger'; ?>"
-              name="consider" data-report-id="<?php echo htmlspecialchars($report['report_id']); ?>">
-              <?php echo $report['is_considered'] ? 'Considered' : 'Consider'; ?>
+            <button
+              class="btn1 btn <?php echo $report['status'] == 'approved' ? 'btn-success' : 'btn-warning'; ?> status-button"
+              disabled>
+              <i class="fas <?php echo $report['status'] == 'approved' ? 'fa-check-circle' : 'fa-check-double'; ?>"></i>
+              <?php echo ucfirst($report['status']); ?>
+            </button>
+            <?php endif; ?>
+            <?php else: ?>
+            <button class="btn1 btn 
+                <?php 
+                switch($report['status']) {
+                  case 'approved':
+                    echo 'btn-success';
+                    break;
+                  case 'solved':
+                    echo 'btn-warning';
+                    break;
+                  case 'pending':
+                    echo $report['is_considered'] ? 'btn-secondary' : 'btn-danger';
+                    break;
+                  default:
+                    echo 'btn-primary';
+                }
+                ?> 
+                status-button" name="consider" data-report-id="<?php echo htmlspecialchars($report['report_id']); ?>"
+              data-status="<?php echo htmlspecialchars($report['status']); ?>"
+              <?php if($report['status'] == 'approved' || $report['status'] == 'solved'): ?> disabled <?php endif; ?>>
+              <?php
+                switch($report['status']) {
+                  case 'approved':
+                    echo '<i class="fas fa-check-circle"></i> Approved';
+                    break;
+                  case 'solved':
+                    echo '<i class="fas fa-check-double"></i> Solved';
+                    break;
+                  case 'pending':
+                    echo $report['is_considered'] ? '<i class="fas fa-hourglass-half"></i> Considered' : '<i class="fas fa-exclamation-circle"></i> Consider';
+                    break;
+                  default:
+                    echo 'Consider';
+                }
+                ?>
             </button>
             <?php endif; ?>
           </div>
           <div class="post-box--top-right">
-            <p class="btn btn-danger" name="count"><?php echo htmlspecialchars($report['count']); ?></p>
+            <p class="btn btn-danger" name="count">
+              <?php
+              
+              echo htmlspecialchars($report['count']); 
+              
+              
+              ?></p>
             <p class="btn btn-warning" name="priority">Priority: <?php echo htmlspecialchars($report['priority']); ?>
             </p>
           </div>
@@ -412,18 +482,18 @@ if ($result) {
     <?php include './common/footer.php'; ?>
   </section>
   <script>
-  // Define userId from PHP session
-  const userId = <?php echo isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0; ?>;
-
   document.addEventListener('DOMContentLoaded', function() {
 
-    // Navigation links functionality
+    const userId = <?php echo isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0; ?>;
+
+    // Navigation links functionality...........................................................
     const links = document.querySelectorAll(".report-links a");
     const allReportsLink = document.querySelector(".all-reports");
     const mostViewedLink = document.querySelector(".most-viewed");
     const answeredLink = document.querySelector(".answered");
     const myReportsLink = document.querySelector(".my-reports");
     const reportBoxes = document.querySelectorAll(".post-box");
+
 
     links.forEach((link) => {
       link.addEventListener("click", function(e) {
@@ -433,6 +503,7 @@ if ($result) {
       });
     });
 
+    // Filter reports.................................................
     allReportsLink.addEventListener("click", function(e) {
       e.preventDefault();
       reportBoxes.forEach((box) => {
@@ -448,11 +519,28 @@ if ($result) {
         parseInt(box.querySelector("p[name='count']").textContent)
       );
       const maxCount = Math.max(...counts);
-      const threshold = maxCount * 0.7; // Show top 30% most viewed
+      const threshold = maxCount * 0.7;
 
       reportBoxes.forEach((box) => {
         const count = parseInt(box.querySelector("p[name='count']").textContent);
         if (count >= threshold) {
+          box.dataset.visible = "true";
+          box.style.display = "block";
+        } else {
+          box.dataset.visible = "false";
+          box.style.display = "none";
+        }
+      });
+      updatePagination();
+    });
+
+    answeredLink.addEventListener("click", function(e) {
+      e.preventDefault();
+      reportBoxes.forEach((box) => {
+        const status = box.querySelector('.status-button')?.getAttribute('data-status') ||
+          box.querySelector('.btn-success, .btn-warning')?.textContent?.toLowerCase().trim();
+
+        if (status === 'approved' || status === 'solved') {
           box.dataset.visible = "true";
           box.style.display = "block";
         } else {
@@ -478,11 +566,171 @@ if ($result) {
       updatePagination();
     });
 
+
+    document.querySelectorAll('[name="consider"]').forEach((considerBtn) => {
+      const reportBox = considerBtn.closest('.post-box');
+      const countElement = reportBox.querySelector('[name="count"]');
+      let currentCount = parseInt(countElement.textContent) || 0;
+      const reportId = considerBtn.dataset.reportId;
+
+
+      if (considerBtn.textContent.includes('Considered')) {
+        considerBtn.classList.remove('btn-danger');
+        considerBtn.classList.add('btn-secondary');
+      }
+
+      considerBtn.addEventListener('click', function() {
+        const isCurrentlyConsidered = considerBtn.textContent.includes('Considered');
+        const newConsideredState = !isCurrentlyConsidered;
+
+        if (newConsideredState) {
+          considerBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> Considered';
+          considerBtn.classList.remove('btn-danger');
+          considerBtn.classList.add('btn-secondary');
+          currentCount++;
+        } else {
+          considerBtn.innerHTML = '<i class="fas fa-exclamation-circle"></i> Consider';
+          considerBtn.classList.remove('btn-secondary');
+          considerBtn.classList.add('btn-danger');
+          currentCount--;
+        }
+
+        countElement.textContent = currentCount;
+
+
+        updateConsiderState(reportId, currentCount, newConsideredState);
+      });
+    });
+
+    function updateConsiderState(reportId, newCount, isConsidered) {
+      fetch("./report.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `report_id=${reportId}&new_count=${newCount}&is_considered=${isConsidered ? 1 : 0}`,
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (!data.success) {
+
+            location.reload();
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          location.reload();
+        });
+    }
+
+    // Cancel Report functionality.........................................................
+    const cancelModal = document.getElementById("cancelModal");
+    const cancelCancelBtn = document.getElementById("cancelCancelBtn");
+    const confirmCancelBtn = document.getElementById("confirmCancelBtn");
+    const cancelReason = document.getElementById("cancelReason");
+    let currentReportId = null;
+
+    document.querySelectorAll(".cancel-report-btn").forEach((btn) => {
+      btn.addEventListener("click", function() {
+        currentReportId = this.dataset.reportId;
+        cancelModal.style.display = "flex";
+      });
+    });
+
+    cancelCancelBtn.addEventListener("click", function() {
+      cancelModal.style.display = "none";
+      cancelReason.value = "";
+    });
+
+    confirmCancelBtn.addEventListener("click", function() {
+      if (!cancelReason.value.trim()) {
+        alert("Please provide a reason for cancelling the report.");
+        return;
+      }
+
+      fetch("./report.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `report_id=${currentReportId}&cancel_reason=${encodeURIComponent(
+        cancelReason.value
+      )}&cancel_report=true`,
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert("Report cancelled successfully.");
+            location.reload();
+          } else {
+            alert("Failed to cancel report.");
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          alert("An error occurred while cancelling the report.");
+        });
+
+      cancelModal.style.display = "none";
+      cancelReason.value = "";
+    });
+
+    // More/Less button functionality................................
+    const moreButtons = document.getElementsByName("more");
+    const reportImages = document.querySelectorAll(".hidden-details");
+
+    moreButtons.forEach((more, index) => {
+      more.addEventListener("click", function() {
+        const reportImage = reportImages[index];
+
+        if (!more.classList.contains("active")) {
+          more.classList.add("active");
+          more.innerHTML = "Less";
+          reportImage.style.display = "flex";
+        } else {
+          more.classList.remove("active");
+          more.innerHTML = "More";
+          reportImage.style.display = "none";
+        }
+      });
+    });
+
+    // Image zoom functionality
+    document.querySelectorAll(".zoomable-image").forEach((img) => {
+      img.addEventListener("click", function() {
+        const overlay = document.createElement("div");
+        overlay.style.position = "fixed";
+        overlay.style.top = "0";
+        overlay.style.left = "0";
+        overlay.style.width = "100vw";
+        overlay.style.height = "100vh";
+        overlay.style.backgroundColor = "rgba(0, 0, 0, 0.85)";
+        overlay.style.display = "flex";
+        overlay.style.alignItems = "center";
+        overlay.style.justifyContent = "center";
+        overlay.style.zIndex = "9999";
+
+        const largeImg = document.createElement("img");
+        largeImg.src = img.src;
+        largeImg.style.maxWidth = "90%";
+        largeImg.style.maxHeight = "90%";
+        largeImg.style.borderRadius = "12px";
+        largeImg.style.boxShadow = "0 0 20px rgba(255,255,255,0.3)";
+
+        overlay.appendChild(largeImg);
+        document.body.appendChild(overlay);
+
+        overlay.addEventListener("click", () => {
+          document.body.removeChild(overlay);
+        });
+      });
+    });
+
     // Pagination functionality
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
     const pageInfo = document.getElementById("pageInfo");
-    const reportsPerPage = 2;
+    const reportsPerPage = 4;
     let currentPage = 1;
     let totalPages = Math.ceil(reportBoxes.length / reportsPerPage);
 
