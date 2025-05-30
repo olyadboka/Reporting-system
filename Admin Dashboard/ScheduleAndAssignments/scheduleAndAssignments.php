@@ -158,7 +158,18 @@ if (!isset($edit_schedule)) $edit_schedule = null;
                       <td>{$row['date']}</td>
                       <td>{$row['time']}</td>
                       <td>
-                        <a href='?edit_schedule_id={$row['id']}' class='btn btn-success'>Edit</a>
+                        <button 
+                          type='button' 
+                          class='btn btn-success edit-schedule-btn'
+                          data-schedule-id='{$row['id']}'
+                          data-report-id='{$row['report_id']}'
+                          data-assigned-to='{$row['assigned_to']}'
+                          data-date='{$row['date']}'
+                          data-time='{$row['time']}'
+                        >
+                          Edit
+                        </button>
+
                       </td>
                     </tr>";
           }
@@ -238,6 +249,45 @@ if (!isset($edit_schedule)) $edit_schedule = null;
         console.log("Schedule Fix button clicked for report ID:", reportId);
       });
     });
+    
+        // Handle Edit button click
+    document.querySelectorAll('.edit-schedule-btn').forEach(button => {
+      button.addEventListener('click', function () {
+        const scheduleId = this.getAttribute('data-schedule-id');
+        const reportId = this.getAttribute('data-report-id');
+        const assignedTo = this.getAttribute('data-assigned-to');
+        const date = this.getAttribute('data-date');
+        const time = this.getAttribute('data-time');
+
+        // Set form values
+        document.getElementById('report_id').value = reportId;
+        document.getElementById('assigned_to').value = assignedTo;
+        document.getElementById('date').value = date;
+        document.getElementById('time').value = time;
+
+        // Create or update hidden schedule_id field
+        let scheduleInput = document.querySelector('input[name="schedule_id"]');
+        if (!scheduleInput) {
+          scheduleInput = document.createElement('input');
+          scheduleInput.type = 'hidden';
+          scheduleInput.name = 'schedule_id';
+          document.querySelector('form').appendChild(scheduleInput);
+        }
+        scheduleInput.value = scheduleId;
+
+        // Update form title and button
+        document.getElementById('form-title').textContent = 'Edit Schedule Fix';
+        document.querySelector('.form-container button[type="submit"]').textContent = 'Update';
+
+        // Show the form
+        const formContainer = document.querySelector('.form-container');
+        formContainer.style.display = 'block';
+        formContainer.scrollIntoView({ behavior: 'smooth' });
+
+        console.log("Editing schedule:", scheduleId);
+      });
+    });
+
   });
 </script>
 
