@@ -13,6 +13,20 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+
+// Handle Done Report
+if (isset($_GET['done_id'])) {
+    $done_id = intval($_GET['done_id']);
+    $sql = "UPDATE reports SET status = 'Fixed' WHERE report_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $done_id);
+    $stmt->execute();
+    $stmt->close();
+    header("Location: scheduleAndAssignments.php");
+    exit();
+}
+
+
 // Handle Approve Report
 if (isset($_GET['approve_id'])) {
     $approve_id = intval($_GET['approve_id']);
@@ -121,7 +135,7 @@ if (!isset($edit_schedule)) $edit_schedule = null;
                         <button type='button' class='btn btn-primary schedule-fix-btn' data-report-id='{$row['report_id']}'>Schedule Fix</button>
                         <a href='?approve_id={$row['report_id']}' class='btn btn-success'>Approve</a>
                         <a href='?reject_id={$row['report_id']}' class='btn btn-danger'>Reject</a>
-                      </td>
+                      
                     </tr>";
           }
       } else {
@@ -146,7 +160,11 @@ if (!isset($edit_schedule)) $edit_schedule = null;
     </thead>
     <tbody>
       <?php
-      $sql = "SELECT id, report_id, assigned_to, date, time FROM schedules";
+      $sql = "SELECT s.id, s.report_id, s.assigned_to, s.date, s.time, r.status
+        FROM schedules s
+        JOIN reports r ON s.report_id = r.report_id
+        WHERE r.status != 'Fixed'";
+
       $result = $conn->query($sql);
 
       if ($result->num_rows > 0) {
@@ -158,8 +176,21 @@ if (!isset($edit_schedule)) $edit_schedule = null;
                       <td>{$row['date']}</td>
                       <td>{$row['time']}</td>
                       <td>
-                        <a href='?edit_schedule_id={$row['id']}' class='btn btn-success'>Edit</a>
+                        <button 
+                          type='button' 
+                          class='btn btn-success edit-schedule-btn'
+                          data-schedule-id='{$row['id']}'
+                          data-report-id='{$row['report_id']}'
+                          data-assigned-to='{$row['assigned_to']}'
+                          data-date='{$row['date']}'
+                          data-time='{$row['time']}'
+                        >
+                          Edit
+                        </button>
+                        <a href='../ReportsAndAnalytics/reportRecord.php?id={$row['report_id']}' class='btn btn-secondary' target='_blank'>View Record</a>
+                        <a href='?done_id={$row['report_id']}' class='btn btn-warning' onclick=\"return confirm('Mark this report as done?');\">Done</a>
                       </td>
+                      
                     </tr>";
           }
       } else {
@@ -238,6 +269,45 @@ if (!isset($edit_schedule)) $edit_schedule = null;
         console.log("Schedule Fix button clicked for report ID:", reportId);
       });
     });
+    
+        // Handle Edit button click
+    document.querySelectorAll('.edit-schedule-btn').forEach(button => {
+      button.addEventListener('click', function () {
+        const scheduleId = this.getAttribute('data-schedule-id');
+        const reportId = this.getAttribute('data-report-id');
+        const assignedTo = this.getAttribute('data-assigned-to');
+        const date = this.getAttribute('data-date');
+        const time = this.getAttribute('data-time');
+
+        // Set form values
+        document.getElementById('report_id').value = reportId;
+        document.getElementById('assigned_to').value = assignedTo;
+        document.getElementById('date').value = date;
+        document.getElementById('time').value = time;
+
+        // Create or update hidden schedule_id field
+        let scheduleInput = document.querySelector('input[name="schedule_id"]');
+        if (!scheduleInput) {
+          scheduleInput = document.createElement('input');
+          scheduleInput.type = 'hidden';
+          scheduleInput.name = 'schedule_id';
+          document.querySelector('form').appendChild(scheduleInput);
+        }
+        scheduleInput.value = scheduleId;
+
+        // Update form title and button
+        document.getElementById('form-title').textContent = 'Edit Schedule Fix';
+        document.querySelector('.form-container button[type="submit"]').textContent = 'Update';
+
+        // Show the form
+        const formContainer = document.querySelector('.form-container');
+        formContainer.style.display = 'block';
+        formContainer.scrollIntoView({ behavior: 'smooth' });
+
+        console.log("Editing schedule:", scheduleId);
+      });
+    });
+
   });
 </script>
 
