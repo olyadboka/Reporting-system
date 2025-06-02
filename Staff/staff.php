@@ -22,7 +22,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'staff') {
 
 // Retrieve staff name using staff_id from session
 $staff_id = $_SESSION['user_id'];
-$sql = "SELECT full_name FROM staff WHERE staff_id = ?";
+$sql = "SELECT fname FROM residents WHERE residence_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $staff_id);
 $stmt->execute();
@@ -30,7 +30,7 @@ $result = $stmt->get_result();
 
 if ($result->num_rows === 1) {
     $row = $result->fetch_assoc();
-    $staff_name = $row['full_name'];
+    $staff_name = $row['fname'];
 } else {
     $staff_name = 'Unknown';
 }
