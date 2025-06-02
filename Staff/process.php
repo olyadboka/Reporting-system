@@ -22,10 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Determine the new status based on the action
         $status = '';
-        if ($action === 'accept') {
-            $status = 'Accepted';
+        if ($action === 'approve') {
+            $status = 'approved';
         } elseif ($action === 'reject') {
-            $status = 'Rejected';
+            $status = 'rejected';
+        } elseif ($action === 'resolve') {
+            $status = 'resolved';
         }
 
         if ($status) {
@@ -37,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($stmt->execute()) {
                 // Store activity log
                 $activity = "Report #$report_id has been $status by $staff_name";
-                $user = $staff_name;
                 $timestamp = date('Y-m-d H:i:s');
                 $log_sql = "INSERT INTO activity_logs (activity, user, timestamp) VALUES (?, ?, ?)";
                 $log_stmt = $conn->prepare($log_sql);

@@ -1,3 +1,10 @@
+<?php
+session_start();
+require_once './dbConnection.php'; // This should contain your database connection
+// $con = connectDB(); // Make sure this function returns a valid mysqli connection
+$kebele_id = $_SESSION['kebele_id'] ?? ''; // Assuming kebele_id is stored in session
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,10 +47,33 @@
     <!-- Profile Bar -->
     <header class="profile-bar">
       <div class="profile-info">
-        <img src="./images/olyad2.png" alt="Admin Profile" class="profile-pic">
+        <?php
+        $imageData = '';
+        if (!empty($kebele_id)) {
+            $stmt = mysqli_prepare($con, "SELECT photo FROM residents WHERE residence_id = ?");
+            if ($stmt) {
+                mysqli_stmt_bind_param($stmt, "s", $kebele_id);
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+                if ($row = mysqli_fetch_assoc($result)) {
+                    $imageData = base64_encode($row['photo']);
+                }
+                mysqli_stmt_close($stmt);
+            }
+        }
+
+        if ($imageData) {
+            echo '<a href="../editProfile/editProfile.php">';
+            echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width: 80px;height: 70px;border-radius:50%; object-fit:cover;">';
+            echo '</a>';
+        } else {
+            echo '<img src="./images/default-profile.png" alt="Profile" style="width: 80px;height: 70px;border-radius:50%; object-fit:cover;">';
+        }
+        ?>
+
         <div>
-          <h4 class="admin-name">Olyad Boka</h4>
-          <p class="admin-role">Admin</p>
+          <h4 class="admin-name"><?php echo htmlspecialchars($_SESSION["username"] ?? 'Admin'); ?></h4>
+          <p class="admin-role"><?php echo htmlspecialchars($_SESSION["role"] ?? 'Administrator'); ?></p>
         </div>
       </div>
       <p style="color:gray; font-size: 1rem;">HERMATA MENTINA RMS</p>
@@ -59,28 +89,28 @@
         <div class="stat-card">
           <i class="fas fa-users"></i>
           <h3>Total Residents</h3>
-          <div class="stat-value"><?php echo getResidentCount(); ?></div>
+          <div class="stat-value"><?php echo getResidentCount($con); ?></div>
           <div class="stat-change">+5% from last month</div>
         </div>
 
         <div class="stat-card">
           <i class="fas fa-file-alt"></i>
           <h3>Total Reports</h3>
-          <div class="stat-value"><?php echo getTotalReportCount(); ?></div>
+          <div class="stat-value"><?php echo getTotalReportCount($con); ?></div>
           <div class="stat-change">+12% from last month</div>
         </div>
 
         <div class="stat-card">
           <i class="fas fa-check-circle"></i>
           <h3>Solved Reports</h3>
-          <div class="stat-value"><?php echo getSolvedReportCount(); ?></div>
+          <div class="stat-value"><?php echo getSolvedReportCount($con); ?></div>
           <div class="stat-change">+8% from last month</div>
         </div>
 
         <div class="stat-card">
           <i class="fas fa-clock"></i>
           <h3>Pending Reports</h3>
-          <div class="stat-value"><?php echo getPendingReportCount(); ?></div>
+          <div class="stat-value"><?php echo getPendingReportCount($con); ?></div>
           <div class="stat-change negative">+3 from yesterday</div>
         </div>
       </div>
@@ -101,42 +131,42 @@
           <tbody>
             <tr>
               <td>residents</td>
-              <td><?php echo getTableRowCount('residents'); ?></td>
+              <td><?php echo getTableRowCount($con, 'residents'); ?></td>
               <td>InnoDB</td>
               <td>288.0 KiB</td>
               <td><span class="status-badge status-active">Active</span></td>
             </tr>
             <tr>
               <td>reports</td>
-              <td><?php echo getTableRowCount('reports'); ?></td>
+              <td><?php echo getTableRowCount($con, 'reports'); ?></td>
               <td>InnoDB</td>
               <td>272.0 KiB</td>
               <td><span class="status-badge status-active">Active</span></td>
             </tr>
             <tr>
               <td>report_images</td>
-              <td><?php echo getTableRowCount('report_images'); ?></td>
+              <td><?php echo getTableRowCount($con, 'report_images'); ?></td>
               <td>InnoDB</td>
               <td>400.0 KiB</td>
               <td><span class="status-badge status-active">Active</span></td>
             </tr>
             <tr>
               <td>report_status_history</td>
-              <td><?php echo getTableRowCount('report_status_history'); ?></td>
+              <td><?php echo getTableRowCount($con, 'report_status_history'); ?></td>
               <td>InnoDB</td>
               <td>48.0 KiB</td>
               <td><span class="status-badge status-active">Active</span></td>
             </tr>
             <tr>
               <td>activity_logs</td>
-              <td><?php echo getTableRowCount('activity_logs'); ?></td>
+              <td><?php echo getTableRowCount($con, 'activity_logs'); ?></td>
               <td>InnoDB</td>
               <td>16.0 KiB</td>
               <td><span class="status-badge status-active">Active</span></td>
             </tr>
             <tr>
               <td>notifications</td>
-              <td><?php echo getTableRowCount('notifications'); ?></td>
+              <td><?php echo getTableRowCount($con, 'notifications'); ?></td>
               <td>InnoDB</td>
               <td>48.0 KiB</td>
               <td><span class="status-badge status-active">Active</span></td>
@@ -148,40 +178,91 @@
   </div>
 
   <?php
-
-  function getResidentCount() {
-  
-    return "42";
-  }
-  
-  function getTotalReportCount() {
-  
-    return "127"; 
-  }
-  
-  function getSolvedReportCount() {
-   
-    return "89"; 
-  }
-  
-  function getPendingReportCount() {
-   
-    return "38"; // Replace with actual count
-  }
-  
-  function getTableRowCount($tableName) {
-   
-    switch($tableName) {
-      case 'residents': return "42";
-      case 'reports': return "127";
-      case 'report_images': return "85";
-      case 'report_status_history': return "210";
-      case 'activity_logs': return "3";
-      case 'notifications': return "15";
-      default: return "0";
+/**
+ * Counts all residents in the database
+ * @param mysqli $conn Database connection
+ * @return int Number of residents
+ */
+function getResidentCount($conn) {
+    $sql = "SELECT COUNT(*) as total FROM residents";
+    $result = mysqli_query($conn, $sql);
+    if ($result && $row = mysqli_fetch_assoc($result)) {
+        return $row['total'];
     }
-  }
-  ?>
+    return 0;
+}
+
+/**
+ * Counts all reports in the database
+ * @param mysqli $conn Database connection
+ * @return int Total number of reports
+ */
+function getTotalReportCount($conn) {
+    $sql = "SELECT COUNT(*) as total FROM reports";
+    $result = mysqli_query($conn, $sql);
+    if ($result && $row = mysqli_fetch_assoc($result)) {
+        return $row['total'];
+    }
+    return 0;
+}
+
+/**
+ * Counts all solved reports
+ * @param mysqli $conn Database connection
+ * @return int Number of solved reports
+ */
+function getSolvedReportCount($conn) {
+    $sql = "SELECT COUNT(*) as total FROM reports WHERE status = 'solved'";
+    $result = mysqli_query($conn, $sql);
+    if ($result && $row = mysqli_fetch_assoc($result)) {
+        return $row['total'];
+    }
+    return 0;
+}
+
+/**
+ * Counts all pending reports
+ * @param mysqli $conn Database connection
+ * @return int Number of pending reports
+ */
+function getPendingReportCount($conn) {
+    $sql = "SELECT COUNT(*) as total FROM reports WHERE status = 'pending'";
+    $result = mysqli_query($conn, $sql);
+    if ($result && $row = mysqli_fetch_assoc($result)) {
+        return $row['total'];
+    }
+    return 0;
+}
+
+/**
+ * Counts rows in specified table (with security checks)
+ * @param mysqli $conn Database connection
+ * @param string $tableName Name of table to count
+ * @return int Number of rows in table
+ */
+function getTableRowCount($conn, $tableName) {
+    // Whitelist allowed tables for security
+    $allowedTables = [
+        'residents', 
+        'reports', 
+        'report_images', 
+        'report_status_history', 
+        'activity_logs', 
+        'notifications'
+    ];
+    
+    if (!in_array($tableName, $allowedTables)) {
+        return 0;
+    }
+    
+    $sql = "SELECT COUNT(*) as total FROM `" . mysqli_real_escape_string($conn, $tableName) . "`";
+    $result = mysqli_query($conn, $sql);
+    if ($result && $row = mysqli_fetch_assoc($result)) {
+        return $row['total'];
+    }
+    return 0;
+}
+?>
 </body>
 
 </html>

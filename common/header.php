@@ -116,17 +116,18 @@ if (!isset($_SESSION['user_id'])) {
           if ($row = mysqli_fetch_assoc($result)) {
             $imageData = base64_encode($row['photo']); 
           }
-
-          if ($role === 'admin') {
-            echo '<a href="../Admin Dashboard/dashboardhome.php" class="btn btn-primary">Dashboard</a>';
-          } elseif ($role === 'staff') {
-            echo '<a href="../staffCSS/staff.php" class="btn btn-primary">Dashboard</a>';
-          }
-
-          if ($imageData) {
+   if ($imageData) {
             echo '<a href="../editProfile/editProfile.php">';
             echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width: 80px;height: 70px;border-radius:50%; object-fit:cover;">';
             echo '</a>';
+          }
+          
+
+       
+          if ($role === 'admin') {
+            echo '<a href="../Admin Dashboard/dashboardhome.php" class="btn btn-primary" style="height:3rem;">Dashboard</a>';
+          } elseif ($role === 'staff') {
+            echo '<a href="../Staff/staff.php" class="btn btn-primary" style="height:3rem;">Dashboard</a>';
           }
 
           echo "<a href='../login/logout.php' class='btn btn-danger' style='height:3rem;'>Logout</a>";
