@@ -1,6 +1,6 @@
 <?php
-session_start();
-require_once './dbConnection.php'; // This should contain your database connection
+// session_start();
+include './dbConnection.php'; // This should contain your database connection
 // $con = connectDB(); // Make sure this function returns a valid mysqli connection
 $kebele_id = $_SESSION['kebele_id'] ?? ''; // Assuming kebele_id is stored in session
 ?>

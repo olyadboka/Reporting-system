@@ -212,7 +212,7 @@ function getTotalReportCount($conn) {
  * @return int Number of solved reports
  */
 function getSolvedReportCount($conn) {
-    $sql = "SELECT COUNT(*) as total FROM reports WHERE status = 'solved'";
+    $sql = "SELECT COUNT(*) as total FROM reports WHERE status = 'resolved'";
     $result = mysqli_query($conn, $sql);
     if ($result && $row = mysqli_fetch_assoc($result)) {
         return $row['total'];
