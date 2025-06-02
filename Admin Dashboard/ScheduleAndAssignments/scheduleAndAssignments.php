@@ -218,6 +218,222 @@ if (isset($_GET['edit_schedule_id'])) {
       width: 100%;
     }
   }
+
+  /* Table Container */
+  .table-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    margin-bottom: 30px;
+    overflow: hidden;
+  }
+
+  /* Base Table Styles */
+  .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.9rem;
+    color: #212529;
+  }
+
+  /* Table Header */
+  .table thead th {
+    background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    padding: 15px;
+    border: none;
+    vertical-align: middle;
+    position: sticky;
+    top: 0;
+  }
+
+  /* Table Body */
+  .table tbody tr {
+    transition: all 0.2s ease;
+    background-color: white;
+  }
+
+  .table tbody tr:hover {
+    background-color: rgba(78, 115, 223, 0.05);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .table tbody td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    border-top: 1px solid rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  }
+
+  /* Zebra Striping */
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+
+  /* Status Badges */
+  .badge {
+    font-weight: 500;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    display: inline-block;
+    min-width: 70px;
+    text-align: center;
+  }
+
+  .status-pending {
+    background-color: #f6c23e;
+    color: #000;
+  }
+
+  .status-in-progress {
+    background-color: #36b9cc;
+    color: #fff;
+  }
+
+  .status-solved {
+    background-color: #1cc88a;
+    color: #fff;
+  }
+
+  .status-rejected {
+    background-color: #e74a3b;
+    color: #fff;
+  }
+
+  /* Priority Badges */
+  .priority-low {
+    background-color: #858796;
+    color: #fff;
+  }
+
+  .priority-medium {
+    background-color: #fd7e14;
+    color: #000;
+  }
+
+  .priority-high {
+    background-color: #e74a3b;
+    color: #fff;
+  }
+
+  /* Action Buttons */
+  .btn-table-action {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    margin: 2px;
+    transition: all 0.2s;
+    box-shadow: none;
+  }
+
+  .btn-table-action:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Resolved Row Styling */
+  .resolved-row {
+    background-color: rgba(248, 249, 250, 0.7);
+  }
+
+  .resolved-row td {
+    color: #6c757d;
+  }
+
+  .resolved-row:hover {
+    background-color: rgba(248, 249, 250, 0.9);
+  }
+
+  /* Description Cell */
+  .description-cell {
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Responsive Table */
+  @media (max-width: 768px) {
+    .table-responsive {
+      border: 1px solid #e3e6f0;
+      border-radius: 5px;
+    }
+
+    .table thead {
+      display: none;
+    }
+
+    .table tbody tr {
+      display: block;
+      margin-bottom: 15px;
+      border: 1px solid #e3e6f0;
+      border-radius: 5px;
+    }
+
+    .table tbody td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border: none;
+      border-bottom: 1px solid #e3e6f0;
+    }
+
+    .table tbody td::before {
+      content: attr(data-label);
+      font-weight: bold;
+      margin-right: 10px;
+      color: #4e73df;
+    }
+
+    .description-cell {
+      max-width: 100%;
+      white-space: normal;
+    }
+  }
+
+  /* Hover Effects */
+  .table-hover tbody tr:hover td {
+    color: #212529;
+  }
+
+  /* Scrollable Table */
+  .table-scrollable {
+    max-height: 500px;
+    overflow-y: auto;
+  }
+
+  /* Table Caption */
+  .table caption {
+    caption-side: top;
+    padding: 10px;
+    font-weight: bold;
+    color: #4e73df;
+  }
+
+  /* Resolution Modal Styles */
+  #resolveModal .modal-header {
+    background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+  }
+
+  #resolveModal .modal-content {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  #resolutionNotes {
+    min-height: 120px;
+    resize: vertical;
+  }
   </style>
 </head>
 
@@ -352,7 +568,7 @@ if (isset($_GET['edit_schedule_id'])) {
     echo "<td>";
     if (strtolower($row['status']) !== 'resolved') {
         echo "<a href='?edit_schedule_id={$row['id']}' class='btn btn-warning btn-sm'>Edit</a>";
-        echo "<a href='?action=resolve&id={$row['report_id']}' class='btn btn-success btn-sm'>Resolve</a>";
+        echo "<button class='btn btn-success btn-sm resolve-btn' data-id='{$row['report_id']}'>Resolve</button>";
     } else {
         echo "<span class='badge bg-secondary'>Resolved</span>";
     }
@@ -406,6 +622,31 @@ if (isset($_GET['edit_schedule_id'])) {
     </div>
   </div>
 
+  <!-- Resolution Dialog Modal -->
+  <div class="modal fade" id="resolveModal" tabindex="-1" aria-labelledby="resolveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="resolveModalLabel">Resolve Report</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="resolveForm">
+            <input type="hidden" id="reportToResolveId" name="report_id">
+            <div class="mb-3">
+              <label for="resolutionNotes" class="form-label">How was this resolved?</label>
+              <textarea class="form-control" id="resolutionNotes" name="resolution_notes" rows="4" required></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="confirmResolve">Mark as Resolved</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
   // Show/hide form functionality
   document.querySelectorAll('.schedule-fix-btn').forEach(button => {
@@ -439,6 +680,51 @@ if (isset($_GET['edit_schedule_id'])) {
   <?php if (isset($edit_schedule)): ?>
   document.getElementById('scheduleForm').style.display = 'block';
   <?php endif; ?>
+
+  // Add this to your existing JavaScript
+  $(document).ready(function() {
+    // Handle resolve button click
+    $(document).on('click', '.resolve-btn', function() {
+      const reportId = $(this).data('id');
+      $('#reportToResolveId').val(reportId);
+      $('#resolutionNotes').val('');
+      $('#resolveModal').modal('show');
+    });
+
+    // Handle confirm resolve
+    $('#confirmResolve').click(function() {
+      const reportId = $('#reportToResolveId').val();
+      const resolutionNotes = $('#resolutionNotes').val().trim();
+
+      if (!resolutionNotes) {
+        alert('Please enter resolution notes');
+        return;
+      }
+
+      // Show loading state
+      $(this).html(
+        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...'
+      );
+      $(this).prop('disabled', true);
+
+      $.ajax({
+        url: 'resolve_report.php',
+        type: 'POST',
+        data: {
+          report_id: reportId,
+          resolution_notes: resolutionNotes
+        },
+        success: function(response) {
+          $('#resolveModal').modal('hide');
+          location.reload(); // Refresh to show updated status
+        },
+        error: function() {
+          alert('Error resolving report');
+          $('#confirmResolve').html('Mark as Resolved').prop('disabled', false);
+        }
+      });
+    });
+  });
   </script>
 </body>
 
