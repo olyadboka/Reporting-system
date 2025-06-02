@@ -26,7 +26,7 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
         case 'resolve':
             $sql = "UPDATE reports SET status = 'resolved' WHERE report_id = ?";
             // Also remove from schedules if exists
-            $conn->query("DELETE FROM schedules WHERE report_id = $id");
+            
             break;
     }
     
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['schedule_fix'])) {
     $conn->query("UPDATE reports SET status = 'approved' WHERE report_id = $report_id");
     
     if ($schedule_id) {
-        $sql = "UPDATE schedules SET assigned_to = ?, date = ?, time = ? WHERE id = ?";
+        $sql = "UPDATE schedules SET assigned_to = ?, date = ?, time = ? WHERE report_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sssi", $assigned_to, $date, $time, $schedule_id);
     } else {
@@ -298,7 +298,7 @@ if (isset($_GET['edit_schedule_id'])) {
                     <td>";
                   
                   if (strtolower($row['status']) === 'resolved') {
-                    echo "<a href='generate_report.php?report_id={$row['report_id']}' class='btn btn-info btn-sm'>View Record</a>";
+                    echo "<a href='../ReportsAndAnalytics/reportRecord.php?id={$row['report_id']}' class='btn btn-info btn-sm'>View Record</a>";
                   } else {
                     echo "<button class='btn btn-primary btn-sm schedule-fix-btn' data-report-id='{$row['report_id']}'>Schedule Fix</button>";
                     if (strtolower($row['status']) !== 'approved') {
@@ -336,25 +336,29 @@ if (isset($_GET['edit_schedule_id'])) {
             <tbody>
               <?php
               $sql = "SELECT s.id, s.report_id, s.assigned_to, s.date, s.time, r.status 
-                      FROM schedules s
-                      JOIN reports r ON s.report_id = r.report_id
-                      WHERE r.status != 'resolved'";
+        FROM schedules s
+        JOIN reports r ON s.report_id = r.report_id";
               $result = $conn->query($sql);
 
               if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                  echo "<tr>
-                    <td>{$row['id']}</td>
-                    <td>{$row['report_id']}</td>
-                    <td style='word-wrap: break-word;'>{$row['assigned_to']}</td>
-                    <td>{$row['date']}</td>
-                    <td>{$row['time']}</td>
-                    <td>
-                      <a href='?edit_schedule_id={$row['id']}' class='btn btn-warning btn-sm'>Edit</a>
-                      <a href='?action=resolve&id={$row['report_id']}' class='btn btn-success btn-sm'>Resolve</a>
-                    </td>
-                  </tr>";
-                }
+    $row_class = strtolower($row['status']) === 'resolved' ? 'resolved-row' : '';
+    echo "<tr class='{$row_class}'>";
+    echo "<td>{$row['id']}</td>";
+    echo "<td>{$row['report_id']}</td>";
+    echo "<td>{$row['assigned_to']}</td>";
+    echo "<td>{$row['date']}</td>";
+    echo "<td>{$row['time']}</td>";
+    echo "<td>";
+    if (strtolower($row['status']) !== 'resolved') {
+        echo "<a href='?edit_schedule_id={$row['id']}' class='btn btn-warning btn-sm'>Edit</a>";
+        echo "<a href='?action=resolve&id={$row['report_id']}' class='btn btn-success btn-sm'>Resolve</a>";
+    } else {
+        echo "<span class='badge bg-secondary'>Resolved</span>";
+    }
+    echo "</td>";
+    echo "</tr>";
+}
               } else {
                 echo "<tr><td colspan='6' class='text-center'>No scheduled fixes found.</td></tr>";
               }

@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../dbConnection.php'; 
-$kebele_id = $_SESSION['kebele_id'] ?? '';
+$kebele_id = $_SESSION['residence_id'] ?? '';
 ?>
 
 <!DOCTYPE html>
@@ -246,7 +246,7 @@ $kebele_id = $_SESSION['kebele_id'] ?? '';
     // Handle Delete User
     if (isset($_GET['delete_id'])) {
         $delete_id = intval($_GET['delete_id']); // Sanitize input
-        $sql = "DELETE FROM users WHERE id = ?";
+        $sql = "DELETE FROM residetns WHERE id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $delete_id);
         $stmt->execute();
@@ -265,7 +265,11 @@ $kebele_id = $_SESSION['kebele_id'] ?? '';
         $email = htmlspecialchars(trim($_POST['email']));
         $role = htmlspecialchars(trim($_POST['role']));
 
+<<<<<<< HEAD
         $sql = "UPDATE residents SET fname = ?, mname = ?, fathersName = ?, phone = ?, email = ?, role = ? WHERE residence_id = ?";
+=======
+        $sql = "UPDATE residents SET fname = ?, mname = ?, fathersName = ?, phone = ?, email = ?, role = ? WHERE id = ?";
+>>>>>>> 99476c652ccc3e4d64b438bc09aa36e47c34be2f
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ssssssi", $fname, $mname, $fathersName, $phone, $email, $role, $edit_id);
         $stmt->execute();
@@ -289,7 +293,11 @@ $kebele_id = $_SESSION['kebele_id'] ?? '';
             </thead>
             <tbody>
               <?php
+<<<<<<< HEAD
         $sql = "SELECT residence_id , fname, mname, fathersName, phone, email, role FROM residents";
+=======
+        $sql = "SELECT id, fname, mname, fathersName, phone, email, role FROM residents";
+>>>>>>> 99476c652ccc3e4d64b438bc09aa36e47c34be2f
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
