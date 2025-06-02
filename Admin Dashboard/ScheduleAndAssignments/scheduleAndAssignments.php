@@ -647,82 +647,78 @@ if (isset($_GET['edit_schedule_id'])) {
     </div>
   </div>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
   <script>
-  // Show/hide form functionality
-  document.querySelectorAll('.schedule-fix-btn').forEach(button => {
-    button.addEventListener('click', function() {
-      const reportId = this.getAttribute('data-report-id');
-      document.getElementById('report_id').value = reportId;
+  document.addEventListener('DOMContentLoaded', function() {
+    // Show/hide form functionality
+    document.querySelectorAll('.schedule-fix-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        const reportId = this.getAttribute('data-report-id');
+        document.getElementById('report_id').value = reportId;
 
-      // Clear other fields if not in edit mode
-      if (!<?php echo isset($edit_schedule) ? 'true' : 'false'; ?>) {
-        document.getElementById('assigned_to').value = '';
-        document.getElementById('date').value = '';
-        document.getElementById('time').value = '';
-      }
-
-      // Show form
-      document.getElementById('scheduleForm').style.display = 'block';
-
-      // Scroll to form
-      document.getElementById('scheduleForm').scrollIntoView({
-        behavior: 'smooth'
-      });
-    });
-  });
-
-  // Cancel button functionality
-  document.getElementById('cancelForm').addEventListener('click', function() {
-    document.getElementById('scheduleForm').style.display = 'none';
-  });
-
-  // Show form if in edit mode
-  <?php if (isset($edit_schedule)): ?>
-  document.getElementById('scheduleForm').style.display = 'block';
-  <?php endif; ?>
-
-  // Add this to your existing JavaScript
-  $(document).ready(function() {
-    // Handle resolve button click
-    $(document).on('click', '.resolve-btn', function() {
-      const reportId = $(this).data('id');
-      $('#reportToResolveId').val(reportId);
-      $('#resolutionNotes').val('');
-      $('#resolveModal').modal('show');
-    });
-
-    // Handle confirm resolve
-    $('#confirmResolve').click(function() {
-      const reportId = $('#reportToResolveId').val();
-      const resolutionNotes = $('#resolutionNotes').val().trim();
-
-      if (!resolutionNotes) {
-        alert('Please enter resolution notes');
-        return;
-      }
-
-      // Show loading state
-      $(this).html(
-        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...'
-      );
-      $(this).prop('disabled', true);
-
-      $.ajax({
-        url: 'resolve_report.php',
-        type: 'POST',
-        data: {
-          report_id: reportId,
-          resolution_notes: resolutionNotes
-        },
-        success: function(response) {
-          $('#resolveModal').modal('hide');
-          location.reload(); // Refresh to show updated status
-        },
-        error: function() {
-          alert('Error resolving report');
-          $('#confirmResolve').html('Mark as Resolved').prop('disabled', false);
+        // Clear other fields if not in edit mode
+        if (!<?php echo isset($edit_schedule) ? 'true' : 'false'; ?>) {
+          document.getElementById('assigned_to').value = '';
+          document.getElementById('date').value = '';
+          document.getElementById('time').value = '';
         }
+
+        // Show form
+        document.getElementById('scheduleForm').style.display = 'block';
+        document.getElementById('scheduleForm').scrollIntoView({
+          behavior: 'smooth'
+        });
       });
+    });
+
+    // Cancel button functionality
+    document.getElementById('cancelForm').addEventListener('click', function() {
+      document.getElementById('scheduleForm').style.display = 'none';
+    });
+
+    // Show form if in edit mode
+    <?php if (isset($edit_schedule)): ?>
+    document.getElementById('scheduleForm').style.display = 'block';
+    <?php endif; ?>
+
+
+  });
+  </script>
+  <script>
+  // Show resolution dialog
+  $(document).on('click', '.resolve-btn', function() {
+    const reportId = $(this).data('id');
+    $('#reportToResolveId').val(reportId);
+    $('#resolveModal').modal('show');
+  });
+
+  // Handle resolution submission
+  $('#confirmResolve').click(function() {
+    const $btn = $(this);
+    const notes = $('#resolutionNotes').val().trim();
+
+    if (!notes) {
+      alert("Please enter resolution notes");
+      return;
+    }
+
+    $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Processing...');
+
+    $.post('resolve_report.php', {
+      report_id: $('#reportToResolveId').val(),
+      resolution_notes: notes
+    }, function(response) {
+      if (response === "OK") {
+        location.reload(); // Refresh page on success
+      } else {
+        alert("Error: " + response);
+        $btn.prop('disabled', false).html('Mark as Resolved');
+      }
+    }).fail(function() {
+      alert("Request failed - try again");
+      $btn.prop('disabled', false).html('Mark as Resolved');
     });
   });
   </script>
