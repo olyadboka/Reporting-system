@@ -39,7 +39,7 @@ session_start();
     <div class="circle"></div>
     <p class="text">Hermata Mentina Kebele Report Management System </p>
   </div>
-
+  
   <!-- 
     - #TOP BAR
   -->
@@ -94,11 +94,11 @@ session_start();
           <h2>Hermata-Mentina </h2>
         </a> -->
 
-        <ul class="navbar-list" style="margin-right: 100px;">
+        <ul class="navbar-list"  style="margin-right: 100px;">
           <li class="navbar-item">
             <a href="#home" class="navbar-link hover-underline active">
               <div class="separator"></div>
-              <span class="span" style="font-size: 10px;">Home</span>
+              <span class="span"  style="font-size: 10px;">Home</span>
             </a>
           </li>
 
@@ -112,32 +112,32 @@ session_start();
           <li class="navbar-item">
             <a href="#about" class="navbar-link hover-underline">
               <div class="separator"></div>
-              <span class="span" style="font-size: 10px;">About-Us</span>
+              <span class="span"  style="font-size: 10px;">About-Us</span>
             </a>
           </li>
 
           <li class="navbar-item">
             <a href="#" class="navbar-link hover-underline">
               <div class="separator"></div>
-              <span class="span" id="rep" style="font-size: 10px;">Representative</span>
+              <span class="span" id="rep"   style="font-size: 10px;">Representative</span>
             </a>
           </li>
 
           <li class="navbar-item">
-            <a href="#" class="navbar-link hover-underline">
+            <a href="#cont" class="navbar-link hover-underline">
               <div class="separator"></div>
-              <span class="span" id="contactsss" style="font-size: 10px;">Contact</span>
+              <span class="span" id="contactsss"  style="font-size: 10px;">Contact</span>
             </a>
           </li>
 
           <li class="navbar-item">
             <a href="../report.php" class="navbar-link hover-underline report-link">
               <div class="separator"></div>
-              <span class="span" id="reports" style="font-size: 10px;">Report Now</span>
+              <span class="span" id="reports"  style="font-size: 10px;">Report Now</span>
             </a>
           </li>
         </ul>
-
+        
         <div class="text-center">
           <p class="headline-1 navbar-title">Visit Us</p>
           <address class="body-4">
@@ -174,19 +174,17 @@ session_start();
           $imageData = base64_encode($row['photo']); 
         }
 
-          if ($imageData) {
+        if ($role === 'admin') {
+          echo '<a href="../Admin Dashboard/dashboardhome.php" class="btn btn-primary">Dashboard</a>';
+        } elseif ($role === 'staff') {
+          echo '<a href="../staffCSS/staff.php" class="btn btn-primary">Dashboard</a>';
+        }
+
+        if ($imageData) {
           echo '<a href="../editProfile/editProfile.php">';
           echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width:100px;height:100px;border-radius:50%; object-fit:cover;">';
           echo '</a>';
         }
-
-        if ($role === 'admin') {
-          echo '<a href="../Admin Dashboard/dashboardhome.php" class="btn btn-primary">Dashboard</a>';
-        } elseif ($role === 'staff') {
-          echo '<a href="../Staff/staff.php" class="btn btn-primary">Dashboard</a>';
-        }
-
-      
         
         echo "<a href='../login/logout.php' class='btn btn-danger'>Logout</a>";
       }
@@ -309,11 +307,10 @@ session_start();
 
       <section class="section testi text-center has-bg-image"
         style="background-image: url('./assets/img/form-pattern.png')" aria-label="testimonials" id="lover">
-        <div class="container">
+        <div class="container" id="rep">
           <div class="quote">”</div>
           <p class="headline-2 testi-text">
-            His vision and initiatives have significantly impacted local governance and community development, fostering
-            progress and engagement at the grassroots level.
+            His vision and initiatives have significantly impacted local governance and community development, fostering progress and engagement at the grassroots level.
           </p>
           <div class="wrapper">
             <div class="separator"></div>
@@ -321,14 +318,13 @@ session_start();
             <div class="separator"></div>
           </div>
           <div class="profile">
-            <img src="../../images/Chairperson.png" width="300" height="500" loading="lazy" alt="Sam Jhonson"
-              class="img">
+            <img src="../../images/Chairperson.png" width="300" height="500" loading="lazy" alt="Sam Jhonson" class="img">
             <p class="label-2 profile-name">Chairperson</p>
           </div>
         </div>
       </section>
 
-      <div class="form-right text-center" style="background-image: url('./assets/images/form-pattern.png')">
+      <div id="cont" class="form-right text-center" style="background-image: url('./assets/images/form-pattern.png')">
         <h2 class="headline-1 text-center">Contact Us</h2>
         <p class="contact-label"> contact-number</p>
         <a href="tel:+88123123456" class="body-1 contact-number hover-underline">+251-3456</a>
@@ -355,7 +351,7 @@ session_start();
       -->
       <section class="section features text-center" aria-label="features" id="whyus">
         <div class="container">
-          <h2 class="headline-1 section-title">objectives</h2>
+          <h2 class="headline-1 section-title" id="obj">objectives</h2>
           <ul class="grid-list">
             <li class="feature-item">
               <div class="feature-card">
@@ -443,5 +439,4 @@ session_start();
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
 </body>
-
 </html>

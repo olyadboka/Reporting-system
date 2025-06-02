@@ -38,11 +38,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
 
-        if (password_verify($password, $user['hashed_password'])) {
-            $_SESSION['user_id'] = $user['user_id']; 
-            $_SESSION['role'] = $user['role'];       
+        // Verify the hashed password
+        if (password_verify($password, $user['hashed_password'])) { // Use 'hashed_password' here
+            // Set session variables
+            $_SESSION['user_id'] = $user['user_id']; // Store user_id in session
+            $_SESSION['role'] = $user['role'];       // Store role in session
 
-           
+            // Redirect based on role
             if ($user['role'] === 'staff') {
                 header("Location: staff.php");
             } else {
@@ -64,45 +66,42 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Staff Login</title>
-  <link rel="stylesheet" href="staffCSS/satfflogin.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Login</title>
+    <link rel="stylesheet" href="staffCSS/satfflogin.css">
 
 </head>
-
 <body>
-  <nav>
-    <h3>Staff Login</h3>
-  </nav>
-  <div class="container">
-    <div class="login-container">
-      <div class="head">
-        <h2>Staff Login</h2>
-      </div>
-      <div class="form-container">
-        <?php if (!empty($error)): ?>
-        <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
-        <?php endif; ?>
-        <form action="stafflogin.php" method="post">
-          <div>
-            <label for="residence_id">Residence ID</label>
-            <input type="text" id="residence_id" name="residence_id" placeholder="Enter your residence ID" required>
-          </div>
-          <div>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required>
-          </div>
-          <div>
-            <input type="submit" value="Login">
-          </div>
-        </form>
-      </div>
+        <nav>
+            <h3>Staff Login</h3>
+        </nav>
+    <div class="container">
+        <div class="login-container">
+            <div class="head">
+                <h2>Staff Login</h2>
+            </div>
+            <div class="form-container">
+                <?php if (!empty($error)): ?>
+                    <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
+                <?php endif; ?>
+                <form action="stafflogin.php" method="post">
+                    <div>
+                        <label for="residence_id">Residence ID</label>
+                        <input type="text" id="residence_id" name="residence_id" placeholder="Enter your residence ID" required>
+                    </div>
+                    <div>
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    </div>
+                    <div>
+                        <input type="submit" value="Login">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="back-img hidden"></div>
     </div>
-    <div class="back-img hidden"></div>
-  </div>
 </body>
-
 </html>

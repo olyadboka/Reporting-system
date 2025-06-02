@@ -1,151 +1,142 @@
-<?php
-session_start();
-require_once '../dbConnection.php'; 
-$kebele_id = $_SESSION['residence_id'] ?? '';
-?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="dashboardHome.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Users Management</title>
   <style>
-  :root {
-    --primary-color: #4e73df;
-    --secondary-color: #858796;
-    --success-color: #1cc88a;
-    --danger-color: #e74a3b;
-    --light-color: #f8f9fc;
-    --dark-color: #5a5c69;
-    --info-color: #36b9cc;
-  }
+    :root {
+      --primary-color: #4e73df;
+      --secondary-color: #858796;
+      --success-color: #1cc88a;
+      --danger-color: #e74a3b;
+      --light-color: #f8f9fc;
+      --dark-color: #5a5c69;
+      --info-color: #36b9cc;
+    }
 
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: var(--light-color);
-  }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--light-color);
+    }
 
-  .container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
 
-  h1 {
-    color: var(--primary-color);
-    text-align: center;
-    margin-bottom: 20px;
-  }
+    h1 {
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
 
-  table th,
-  table td {
-    border: 1px solid var(--secondary-color);
-    padding: 10px;
-    text-align: left;
-  }
+    table th,
+    table td {
+      border: 1px solid var(--secondary-color);
+      padding: 10px;
+      text-align: left;
+    }
 
-  table th {
-    background-color: var(--primary-color);
-    color: white;
-  }
+    table th {
+      background-color: var(--primary-color);
+      color: white;
+    }
 
-  table tr:nth-child(even) {
-    background-color: var(--light-color);
-  }
+    table tr:nth-child(even) {
+      background-color: var(--light-color);
+    }
 
-  table tr:hover {
-    background-color: var(--info-color);
-    color: white;
-  }
+    table tr:hover {
+      background-color: var(--info-color);
+      color: white;
+    }
 
-  .edit-btn {
-    background-color: var(--info-color);
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+    .edit-btn {
+      background-color: var(--info-color);
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 
-  .edit-btn:hover {
-    background-color: var(--dark-color);
-  }
+    .edit-btn:hover {
+      background-color: var(--dark-color);
+    }
 
-  .delete-btn {
-    background-color: var(--danger-color);
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+    .delete-btn {
+      background-color: var(--danger-color);
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 
-  .delete-btn:hover {
-    background-color: var(--dark-color);
-  }
+    .delete-btn:hover {
+      background-color: var(--dark-color);
+    }
 
-  .form-container {
-    display: none;
-    margin-top: 20px;
-    padding: 20px;
-    background-color: var(--light-color);
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
+    .form-container {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: var(--light-color);
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
 
-  .form-container.active {
-    display: block;
-  }
+    .form-container.active {
+      display: block;
+    }
 
-  .form-container h3 {
-    color: var(--primary-color);
-    margin-bottom: 10px;
-  }
+    .form-container h3 {
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
 
-  .form-container label {
-    display: block;
-    margin-bottom: 5px;
-    color: var(--dark-color);
-  }
+    .form-container label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--dark-color);
+    }
 
-  .form-container input,
-  .form-container select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid var(--secondary-color);
-    border-radius: 5px;
-  }
+    .form-container input,
+    .form-container select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid var(--secondary-color);
+      border-radius: 5px;
+    }
 
-  .form-container button {
-    background-color: var(--success-color);
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+    .form-container button {
+      background-color: var(--success-color);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 
-  .form-container button:hover {
-    background-color: var(--dark-color);
-  }
+    .form-container button:hover {
+      background-color: var(--dark-color);
+    }
   </style>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -154,82 +145,12 @@ $kebele_id = $_SESSION['residence_id'] ?? '';
 </head>
 
 <body>
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <h2 class="sidebar-title"><i class="fas fa-cogs"></i> Admin Panel</h2>
-    <nav class="menu-container">
-      <ul>
-        <li><a href="../dashboardHome.php"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
-        <li><a href="../all reports/allReports.php"><i class="fas fa-folder"></i> <span>All Reports</span></a></li>
-        <li><a href="#"><i class="fas fa-users"></i>
-            <span>Residents</span></a></li>
-        <li><a href="../ManageCatagories/manageCategories.php"><i class="fas fa-tags"></i> <span>Categories</span></a>
-        </li>
-        <li><a href="../ScheduleAndAssignments/scheduleAndAssignments.php"><i class="fas fa-calendar-alt"></i>
-            <span>Schedule</span></a></li>
-        <li><a href="../../Hermata home/index.php"><i class="fas fa-user-shield"></i> <span>Login as Resident</span></a>
-        </li>
-        <li><a href="../ReportsAndAnalytics/reportsAndAnalytics.php"><i class="fas fa-chart-bar"></i>
-            <span>Analytics</span></a></li>
-        <li><a href="../Notification/notification.php"><i class="fas fa-bell"></i> <span>Notifications</span></a></li>
-        <li><a href="../ActivityLogs/activityLogs.php"><i class="fas fa-history"></i> <span>Activity Logs</span></a>
-        </li>
-        <li><a href="../SystemSettings/systemSetting.php"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
-        <li><a href="../../login/logout.php"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
-      </ul>
-    </nav>
-  </aside>
+    <?php include "../commonAdmin.php"; ?>
+ 
+  <div class="container">
+    <h1>Residents Management</h1>
 
-  <!-- Main Content -->
-  <div class="main-content">
-    <!-- Profile Bar -->
-    <header class="profile-bar">
-      <div class="profile-info">
-        <?php
-        $imageData = '';
-        if (!empty($kebele_id)) {
-            $stmt = mysqli_prepare($con, "SELECT photo FROM residents WHERE residence_id = ?");
-            if ($stmt) {
-                mysqli_stmt_bind_param($stmt, "s", $kebele_id);
-                mysqli_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
-                if ($row = mysqli_fetch_assoc($result)) {
-                    $imageData = base64_encode($row['photo']);
-                }
-                mysqli_stmt_close($stmt);
-            }
-        }
-
-        if ($imageData) {
-            echo '<a href="../editProfile/editProfile.php">';
-            echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width: 80px;height: 70px;border-radius:50%; object-fit:cover;">';
-            echo '</a>';
-        } else {
-            echo '<img src="./images/default-profile.png" alt="Profile" style="width: 80px;height: 70px;border-radius:50%; object-fit:cover;">';
-        }
-        ?>
-
-        <div>
-          <h4 class="admin-name"><?php echo htmlspecialchars($_SESSION["username"] ?? 'Admin'); ?></h4>
-          <p class="admin-role"><?php echo htmlspecialchars($_SESSION["role"] ?? 'Administrator'); ?></p>
-        </div>
-      </div>
-      <p style="color:gray; font-size: 1rem;">HERMATA MENTINA RMS</p>
-    </header>
-
-
-    <!-- Main Content -->
-    <div class="main-content">
-
-
-      <!-- Main Section -->
-      <section class="dashboard-content">
-
-
-        <div class="container">
-          <h1>Residents Management</h1>
-
-          <?php
+    <?php
     // Database connection
      include "../../reportDB/dbconnection.php"; 
     $servername = "localhost";
@@ -246,7 +167,7 @@ $kebele_id = $_SESSION['residence_id'] ?? '';
     // Handle Delete User
     if (isset($_GET['delete_id'])) {
         $delete_id = intval($_GET['delete_id']); // Sanitize input
-        $sql = "DELETE FROM residetns WHERE id = ?";
+        $sql = "DELETE FROM users WHERE id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $delete_id);
         $stmt->execute();
@@ -265,11 +186,7 @@ $kebele_id = $_SESSION['residence_id'] ?? '';
         $email = htmlspecialchars(trim($_POST['email']));
         $role = htmlspecialchars(trim($_POST['role']));
 
-<<<<<<< HEAD
-        $sql = "UPDATE residents SET fname = ?, mname = ?, fathersName = ?, phone = ?, email = ?, role = ? WHERE residence_id = ?";
-=======
-        $sql = "UPDATE residents SET fname = ?, mname = ?, fathersName = ?, phone = ?, email = ?, role = ? WHERE id = ?";
->>>>>>> 99476c652ccc3e4d64b438bc09aa36e47c34be2f
+        $sql = "UPDATE users SET fname = ?, mname = ?, fathersName = ?, phone = ?, email = ?, role = ? WHERE id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ssssssi", $fname, $mname, $fathersName, $phone, $email, $role, $edit_id);
         $stmt->execute();
@@ -279,38 +196,34 @@ $kebele_id = $_SESSION['residence_id'] ?? '';
     }
     ?>
 
-          <!-- Users Table -->
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-<<<<<<< HEAD
-        $sql = "SELECT residence_id , fname, mname, fathersName, phone, email, role FROM residents";
-=======
-        $sql = "SELECT id, fname, mname, fathersName, phone, email, role FROM residents";
->>>>>>> 99476c652ccc3e4d64b438bc09aa36e47c34be2f
+    <!-- Users Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+        $sql = "SELECT id, fname, mname, fathersName, phone, email, role FROM users";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>
-                        <td>{$row['residence_id']}</td>
+                        <td>{$row['id']}</td>
                         <td>{$row['fname']} {$row['mname']} {$row['fathersName']}</td>
                         <td>{$row['phone']}</td>
                         <td>{$row['email']}</td>
                         <td>{$row['role']}</td>
                         <td>
-                          <button class='edit-btn' onclick=\"editUser({$row['residence_id']}, '{$row['fname']}', '{$row['mname']}', '{$row['fathersName']}', '{$row['phone']}', '{$row['email']}', '{$row['role']}')\">Edit</button>
-                          <a href='?delete_id={$row['residence_id']}' class='delete-btn'>Delete</a>
+                          <button class='edit-btn' onclick=\"editUser({$row['id']}, '{$row['fname']}', '{$row['mname']}', '{$row['fathersName']}', '{$row['phone']}', '{$row['email']}', '{$row['role']}')\">Edit</button>
+                          <a href='?delete_id={$row['id']}' class='delete-btn'>Delete</a>
                         </td>
                       </tr>";
             }
@@ -318,47 +231,47 @@ $kebele_id = $_SESSION['residence_id'] ?? '';
             echo "<tr><td colspan='6'>No users found.</td></tr>";
         }
         ?>
-            </tbody>
-          </table>
+      </tbody>
+    </table>
 
-          <!-- Edit User Form -->
-          <div id="editUserForm" class="form-container">
-            <h3>Edit User</h3>
-            <form method="POST" action="">
-              <input type="hidden" name="id" id="edit_id">
-              <label for="fname">First Name:</label>
-              <input type="text" name="fname" id="edit_fname" required>
-              <label for="mname">Middle Name:</label>
-              <input type="text" name="mname" id="edit_mname">
-              <label for="fathersName">Father's Name:</label>
-              <input type="text" name="fathersName" id="edit_fathersName" required>
-              <label for="phone">Phone:</label>
-              <input type="text" name="phone" id="edit_phone" required>
-              <label for="email">Email:</label>
-              <input type="email" name="email" id="edit_email" required>
-              <label for="role">Role:</label>
-              <select name="role" id="edit_role" required>
-                <option value="resident">Resident</option>
-                <option value="staff">Staff</option>
-                <option value="admin">Admin</option>
-              </select>
-              <button type="submit" name="edit_user">Save Changes</button>
-            </form>
-          </div>
-        </div>
+    <!-- Edit User Form -->
+    <div id="editUserForm" class="form-container">
+      <h3>Edit User</h3>
+      <form method="POST" action="">
+        <input type="hidden" name="id" id="edit_id">
+        <label for="fname">First Name:</label>
+        <input type="text" name="fname" id="edit_fname" required>
+        <label for="mname">Middle Name:</label>
+        <input type="text" name="mname" id="edit_mname">
+        <label for="fathersName">Father's Name:</label>
+        <input type="text" name="fathersName" id="edit_fathersName" required>
+        <label for="phone">Phone:</label>
+        <input type="text" name="phone" id="edit_phone" required>
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="edit_email" required>
+        <label for="role">Role:</label>
+        <select name="role" id="edit_role" required>
+          <option value="resident">Resident</option>
+          <option value="staff">Staff</option>
+          <option value="admin">Admin</option>
+        </select>
+        <button type="submit" name="edit_user">Save Changes</button>
+      </form>
+    </div>
+  </div>
 
-        <script>
-        function editUser(id, fname, mname, fathersName, phone, email, role) {
-          document.getElementById('editUserForm').classList.add('active');
-          document.getElementById('edit_id').value = id;
-          document.getElementById('edit_fname').value = fname;
-          document.getElementById('edit_mname').value = mname;
-          document.getElementById('edit_fathersName').value = fathersName;
-          document.getElementById('edit_phone').value = phone;
-          document.getElementById('edit_email').value = email;
-          document.getElementById('edit_role').value = role;
-        }
-        </script>
+  <script>
+    function editUser(id, fname, mname, fathersName, phone, email, role) {
+      document.getElementById('editUserForm').classList.add('active');
+      document.getElementById('edit_id').value = id;
+      document.getElementById('edit_fname').value = fname;
+      document.getElementById('edit_mname').value = mname;
+      document.getElementById('edit_fathersName').value = fathersName;
+      document.getElementById('edit_phone').value = phone;
+      document.getElementById('edit_email').value = email;
+      document.getElementById('edit_role').value = role;
+    }
+  </script>
 </body>
 
 </html>
