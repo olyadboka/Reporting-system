@@ -64,7 +64,7 @@ $result = $conn->query($sql);
       <ul>
         <li><a href="./Registration/register.php">📝 Registration</a></li>
         <li><a href="#" class="active">🗂️ Reports List</a></li>
-        <li><a href="../Resident/residentlogin.php">👩‍💻 Login as Resident</a></li>
+        <li><a href="../Hermata home/index.php">👩‍💻 Login as Resident</a></li>
       </ul>
     </nav>
   </aside>
