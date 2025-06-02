@@ -16,7 +16,7 @@ if ($conn->connect_error) {
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'staff') {
-    header("Location: stafflogin.php");
+    header("Location: ../login/login.php");
     exit();
 }
 
@@ -64,7 +64,7 @@ $result = $conn->query($sql);
       <ul>
         <li><a href="./Registration/register.php">📝 Registration</a></li>
         <li><a href="#" class="active">🗂️ Reports List</a></li>
-        <li><a href="../Resident/residentlogin.php">👩‍💻 Login as Resident</a></li>
+        <li><a href="../Hermata home/index.php">👩‍💻 Login as Resident</a></li>
       </ul>
     </nav>
   </aside>
