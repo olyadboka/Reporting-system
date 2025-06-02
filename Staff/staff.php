@@ -16,7 +16,7 @@ if ($conn->connect_error) {
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'staff') {
-    header("Location: stafflogin.php");
+    header("Location: ../login/login.php");
     exit();
 }
 
