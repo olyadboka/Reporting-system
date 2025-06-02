@@ -1,6 +1,6 @@
 <?php
 session_start();
-// require_once './dbConnection.php'; // This should contain your database connection
+require_once './dbConnection.php'; // This should contain your database connection
 // $con = connectDB(); // Make sure this function returns a valid mysqli connection
 $kebele_id = $_SESSION['kebele_id'] ?? ''; // Assuming kebele_id is stored in session
 ?>
@@ -14,6 +14,7 @@ $kebele_id = $_SESSION['kebele_id'] ?? ''; // Assuming kebele_id is stored in se
   <title>Admin Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="dashboardHome.css">
+  <link rel="stylesheet" href="./allReports.css">
 </head>
 
 <body>

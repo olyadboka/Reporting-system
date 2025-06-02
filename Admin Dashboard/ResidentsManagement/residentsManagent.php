@@ -265,7 +265,7 @@ $kebele_id = $_SESSION['kebele_id'] ?? '';
         $email = htmlspecialchars(trim($_POST['email']));
         $role = htmlspecialchars(trim($_POST['role']));
 
-        $sql = "UPDATE users SET fname = ?, mname = ?, fathersName = ?, phone = ?, email = ?, role = ? WHERE id = ?";
+        $sql = "UPDATE residents SET fname = ?, mname = ?, fathersName = ?, phone = ?, email = ?, role = ? WHERE residence_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ssssssi", $fname, $mname, $fathersName, $phone, $email, $role, $edit_id);
         $stmt->execute();
@@ -289,20 +289,20 @@ $kebele_id = $_SESSION['kebele_id'] ?? '';
             </thead>
             <tbody>
               <?php
-        $sql = "SELECT id, fname, mname, fathersName, phone, email, role FROM users";
+        $sql = "SELECT residence_id , fname, mname, fathersName, phone, email, role FROM residents";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>
-                        <td>{$row['id']}</td>
+                        <td>{$row['residence_id']}</td>
                         <td>{$row['fname']} {$row['mname']} {$row['fathersName']}</td>
                         <td>{$row['phone']}</td>
                         <td>{$row['email']}</td>
                         <td>{$row['role']}</td>
                         <td>
-                          <button class='edit-btn' onclick=\"editUser({$row['id']}, '{$row['fname']}', '{$row['mname']}', '{$row['fathersName']}', '{$row['phone']}', '{$row['email']}', '{$row['role']}')\">Edit</button>
-                          <a href='?delete_id={$row['id']}' class='delete-btn'>Delete</a>
+                          <button class='edit-btn' onclick=\"editUser({$row['residence_id']}, '{$row['fname']}', '{$row['mname']}', '{$row['fathersName']}', '{$row['phone']}', '{$row['email']}', '{$row['role']}')\">Edit</button>
+                          <a href='?delete_id={$row['residence_id']}' class='delete-btn'>Delete</a>
                         </td>
                       </tr>";
             }
