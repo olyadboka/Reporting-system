@@ -12,8 +12,9 @@ if (isset($_SESSION['reg_error'])) {
     unset($_SESSION['reg_error']);
 }
 
-// Calculate max date (18 years ago from today)
+// Calculate max date (18 years ago from today) and min date (100 years ago)
 $maxDate = date('Y-m-d', strtotime('-18 years'));
+$minDate = date('Y-m-d', strtotime('-100 years'));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,25 +32,6 @@ $maxDate = date('Y-m-d', strtotime('-18 years'));
         .input-box {
             margin-bottom: 15px;
         }
-        .password-strength {
-            margin-top: 5px;
-            height: 5px;
-            display: flex;
-        }
-        .password-strength span {
-            flex: 1;
-            margin: 0 2px;
-            background: #ddd;
-            border-radius: 2px;
-        }
-        .password-strength .weak { background: #ff4d4d; }
-        .password-strength .medium { background: #ffcc00; }
-        .password-strength .strong { background: #00cc66; }
-        .password-hint {
-            font-size: 0.8em;
-            color: #666;
-            margin-top: 5px;
-        }
         .valid { border-color: #00cc66; }
         .invalid { border-color: #ff4d4d; }
     </style>
@@ -65,14 +47,14 @@ $maxDate = date('Y-m-d', strtotime('-18 years'));
                 const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
                 if (!validTypes.includes(file.type)) {
                     errorElement.textContent = "Only JPG, PNG or GIF images are allowed.";
-                    event.target.value = ''; // Clear the invalid file
+                    event.target.value = '';
                     return;
                 }
                 
                 // Validate file size (max 2MB)
                 if (file.size > 2 * 1024 * 1024) {
                     errorElement.textContent = "Image must be less than 2MB.";
-                    event.target.value = ''; // Clear the invalid file
+                    event.target.value = '';
                     return;
                 }
                 
@@ -82,45 +64,11 @@ $maxDate = date('Y-m-d', strtotime('-18 years'));
             }
         }
 
-        function validatePasswordStrength(password) {
-            // At least 8 characters, one uppercase, one lowercase, one number, one special char
-            const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-            const mediumRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
-            
-            if (strongRegex.test(password)) return 'strong';
-            if (mediumRegex.test(password)) return 'medium';
-            return 'weak';
-        }
-
-        function updatePasswordStrength() {
-            const password = document.getElementById('password').value;
-            const strength = validatePasswordStrength(password);
-            const strengthBars = document.querySelectorAll('.password-strength span');
-            
-            // Reset all bars
-            strengthBars.forEach(bar => bar.className = '');
-            
-            // Set appropriate strength
-            if (password.length > 0) {
-                if (strength === 'weak') {
-                    strengthBars[0].className = 'weak';
-                } else if (strength === 'medium') {
-                    strengthBars[0].className = 'medium';
-                    strengthBars[1].className = 'medium';
-                } else if (strength === 'strong') {
-                    strengthBars[0].className = 'strong';
-                    strengthBars[1].className = 'strong';
-                    strengthBars[2].className = 'strong';
-                }
-            }
-        }
-
         function validateNameField(fieldId, fieldName) {
             const field = document.getElementById(fieldId);
             const errorElement = document.getElementById(`${fieldId}-error`);
             const value = field.value.trim();
             
-            // Enhanced name validation - only letters, spaces, hyphens, and apostrophes
             const nameRegex = /^[A-Za-z\s\-']{2,50}$/;
             
             if (value === '') {
@@ -157,9 +105,8 @@ $maxDate = date('Y-m-d', strtotime('-18 years'));
             const birthdate = new Date(birthdateField.value);
             const today = new Date();
             
-            // Calculate minimum date (120 years ago) and maximum date (18 years ago)
             const minDate = new Date();
-            minDate.setFullYear(today.getFullYear() - 120);
+            minDate.setFullYear(today.getFullYear() - 100);
             
             const maxDate = new Date();
             maxDate.setFullYear(today.getFullYear() - 18);
@@ -175,7 +122,7 @@ $maxDate = date('Y-m-d', strtotime('-18 years'));
                 birthdateField.classList.remove('valid');
                 return false;
             } else if (birthdate < minDate) {
-                errorElement.textContent = "Birthdate is too far in the past (maximum 120 years).";
+                errorElement.textContent = "Birthdate is too far in the past (maximum 100 years).";
                 birthdateField.classList.add('invalid');
                 birthdateField.classList.remove('valid');
                 return false;
@@ -190,6 +137,74 @@ $maxDate = date('Y-m-d', strtotime('-18 years'));
                 birthdateField.classList.remove('invalid');
                 return true;
             }
+        }
+
+        function validateAge() {
+            const ageField = document.getElementById('age');
+            const errorElement = document.getElementById('age-error');
+            const age = parseInt(ageField.value);
+            
+            if (!ageField.value) {
+                errorElement.textContent = "Age is required.";
+                ageField.classList.add('invalid');
+                ageField.classList.remove('valid');
+                return false;
+            } else if (isNaN(age)) {
+                errorElement.textContent = "Age must be a valid number.";
+                ageField.classList.add('invalid');
+                ageField.classList.remove('valid');
+                return false;
+            } else if (age < 18) {
+                errorElement.textContent = "You must be at least 18 years old to register.";
+                ageField.classList.add('invalid');
+                ageField.classList.remove('valid');
+                return false;
+            } else if (age > 100) {
+                errorElement.textContent = "Maximum age is 100 years.";
+                ageField.classList.add('invalid');
+                ageField.classList.remove('valid');
+                return false;
+            } else {
+                errorElement.textContent = "";
+                ageField.classList.add('valid');
+                ageField.classList.remove('invalid');
+                return true;
+            }
+        }
+
+        function syncAgeAndBirthdate() {
+            const birthdateField = document.getElementById('birthdate');
+            const ageField = document.getElementById('age');
+            
+            // When birthdate changes, update age
+            birthdateField.addEventListener('change', function() {
+                if (this.value) {
+                    const birthDate = new Date(this.value);
+                    const today = new Date();
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const monthDiff = today.getMonth() - birthDate.getMonth();
+                    
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+                    
+                    ageField.value = age;
+                    validateAge();
+                }
+            });
+            
+            // When age changes, update birthdate (approximate)
+            ageField.addEventListener('change', function() {
+                if (this.value && !isNaN(this.value)) {
+                    const age = parseInt(this.value);
+                    const today = new Date();
+                    const birthYear = today.getFullYear() - age;
+                    const approximateBirthdate = `${birthYear}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+                    
+                    birthdateField.value = approximateBirthdate;
+                    validateDateOfBirth();
+                }
+            });
         }
 
         function validatePhoneNumber(fieldId, fieldName) {
@@ -243,74 +258,6 @@ $maxDate = date('Y-m-d', strtotime('-18 years'));
             }
         }
 
-        function validatePassword() {
-            const passwordField = document.getElementById('password');
-            const errorElement = document.getElementById('password-error');
-            const value = passwordField.value;
-            
-            if (value === '') {
-                errorElement.textContent = "Password is required.";
-                passwordField.classList.add('invalid');
-                passwordField.classList.remove('valid');
-                return false;
-            } else if (value.length < 8) {
-                errorElement.textContent = "Password must be at least 8 characters.";
-                passwordField.classList.add('invalid');
-                passwordField.classList.remove('valid');
-                return false;
-            } else if (!/[A-Z]/.test(value)) {
-                errorElement.textContent = "Password must contain at least one uppercase letter.";
-                passwordField.classList.add('invalid');
-                passwordField.classList.remove('valid');
-                return false;
-            } else if (!/[a-z]/.test(value)) {
-                errorElement.textContent = "Password must contain at least one lowercase letter.";
-                passwordField.classList.add('invalid');
-                passwordField.classList.remove('valid');
-                return false;
-            } else if (!/\d/.test(value)) {
-                errorElement.textContent = "Password must contain at least one number.";
-                passwordField.classList.add('invalid');
-                passwordField.classList.remove('valid');
-                return false;
-            } else if (!/[@$!%*?&]/.test(value)) {
-                errorElement.textContent = "Password must contain at least one special character (@$!%*?&).";
-                passwordField.classList.add('invalid');
-                passwordField.classList.remove('valid');
-                return false;
-            } else {
-                errorElement.textContent = '';
-                passwordField.classList.add('valid');
-                passwordField.classList.remove('invalid');
-                return true;
-            }
-        }
-
-        function validateConfirmPassword() {
-            const passwordField = document.getElementById('password');
-            const confirmField = document.getElementById('confirmPassword');
-            const errorElement = document.getElementById('confirmPassword-error');
-            const passwordValue = passwordField.value;
-            const confirmValue = confirmField.value;
-            
-            if (confirmValue === '') {
-                errorElement.textContent = "Please confirm your password.";
-                confirmField.classList.add('invalid');
-                confirmField.classList.remove('valid');
-                return false;
-            } else if (passwordValue !== confirmValue) {
-                errorElement.textContent = "Passwords do not match.";
-                confirmField.classList.add('invalid');
-                confirmField.classList.remove('valid');
-                return false;
-            } else {
-                errorElement.textContent = '';
-                confirmField.classList.add('valid');
-                confirmField.classList.remove('invalid');
-                return true;
-            }
-        }
-
         function validateGender() {
             const genderSelected = document.querySelector('input[name="gender"]:checked');
             const errorElement = document.getElementById('gender-error');
@@ -349,13 +296,14 @@ $maxDate = date('Y-m-d', strtotime('-18 years'));
         }
 
         function validateForm(event) {
-            if (event) event.preventDefault();
+            event.preventDefault();
             
             // Validate all fields
             const isFnameValid = validateNameField('fname', 'First Name');
             const isMnameValid = validateNameField('mname', 'Father\'s Name');
             const isFathersNameValid = validateNameField('fathersName', 'Grandfather\'s Name');
             const isBirthdateValid = validateDateOfBirth();
+            const isAgeValid = validateAge();
             const isPhoneValid = validatePhoneNumber('phone', 'Phone');
             const isEmailValid = validateEmail();
             const isAddressValid = validateField('address', 
@@ -363,8 +311,6 @@ $maxDate = date('Y-m-d', strtotime('-18 years'));
             const isHouseNumberValid = validateField('house-number', 
                 val => val !== "" && !isNaN(val) && val > 0, "Valid house number is required.");
             const isGenderValid = validateGender();
-            const isPasswordValid = validatePassword();
-            const isConfirmPasswordValid = validateConfirmPassword();
             const isFatherFullNameValid = validateNameField('fatherFullName', 'Father\'s Full Name');
             const isFatherPhoneValid = validatePhoneNumber('fatherPhone', 'Father\'s Phone');
             const isMotherFullNameValid = validateNameField('motherFullName', 'Mother\'s Full Name');
@@ -375,13 +321,12 @@ $maxDate = date('Y-m-d', strtotime('-18 years'));
             
             // If all validations pass, submit the form
             if (isFnameValid && isMnameValid && isFathersNameValid && 
-                isBirthdateValid && isPhoneValid && isEmailValid && 
+                isBirthdateValid && isAgeValid && isPhoneValid && isEmailValid && 
                 isAddressValid && isHouseNumberValid && isGenderValid &&
-                isPasswordValid && isConfirmPasswordValid &&
                 isFatherFullNameValid && isFatherPhoneValid &&
                 isMotherFullNameValid && isMotherPhoneValid &&
                 isEmergencyNameValid && isEmergencyPhoneValid && isPhotoValid) {
-                document.querySelector('form').submit();
+                document.getElementById('reportForm').submit();
             }
         }
 
@@ -404,7 +349,6 @@ $maxDate = date('Y-m-d', strtotime('-18 years'));
             }
         }
 
-        // Setup field validation on blur
         document.addEventListener('DOMContentLoaded', function() {
             // Name fields
             ['fname', 'mname', 'fathersName', 'fatherFullName', 'motherFullName', 'emergencyName'].forEach(fieldId => {
@@ -436,20 +380,20 @@ $maxDate = date('Y-m-d', strtotime('-18 years'));
             
             // Other fields
             document.getElementById('birthdate').addEventListener('change', validateDateOfBirth);
+            document.getElementById('age').addEventListener('blur', validateAge);
             document.getElementById('email').addEventListener('blur', validateEmail);
-            document.getElementById('password').addEventListener('blur', validatePassword);
-            document.getElementById('confirmPassword').addEventListener('blur', validateConfirmPassword);
-            
-            // Password strength indicator
-            document.getElementById('password').addEventListener('input', updatePasswordStrength);
             
             // Gender radio buttons
             document.querySelectorAll('input[name="gender"]').forEach(radio => {
                 radio.addEventListener('change', validateGender);
             });
             
-            // Set max date for birthdate (18 years ago)
+            // Set min and max dates for birthdate
+            document.getElementById('birthdate').min = '<?php echo $minDate; ?>';
             document.getElementById('birthdate').max = '<?php echo $maxDate; ?>';
+            
+            // Sync age and birthdate fields
+            syncAgeAndBirthdate();
         });
     </script>
     <link rel="stylesheet" href="../Registration/generalStyles/register.css">
@@ -464,7 +408,7 @@ $maxDate = date('Y-m-d', strtotime('-18 years'));
         <h3>Hermata Mentina Residents Registration Form</h3>
     </div>
    
-    <form action="store_data.php" method="POST" enctype="multipart/form-data" onsubmit="validateForm(event)">
+    <form id="reportForm" action="store_data.php" method="POST" enctype="multipart/form-data" onsubmit="validateForm(event)">
         <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
         
         <div class="container">
@@ -492,7 +436,7 @@ $maxDate = date('Y-m-d', strtotime('-18 years'));
                     <div id="fathersName-error" class="error-message"></div>
 
                     <label for="age">Age:</label>
-                    <input type="number" id="age" name="age" required min="18" max="120" />
+                    <input type="number" id="age" name="age" required min="18" max="100" />
                     <div id="age-error" class="error-message"></div>
                 </div>
                 <div class="input-box">
@@ -508,7 +452,7 @@ $maxDate = date('Y-m-d', strtotime('-18 years'));
                     </div>
 
                     <label for="birthdate">Birthdate:</label>
-                    <input type="date" id="birthdate" name="birthdate" required max="<?php echo $maxDate; ?>" />
+                    <input type="date" id="birthdate" name="birthdate" required min="<?php echo $minDate; ?>" max="<?php echo $maxDate; ?>" />
                     <div id="birthdate-error" class="error-message"></div>
 
                     <label for="phone">Phone:</label>
@@ -519,26 +463,6 @@ $maxDate = date('Y-m-d', strtotime('-18 years'));
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email" required />
                     <div id="email-error" class="error-message"></div>
-
-                    <!-- <label for="address">Address:</label>
-                    <input type="text" id="address" name="address" required minlength="5" maxlength="100" />
-                    <div id="address-error" class="error-message"></div> -->
-
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required minlength="8" />
-                    <div class="password-strength">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                    <div class="password-hint">
-                        Password must contain at least 8 characters, including uppercase, lowercase, number, and special character (@$!%*?&)
-                    </div>
-                    <div id="password-error" class="error-message"></div>
-
-                    <label for="confirmPassword">Confirm Password:</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required minlength="8" />
-                    <div id="confirmPassword-error" class="error-message"></div>
                 </div>
             </div>
             <div class="section">
