@@ -8,6 +8,7 @@
   --eerie-black-1: hsla(210, 4%, 9%, 1);
   --eerie-black-2: rgb(33, 34, 34);
   --eerie-black-3: rgb(5, 6, 6);
+  --eerie-black-5: rgb(13, 13, 54);
   --eerie-black-4: hsl(226, 61%, 73%);
   --white: hsla(0, 0%, 100%, 1);
   --white-alpha-20: hsla(0, 0%, 100%, 0.2);
@@ -342,12 +343,13 @@ body.nav-active {
   display: block;
   width: 100px;
   margin-inline: auto;
-  margin-block-start: 5px;
+  margini-block-start: 5px;
 }
 
 .btn {
   position: relative;
-  color: var(--gold-crayola);
+  /* color: var(--gold-crayola); */
+  color: var(--white);
   font-size: var(--fontSize-label-2);
   font-weight: var(--weight-bold);
   text-transform: uppercase;
@@ -357,8 +359,13 @@ body.nav-active {
   padding: 12px 45px;
   overflow: hidden;
   z-index: 1;
+  border-radius: 12px;
 }
-
+.btn:hover{
+  color: var(--black);
+  border-color: var(--gold-crayola);
+  transition: var(--transition-1);
+}
 .btn::before {
   content: "";
   position: absolute;
@@ -2130,4 +2137,5 @@ textarea.input-field {
     bottom: 80px;
     left: 0;
   }
+}
 }
