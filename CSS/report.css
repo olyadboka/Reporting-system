@@ -22,17 +22,6 @@ Global Styles * {
   margin-top: 12rem;
 }
 
-.zoomable-image {
-  cursor: zoom-in;
-  max-width: 48%;
-  margin: 5px;
-  border-radius: 8px;
-  transition: transform 0.2s ease-in-out;
-}
-.zoomable-image:hover {
-  transform: scale(1.03);
-}
-
 /* Report Now Button */
 .report-now {
   display: inline-block;

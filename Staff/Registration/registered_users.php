@@ -10,8 +10,10 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+
+
 // Fetch all users from the database
-$sql = "SELECT residence_id, fname, mname, fathersName, age, birthdate, phone, email, address, fatherFullName, fatherPhone, motherFullName, motherPhone, emergencyName, emergencyPhone, photo FROM residents WHERE role = 'resident' ORDER BY residence_id ASC";
+$sql = "SELECT residence_id, fname, mname, fathersName,  birthdate, phone, email, address, fatherFullName, fatherPhone, motherFullName, motherPhone, emergencyName, emergencyPhone, photo FROM residents WHERE role = 'resident' ORDER BY residence_id ASC";
 $result = $conn->query($sql);
 ?>
 
@@ -77,7 +79,16 @@ $result = $conn->query($sql);
             <td><?php echo $row['fname']; ?></td>
             <td><?php echo $row['mname']; ?></td>
             <td><?php echo $row['fathersName']; ?></td>
-            <td><?php echo $row['age']; ?></td>
+            <td><?php 
+    $birthdateStr = $row['birthdate'];
+
+    
+    $birthdate = new DateTime($birthdateStr);
+    $today = new DateTime();
+    $age = $today->diff($birthdate)->y;
+    
+    echo  $age; 
+?></td>
             <td><?php echo $row['birthdate']; ?></td>
             <td><?php echo $row['phone']; ?></td>
             <td><?php echo $row['email']; ?></td>

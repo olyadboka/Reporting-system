@@ -43,6 +43,6 @@
     <i class="fas fa-chevron-up"></i>
   </a>
 </footer>
-<!-- </body>
+</body>
 
-</html> -->
+</html>

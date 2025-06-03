@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 
 // Retrieve the schedule ID from the query string
 if (isset($_GET['edit_schedule_id'])) {
-    $edit_schedule_id = intval($_GET['edit_schedule_id']); 
+    $edit_schedule_id = intval($_GET['edit_schedule_id']); // Sanitize input
     $sql = "SELECT * FROM schedules WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $edit_schedule_id);
@@ -62,20 +62,19 @@ if (isset($_GET['edit_schedule_id'])) {
   <div class="container">
     <h1>Edit Schedule</h1>
     <?php if (isset($_SESSION['edit_schedule'])): ?>
-    <?php $edit_schedule = $_SESSION['edit_schedule']; ?>
-    <form method="POST" action="">
-      <input type="hidden" name="schedule_id" value="<?php echo $edit_schedule['id']; ?>">
-      <label for="assigned_to">Assigned To:</label>
-      <input type="text" name="assigned_to" id="assigned_to" value="<?php echo $edit_schedule['assigned_to']; ?>"
-        required>
-      <label for="date">Date:</label>
-      <input type="date" name="date" id="date" value="<?php echo $edit_schedule['date']; ?>" required>
-      <label for="time">Time:</label>
-      <input type="time" name="time" id="time" value="<?php echo $edit_schedule['time']; ?>" required>
-      <button type="submit" name="update_schedule" class="btn btn-primary">Update Schedule</button>
-    </form>
+      <?php $edit_schedule = $_SESSION['edit_schedule']; ?>
+      <form method="POST" action="">
+        <input type="hidden" name="schedule_id" value="<?php echo $edit_schedule['id']; ?>">
+        <label for="assigned_to">Assigned To:</label>
+        <input type="text" name="assigned_to" id="assigned_to" value="<?php echo $edit_schedule['assigned_to']; ?>" required>
+        <label for="date">Date:</label>
+        <input type="date" name="date" id="date" value="<?php echo $edit_schedule['date']; ?>" required>
+        <label for="time">Time:</label>
+        <input type="time" name="time" id="time" value="<?php echo $edit_schedule['time']; ?>" required>
+        <button type="submit" name="update_schedule" class="btn btn-primary">Update Schedule</button>
+      </form>
     <?php else: ?>
-    <p>No schedule found to edit.</p>
+      <p>No schedule found to edit.</p>
     <?php endif; ?>
   </div>
 </body>

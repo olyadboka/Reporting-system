@@ -55,6 +55,105 @@ if ($result) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Staff Page</title>
   <link rel="stylesheet" href="staffCSS/staff.css">
+  <style>
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .approve-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .reject-btn {
+    background-color: #f44336;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .resolve-btn {
+    background-color: #2196F3;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  /* Modal styles */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+
+  .modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+  }
+
+  .modal-content {
+    animation-name: zoom;
+    animation-duration: 0.6s;
+  }
+
+  @keyframes zoom {
+    from {
+      transform: scale(0)
+    }
+
+    to {
+      transform: scale(1)
+    }
+  }
+
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .clickable-image {
+    cursor: pointer;
+    transition: 0.3s;
+    max-width: 150px;
+    height: auto;
+    margin: 5px;
+  }
+
+  .clickable-image:hover {
+    opacity: 0.7;
+  }
+  </style>
 </head>
 
 <body>
@@ -82,7 +181,7 @@ if ($result) {
           <p class="admin-role">Staff</p>
         </div>
       </div>
-      <form action="logout.php" method="post" style="margin:0;">
+      <form action="../login/logout.php" method="post" style="margin:0;">
         <button type="submit" class="logout-btn">Logout</button>
       </form>
     </header>
@@ -116,13 +215,32 @@ if ($result) {
             <p><strong>Priority:</strong> <?php echo ucfirst($row['priority']); ?></p>
             <p><strong>Created At:</strong> <?php echo $row['created_at']; ?></p>
             <?php if (!empty($row['image_url_1'])): ?>
-            <img src="<?php echo $row['image_url_1']; ?>" alt="Report Image" style="max-width: 100%; height: auto;">
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($row['image_url_1']); ?>" alt="Report Image"
+              class="clickable-image" onclick="openModal(this)">
             <?php endif; ?>
-            <div class="actions">
-              <button class="accept-btn"
-                onclick="handleAction(<?php echo $row['report_id']; ?>, 'approve', '<?php echo $staff_name; ?>')">Approve</button>
-              <button class="reject-btn"
-                onclick="handleAction(<?php echo $row['report_id']; ?>, 'reject', '<?php echo $staff_name; ?>')">Reject</button>
+            <?php if (!empty($row['image_url_2'])): ?>
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($row['image_url_2']); ?>" alt="Report Image"
+              class="clickable-image" onclick="openModal(this)">
+            <?php endif; ?>
+            <?php if (!empty($row['image_url_3'])): ?>
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($row['image_url_3']); ?>" alt="Report Image"
+              class="clickable-image" onclick="openModal(this)">
+            <?php endif; ?>
+            <?php if (!empty($row['image_url_4'])): ?>
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($row['image_url_4']); ?>" alt="Report Image"
+              class="clickable-image" onclick="openModal(this)">
+            <?php endif; ?>
+            <div class="action-buttons">
+              <form method="post" action="updateStatus.php" style="display: inline;">
+                <input type="hidden" name="report_id" value="<?php echo $row['report_id']; ?>">
+                <input type="hidden" name="status" value="approved">
+                <button type="submit" class="approve-btn">Approve</button>
+
+              </form>
+              <form method="post" action="updateStatus.php" style="display: inline;">
+                <input type="hidden" name="report_id" value="<?php echo $row['report_id']; ?>">
+                <input type="hidden" name="status" value="rejected">
+                <button type="submit" class="reject-btn">Reject</button>
             </div>
           </div>
           <?php
@@ -152,14 +270,27 @@ if ($result) {
             <p><strong>Created At:</strong> <?php echo $row['created_at']; ?></p>
             <p><strong>Approved By:</strong> <?php echo $row['handled_by']; ?></p>
             <?php if (!empty($row['image_url_1'])): ?>
-            <img src="<?php echo $row['image_url_1']; ?>" alt="Report Image" style="max-width: 100%; height: auto;">
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($row['image_url_1']); ?>" alt="Report Image"
+              class="clickable-image" onclick="openModal(this)">
             <?php endif; ?>
-            <div class="actions">
-              <button class="resolve-btn"
-                onclick="handleAction(<?php echo $row['report_id']; ?>, 'resolve', '<?php echo $staff_name; ?>')">Mark
-                as Resolved</button>
-              <button class="reject-btn"
-                onclick="handleAction(<?php echo $row['report_id']; ?>, 'reject', '<?php echo $staff_name; ?>')">Reject</button>
+            <?php if (!empty($row['image_url_2'])): ?>
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($row['image_url_2']); ?>" alt="Report Image"
+              class="clickable-image" onclick="openModal(this)">
+            <?php endif; ?>
+            <?php if (!empty($row['image_url_3'])): ?>
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($row['image_url_3']); ?>" alt="Report Image"
+              class="clickable-image" onclick="openModal(this)">
+            <?php endif; ?>
+            <?php if (!empty($row['image_url_4'])): ?>
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($row['image_url_4']); ?>" alt="Report Image"
+              class="clickable-image" onclick="openModal(this)">
+            <?php endif; ?>
+            <div class="action-buttons">
+              <form method="post" action="updateStatus.php" style="display: inline;">
+                <input type="hidden" name="report_id" value="<?php echo $row['report_id']; ?>">
+                <input type="hidden" name="status" value="rejected">
+                <button type="submit" class="reject-btn">Reject</button>
+              </form>
             </div>
           </div>
           <?php
@@ -189,11 +320,27 @@ if ($result) {
             <p><strong>Created At:</strong> <?php echo $row['created_at']; ?></p>
             <p><strong>Rejected By:</strong> <?php echo $row['handled_by']; ?></p>
             <?php if (!empty($row['image_url_1'])): ?>
-            <img src="<?php echo $row['image_url_1']; ?>" alt="Report Image" style="max-width: 100%; height: auto;">
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($row['image_url_1']); ?>" alt="Report Image"
+              class="clickable-image" onclick="openModal(this)">
             <?php endif; ?>
-            <div class="actions">
-              <button class="accept-btn"
-                onclick="handleAction(<?php echo $row['report_id']; ?>, 'approve', '<?php echo $staff_name; ?>')">Approve</button>
+            <?php if (!empty($row['image_url_2'])): ?>
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($row['image_url_2']); ?>" alt="Report Image"
+              class="clickable-image" onclick="openModal(this)">
+            <?php endif; ?>
+            <?php if (!empty($row['image_url_3'])): ?>
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($row['image_url_3']); ?>" alt="Report Image"
+              class="clickable-image" onclick="openModal(this)">
+            <?php endif; ?>
+            <?php if (!empty($row['image_url_4'])): ?>
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($row['image_url_4']); ?>" alt="Report Image"
+              class="clickable-image" onclick="openModal(this)">
+            <?php endif; ?>
+            <div class="action-buttons">
+              <form method="post" action="updateStatus.php" style="display: inline;">
+                <input type="hidden" name="report_id" value="<?php echo $row['report_id']; ?>">
+                <input type="hidden" name="status" value="approved">
+                <button type="submit" class="approve-btn">Approve</button>
+              </form>
             </div>
           </div>
           <?php
@@ -224,23 +371,19 @@ if ($result) {
             <p><strong>Resolved By:</strong> <?php echo $row['handled_by']; ?></p>
             <?php if (!empty($row['image_url_1'])): ?>
             <img src="data:image/jpeg;base64,<?php echo base64_encode($row['image_url_1']); ?>" alt="Report Image"
-              style="max-width: 150px; height: auto;">
-
+              class="clickable-image" onclick="openModal(this)">
             <?php endif; ?>
             <?php if (!empty($row['image_url_2'])): ?>
             <img src="data:image/jpeg;base64,<?php echo base64_encode($row['image_url_2']); ?>" alt="Report Image"
-              style="max-width: 150px; height: auto;" id="imageModal">
-
+              class="clickable-image" onclick="openModal(this)">
             <?php endif; ?>
             <?php if (!empty($row['image_url_3'])): ?>
             <img src="data:image/jpeg;base64,<?php echo base64_encode($row['image_url_3']); ?>" alt="Report Image"
-              style="max-width: 150px; height: auto;">
-
+              class="clickable-image" onclick="openModal(this)">
             <?php endif; ?>
             <?php if (!empty($row['image_url_4'])): ?>
             <img src="data:image/jpeg;base64,<?php echo base64_encode($row['image_url_4']); ?>" alt="Report Image"
-              style="max-width: 150px; height: auto;" id="imageModal">
-
+              class="clickable-image" onclick="openModal(this)">
             <?php endif; ?>
           </div>
           <?php
@@ -253,57 +396,46 @@ if ($result) {
     </section>
   </div>
 
+  <!-- The Modal -->
+  <div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+  </div>
+
   <script>
-  const modal = document.getElementById("imageModal");
-  const modalImg = document.getElementById("modalImage");
-  const closeModal = document.querySelector(".close");
+  // Function to open the modal with the clicked image
+  function openModal(img) {
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImage");
+    modal.style.display = "block";
+    modalImg.src = img.src;
+  }
 
-  document.querySelectorAll(".clickable-image").forEach(img => {
-    img.addEventListener("click", () => {
-      modal.style.display = "block";
-      modalImg.src = img.src;
-    });
-  });
+  // Function to close the modal
+  function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
+  }
 
-  closeModal.addEventListener("click", () => {
-    modal.style.display = "none";
-  });
-
-  modal.addEventListener("click", () => {
-    modal.style.display = "none";
-  });
+  // Close the modal when clicking outside of the image
+  window.onclick = function(event) {
+    const modal = document.getElementById("imageModal");
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
 
   function showTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
     document.getElementById(tabId).style.display = 'block';
   }
 
-  function handleAction(reportId, action, staffName) {
-    // Send the action to the server to update the database
-    fetch('process.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          report_id: reportId,
-          action: action,
-          staff_name: staffName
-        })
-      })
-      .then(response => responses.json())
-      .then(data => {
-        if (data.success) {
-
-          location.reload();
-        } else {
-          alert('Failed to update report: ' + (data.error || 'Unknown error'));
-        }
-      })
-      .catch(error => alert('Error: ' + error));
+  function updateStatus(reportId, status) {
+    // You'll need to implement this function to handle the status update
+    // This is just a placeholder for the functionality
+    console.log(`Updating report ${reportId} to status ${status}`);
+    // Typically you would make an AJAX call here to update the status
   }
   </script>
-  <script src="./js/modal.js"></script>
 </body>
 
 </html>
