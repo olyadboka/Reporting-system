@@ -15,8 +15,8 @@ if (!isset($_SESSION['user_id'])) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="title" content="Hirmata Mentina - Kebele & Report Managment System">
-  <meta name="description" content="This is a ReportSystem made by 3rd year Students">
+  <meta name="title" content="Hirmata Mentina - Kebele & Report Management System">
+  <meta name="description" content="This is a Report System made by 3rd year Students">
   <title>Hermata Mentina Kebele</title>
 
   <link rel="stylesheet" href="../CSS/header.css" />
@@ -51,96 +51,82 @@ if (!isset($_SESSION['user_id'])) {
     <div class="container">
 
       <a href="#" class="logo">
-        <!-- <img src="../Hermata home/assets/img/Flag_of_Ethiopia.svg" width="140" height="40" alt="Ethiopian-logo "> -->
-        <img src="../Hermata home/assets/img/Flag_of_the_Oromia_Region.svg.png" width="160" height="50"
-          alt="flag- Home">
+        <img src="../Hermata home/assets/img/Flag_of_the_Oromia_Region.svg.png" width="160" height="50" alt="flag- Home">
       </a>
 
       <nav class="navbar" data-navbar>
-        <button class="close-btn" aria-label="close menu" data-nav-toggler>
-          <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
-        </button>
-
         <ul class="navbar-list">
           <li class="navbar-item">
             <a href="../Hermata home/index.php" class="navbar-link hover-underline active">
-              <div class="separator"></div>
               <span class="span">Home</span>
             </a>
           </li>
 
           <li class="navbar-item">
-            <a href="#obj" class="navbar-link hover-underline">
-              <div class="separator"></div>
-              <span class="spans" id="spansss">Objectives</span>
+            <a href="#menu" class="navbar-link hover-underline">
+              <span class="span">Objectives</span>
             </a>
           </li>
 
           <li class="navbar-item">
             <a href="#about" class="navbar-link hover-underline">
-              <div class="separator"></div>
-              <span class="span">AboutUs</span>
-            </a>
-          </li>
-
-          <li class="navbar-item">
-            <a href="#rep" class="navbar-link hover-underline">
-              <div class="separator"></div>
-              <span class="span" id="rep">Representative</span>
+              <span class="span">About Us</span>
             </a>
           </li>
 
           <li class="navbar-item">
             <a href="#" class="navbar-link hover-underline">
-              <div class="separator"></div>
-              <span class="span" id="contactsss">Contact</span>
+              <span class="span">Representative</span>
             </a>
           </li>
 
+          <li class="navbar-item">
+            <a href="#" class="navbar-link hover-underline">
+              <span class="span">Contact</span>
+            </a>
+          </li>
 
           <?php
-        if (isset($_SESSION['user_id'])) {
-          $user_id = $_SESSION['user_id'];
-          $role = $_SESSION['role'];
-          $name = $_SESSION['user_name'];
-          $email = $_SESSION['user_email'];
-          $phone = $_SESSION['user_phone'];
-          $kebele_id = $_SESSION['kebele_id'];
+          if (isset($_SESSION['user_id'])) {
+              $user_id = $_SESSION['user_id'];
+              $role = $_SESSION['role'];
+              $name = $_SESSION['user_name'];
+              $email = $_SESSION['user_email'];
+              $phone = $_SESSION['user_phone'];
+              $kebele_id = $_SESSION['kebele_id'];
 
-          $stmt = mysqli_prepare($con, "SELECT photo FROM residents WHERE residence_id = ?");
-          mysqli_stmt_bind_param($stmt, "s", $kebele_id);
-          mysqli_stmt_execute($stmt);
-          $result = mysqli_stmt_get_result($stmt);
+              $stmt = mysqli_prepare($con, "SELECT photo FROM residents WHERE residence_id = ?");
+              mysqli_stmt_bind_param($stmt, "s", $kebele_id);
+              mysqli_stmt_execute($stmt);
+              $result = mysqli_stmt_get_result($stmt);
 
-          $imageData = '';
-          if ($row = mysqli_fetch_assoc($result)) {
-            $imageData = base64_encode($row['photo']); 
+              $imageData = '';
+              if ($row = mysqli_fetch_assoc($result)) {
+                  $imageData = base64_encode($row['photo']); 
+              }
+
+              if ($imageData) {
+                  echo '<li class="navbar-item"><a href="../editProfile/editProfile.php">';
+                  echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width: 48px;height: 48px;border-radius:50%; object-fit:cover; margin-right:8px;">';
+                  echo '</a></li>';
+              }
+
+              if ($role === 'admin') {
+                  echo '<li class="navbar-item dash"><a href="../Admin Dashboard/dashboardhome.php" class="navbar-link btn btn-primary"><span class="span">Dashboard</span></a></li>';
+              } elseif ($role === 'staff') {
+                  echo '<li class="navbar-item dash"><a href="../Staff/staff.php" class="navbar-link btn btn-primary"><span class="span">Dashboard</span></a></li>';
+              }
+
+              echo "<li class='navbar-item logout'><a href='../login/logout.php' class='navbar-link btn btn-danger'><span class='span'>Logout</span></a></li>";
           }
-
-          if ($role === 'admin') {
-            echo '<a href="../Admin Dashboard/dashboardhome.php" class="btn btn-primary">Dashboard</a>';
-          } elseif ($role === 'staff') {
-            echo '<a href="../staffCSS/staff.php" class="btn btn-primary">Dashboard</a>';
-          }
-
-          if ($imageData) {
-            echo '<a href="../editProfile/editProfile.php">';
-            echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width: 80px;height: 70px;border-radius:50%; object-fit:cover;">';
-            echo '</a>';
-          }
-
-          echo "<a href='../login/logout.php' class='btn btn-danger' style='height:3rem;'>Logout</a>";
-        }
-        ?>
+          ?>
         </ul>
-        <button class="nav-open-btn" aria-label="open menu" data-nav-toggler>
-          <span class="line line-1"></span>
-          <span class="line line-2"></span>
-          <span class="line line-3"></span>
-        </button>
-
-        <div class="overlay" data-nav-toggler data-overlay></div>
       </nav>
+      <button class="nav-toggle-btn" aria-label="open menu" data-nav-toggler>
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </button>
 
     </div>
   </header>
