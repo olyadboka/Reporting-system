@@ -86,6 +86,8 @@ if (isset($_GET['edit_schedule_id'])) {
   <title>Schedule and Assignments</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../dashboardHome.css">
+
   <style>
   body {
     background-color: #f8f9fa;
@@ -94,7 +96,7 @@ if (isset($_GET['edit_schedule_id'])) {
 
   .sidebar {
     min-height: 100vh;
-    background: #343a40;
+    background-color: #4a6fa5;
     color: white;
     width: 250px;
     position: fixed;
@@ -435,36 +437,34 @@ if (isset($_GET['edit_schedule_id'])) {
     resize: vertical;
   }
   </style>
+
 </head>
 
 <body>
   <div class="d-flex">
     <!-- Sidebar -->
     <aside class="sidebar">
-      <h2 class="sidebar-title px-3"><i class="fas fa-cogs"></i> Admin Panel</h2>
+      <h3 class="sidebar-title px-3"><i class="fas fa-cogs"></i> Admin Panel</h3>
       <nav class="menu-container mt-4">
         <ul class="nav flex-column">
-          <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-home"></i>
+          <li class="nav-item"><a class="nav-link text-white" href="/Admin Dashboard/dashboardHome.php"><i
+                class="fas fa-home"></i>
               <span>Dashboard</span></a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="./all reports/allReports.php"><i
+          <li class="nav-item"><a class="nav-link text-white" href="../all reports/allReports.php"><i
                 class="fas fa-folder"></i> <span>All Reports</span></a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="./ResidentsManagement/residentsManagent.php"><i
+          <li class="nav-item"><a class="nav-link text-white" href="../ResidentsManagement/residentsManagent.php"><i
                 class="fas fa-users"></i> <span>Residents</span></a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="./ManageCatagories/manageCategories.php"><i
-                class="fas fa-tags"></i> <span>Categories</span></a></li>
+
           <li class="nav-item"><a class="nav-link text-white active"
-              href="./ScheduleAndAssignments/scheduleAndAssignments.php"><i class="fas fa-calendar-alt"></i>
+              href="../ScheduleAndAssignments/scheduleAndAssignments.php"><i class="fas fa-calendar-alt"></i>
               <span>Schedule</span></a></li>
           <li class="nav-item"><a class="nav-link text-white" href="../Hermata home/index.php"><i
                 class="fas fa-user-shield"></i> <span>Login as Resident</span></a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="./ReportsAndAnalytics/reportsAndAnalytics.php"><i
-                class="fas fa-chart-bar"></i> <span>Analytics</span></a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="./Notification/notification.php"><i
-                class="fas fa-bell"></i> <span>Notifications</span></a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="./ActivityLogs/activityLogs.php"><i
+
+
+          <li class="nav-item"><a class="nav-link text-white" href="../ActivityLogs/activityLogs.php"><i
                 class="fas fa-history"></i> <span>Activity Logs</span></a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="./SystemSettings/systemSetting.php"><i
-                class="fas fa-cog"></i> <span>Settings</span></a></li>
+
           <li class="nav-item"><a class="nav-link text-white" href="../login/logout.php"><i
                 class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
         </ul>

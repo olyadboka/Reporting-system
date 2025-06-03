@@ -27,17 +27,16 @@ $kebele_id = $_SESSION['kebele_id'] ?? '';
         <li><a href="../all reports/allReports.php"><i class="fas fa-folder"></i> <span>All Reports</span></a></li>
         <li><a href="./ResidentsManagement/residentsManagent.php"><i class="fas fa-users"></i>
             <span>Residents</span></a></li>
-        <li><a href="../ManageCatagories/manageCategories.php"><i class="fas fa-tags"></i> <span>Categories</span></a>
-        </li>
+
         <li><a href="../ScheduleAndAssignments/scheduleAndAssignments.php"><i class="fas fa-calendar-alt"></i>
             <span>Schedule</span></a></li>
         <li><a href="../../Hermata home/index.php"><i class="fas fa-user-shield"></i> <span>Login as Resident</span></a>
         </li>
         <li><a href="../ReportsAndAnalytics/reportsAndAnalytics.php"><i class="fas fa-chart-bar"></i>
             <span>Analytics</span></a></li>
-        <li><a href="../Notification/notification.php"><i class="fas fa-bell"></i> <span>Notifications</span></a></li>
+
         <li><a href="#"><i class="fas fa-history"></i> <span>Activity Logs</span></a></li>
-        <li><a href="./SystemSettings/systemSetting.php"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+
         <li><a href="../../login/logout.php"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
       </ul>
     </nav>

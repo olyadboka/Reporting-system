@@ -1,19 +1,9 @@
-<?php
-session_start();
-require_once '../dbConnection.php'; 
-$kebele_id = $_SESSION['residence_id'] ?? '';
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="dashboardHome.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Users Management</title>
   <style>
   :root {
@@ -26,28 +16,52 @@ $kebele_id = $_SESSION['residence_id'] ?? '';
     --info-color: #36b9cc;
   }
 
+  /* Main layout structure */
   body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: var(--light-color);
+    min-height: 100vh;
+    overflow-x: hidden;
+    /* Prevent horizontal scroll */
   }
 
+  /* Sidebar styles */
+  .sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: var(--primary-color);
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    overflow-y: auto;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Main content area */
+  .main-content {
+    margin-left: 250px;
+    /* Same as sidebar width */
+    padding: 20px;
+    width: calc(100% - 250px);
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Container adjustments */
   .container {
-    max-width: 1200px;
-    margin: 20px auto;
+    max-width: 100%;
     padding: 20px;
     background-color: white;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
 
-  h1 {
-    color: var(--primary-color);
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
+  /* Table styles */
   table {
     width: 100%;
     border-collapse: collapse;
@@ -75,6 +89,7 @@ $kebele_id = $_SESSION['residence_id'] ?? '';
     color: white;
   }
 
+  /* Button styles */
   .edit-btn {
     background-color: var(--info-color);
     color: white;
@@ -101,6 +116,7 @@ $kebele_id = $_SESSION['residence_id'] ?? '';
     background-color: var(--dark-color);
   }
 
+  /* Form styles */
   .form-container {
     display: none;
     margin-top: 20px;
@@ -146,92 +162,134 @@ $kebele_id = $_SESSION['residence_id'] ?? '';
   .form-container button:hover {
     background-color: var(--dark-color);
   }
+
+  /* Validation styles */
+  .error-message {
+    color: var(--danger-color);
+    font-size: 0.8em;
+    margin-top: -8px;
+    margin-bottom: 10px;
+  }
+
+  .valid {
+    border-color: var(--success-color);
+  }
+
+  .invalid {
+    border-color: var(--danger-color);
+  }
+
+  /* Confirmation dialog */
+  .confirmation-dialog {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .confirmation-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 400px;
+    text-align: center;
+  }
+
+  .confirmation-buttons {
+    margin-top: 20px;
+  }
+
+  .confirmation-buttons button {
+    margin: 0 10px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .confirm-btn {
+    background-color: var(--danger-color);
+    color: white;
+  }
+
+  .cancel-btn {
+    background-color: var(--secondary-color);
+    color: white;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 992px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+
+    .main-content {
+      margin-left: 0;
+      width: 100%;
+    }
+
+    .container {
+      margin: 0 auto;
+    }
+  }
+
+  /* Table responsive fixes */
+  .table-responsive {
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
   </style>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../dashboardHome.css">
 </head>
 
 <body>
-  <!-- Sidebar -->
+
   <aside class="sidebar">
-    <h2 class="sidebar-title"><i class="fas fa-cogs"></i> Admin Panel</h2>
-    <nav class="menu-container">
-      <ul>
-        <li><a href="../dashboardHome.php"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
-        <li><a href="../all reports/allReports.php"><i class="fas fa-folder"></i> <span>All Reports</span></a></li>
-        <li><a href="#"><i class="fas fa-users"></i>
-            <span>Residents</span></a></li>
-        <li><a href="../ManageCatagories/manageCategories.php"><i class="fas fa-tags"></i> <span>Categories</span></a>
-        </li>
-        <li><a href="../ScheduleAndAssignments/scheduleAndAssignments.php"><i class="fas fa-calendar-alt"></i>
+    <h3 class="sidebar-title px-3"><i class="fas fa-cogs"></i> Admin Panel</h3>
+    <nav class="menu-container mt-4">
+      <ul class="nav flex-column">
+        <li class="nav-item"><a class="nav-link text-white" href="/Admin Dashboard/dashboardHome.php"><i
+              class="fas fa-home"></i>
+            <span>Dashboard</span></a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="../all reports/allReports.php"><i
+              class="fas fa-folder"></i> <span>All Reports</span></a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="../ResidentsManagement/residentsManagent.php"><i
+              class="fas fa-users"></i> <span>Residents</span></a></li>
+
+        <li class="nav-item"><a class="nav-link text-white active"
+            href="../ScheduleAndAssignments/scheduleAndAssignments.php"><i class="fas fa-calendar-alt"></i>
             <span>Schedule</span></a></li>
-        <li><a href="../../Hermata home/index.php"><i class="fas fa-user-shield"></i> <span>Login as Resident</span></a>
-        </li>
-        <li><a href="../ReportsAndAnalytics/reportsAndAnalytics.php"><i class="fas fa-chart-bar"></i>
-            <span>Analytics</span></a></li>
-        <li><a href="../Notification/notification.php"><i class="fas fa-bell"></i> <span>Notifications</span></a></li>
-        <li><a href="../ActivityLogs/activityLogs.php"><i class="fas fa-history"></i> <span>Activity Logs</span></a>
-        </li>
-        <li><a href="../SystemSettings/systemSetting.php"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
-        <li><a href="../../login/logout.php"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="../../Hermata home/index.php"><i
+              class="fas fa-user-shield"></i> <span>Login as Resident</span></a></li>
+
+
+        <li class="nav-item"><a class="nav-link text-white" href="../ActivityLogs/activityLogs.php"><i
+              class="fas fa-history"></i> <span>Activity Logs</span></a></li>
+
+        <li class="nav-item"><a class="nav-link text-white" href="../login/logout.php"><i
+              class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
       </ul>
     </nav>
   </aside>
 
-  <!-- Main Content -->
-  <div class="main-content">
-    <!-- Profile Bar -->
-    <header class="profile-bar">
-      <div class="profile-info">
-        <?php
-        $imageData = '';
-        if (!empty($kebele_id)) {
-            $stmt = mysqli_prepare($con, "SELECT photo FROM residents WHERE residence_id = ?");
-            if ($stmt) {
-                mysqli_stmt_bind_param($stmt, "s", $kebele_id);
-                mysqli_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
-                if ($row = mysqli_fetch_assoc($result)) {
-                    $imageData = base64_encode($row['photo']);
-                }
-                mysqli_stmt_close($stmt);
-            }
-        }
+  <main class="main-content">
+    <div class="container">
+      <h1>Residents Management</h1>
 
-        if ($imageData) {
-            echo '<a href="../editProfile/editProfile.php">';
-            echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width: 80px;height: 70px;border-radius:50%; object-fit:cover;">';
-            echo '</a>';
-        } else {
-            echo '<img src="./images/default-profile.png" alt="Profile" style="width: 80px;height: 70px;border-radius:50%; object-fit:cover;">';
-        }
-        ?>
-
-        <div>
-          <h4 class="admin-name"><?php echo htmlspecialchars($_SESSION["username"] ?? 'Admin'); ?></h4>
-          <p class="admin-role"><?php echo htmlspecialchars($_SESSION["role"] ?? 'Administrator'); ?></p>
-        </div>
-      </div>
-      <p style="color:gray; font-size: 1rem;">HERMATA MENTINA RMS</p>
-    </header>
-
-
-    <!-- Main Content -->
-    <div class="main-content">
-
-
-      <!-- Main Section -->
-      <section class="dashboard-content">
-
-
-        <div class="container">
-          <h1>Residents Management</h1>
-
-          <?php
+      <?php
     // Database connection
-     include "../../reportDB/dbconnection.php"; 
+    include "../../reportDB/dbconnection.php"; 
     $servername = "localhost";
     $username = "root";
     $password = "";
@@ -246,7 +304,7 @@ $kebele_id = $_SESSION['residence_id'] ?? '';
     // Handle Delete User
     if (isset($_GET['delete_id'])) {
         $delete_id = intval($_GET['delete_id']); // Sanitize input
-        $sql = "DELETE FROM residetns WHERE id = ?";
+        $sql = "DELETE FROM residents WHERE residence_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $delete_id);
         $stmt->execute();
@@ -257,6 +315,9 @@ $kebele_id = $_SESSION['residence_id'] ?? '';
 
     // Handle Edit User
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_user'])) {
+        $errors = [];
+        
+        // Validate and sanitize inputs
         $edit_id = intval($_POST['id']); // Sanitize input
         $fname = htmlspecialchars(trim($_POST['fname']));
         $mname = htmlspecialchars(trim($_POST['mname']));
@@ -264,40 +325,72 @@ $kebele_id = $_SESSION['residence_id'] ?? '';
         $phone = htmlspecialchars(trim($_POST['phone']));
         $email = htmlspecialchars(trim($_POST['email']));
         $role = htmlspecialchars(trim($_POST['role']));
-
-<<<<<<< HEAD
-        $sql = "UPDATE residents SET fname = ?, mname = ?, fathersName = ?, phone = ?, email = ?, role = ? WHERE residence_id = ?";
-=======
-        $sql = "UPDATE residents SET fname = ?, mname = ?, fathersName = ?, phone = ?, email = ?, role = ? WHERE id = ?";
->>>>>>> 99476c652ccc3e4d64b438bc09aa36e47c34be2f
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssssi", $fname, $mname, $fathersName, $phone, $email, $role, $edit_id);
-        $stmt->execute();
-        $stmt->close();
-        header("Location: residentsManagement.php"); // Refresh the page
-        exit();
+        
+        // Validate names (letters only, no numbers or special chars except spaces, hyphens, apostrophes)
+        $nameRegex = "/^[A-Za-z\s\-']{2,50}$/";
+        
+        if (!preg_match($nameRegex, $fname)) {
+            $errors['fname'] = "First name must contain only letters (2-50 characters)";
+        }
+        
+        if (!empty($mname) && !preg_match($nameRegex, $mname)) {
+            $errors['mname'] = "Middle name must contain only letters (2-50 characters)";
+        }
+        
+        if (!preg_match($nameRegex, $fathersName)) {
+            $errors['fathersName'] = "Father's name must contain only letters (2-50 characters)";
+        }
+        
+        // Validate Ethiopian phone number
+        if (!preg_match("/^(\+2519\d{8}|09\d{8})$/", $phone)) {
+            $errors['phone'] = "Phone must be a valid Ethiopian number (+2519xxxxxxxx or 09xxxxxxxx)";
+        }
+        
+        // Validate email
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = "Please enter a valid email address";
+        }
+        
+        // Validate role
+        $validRoles = ['resident', 'staff', 'admin'];
+        if (!in_array($role, $validRoles)) {
+            $errors['role'] = "Invalid role selected";
+        }
+        
+        // If no errors, update the database
+        if (empty($errors)) {
+            $sql = "UPDATE residents SET fname = ?, mname = ?, fathersName = ?, phone = ?, email = ?, role = ? WHERE residence_id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssssssi", $fname, $mname, $fathersName, $phone, $email, $role, $edit_id);
+            $stmt->execute();
+            $stmt->close();
+            header("Location: residentsManagement.php"); // Refresh the page
+            exit();
+        } else {
+            // Store errors in session to display them after redirect
+            $_SESSION['edit_errors'] = $errors;
+            $_SESSION['edit_values'] = $_POST;
+            header("Location: residentsManagement.php?edit_id=".$edit_id);
+            exit();
+        }
     }
     ?>
 
-          <!-- Users Table -->
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-<<<<<<< HEAD
-        $sql = "SELECT residence_id , fname, mname, fathersName, phone, email, role FROM residents";
-=======
-        $sql = "SELECT id, fname, mname, fathersName, phone, email, role FROM residents";
->>>>>>> 99476c652ccc3e4d64b438bc09aa36e47c34be2f
+      <!-- Users Table -->
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+        $sql = "SELECT residence_id, fname, mname, fathersName, phone, email, role FROM residents";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
@@ -310,7 +403,7 @@ $kebele_id = $_SESSION['residence_id'] ?? '';
                         <td>{$row['role']}</td>
                         <td>
                           <button class='edit-btn' onclick=\"editUser({$row['residence_id']}, '{$row['fname']}', '{$row['mname']}', '{$row['fathersName']}', '{$row['phone']}', '{$row['email']}', '{$row['role']}')\">Edit</button>
-                          <a href='?delete_id={$row['residence_id']}' class='delete-btn'>Delete</a>
+                          <button class='delete-btn' onclick=\"confirmDelete({$row['residence_id']})\">Delete</button>
                         </td>
                       </tr>";
             }
@@ -318,47 +411,406 @@ $kebele_id = $_SESSION['residence_id'] ?? '';
             echo "<tr><td colspan='6'>No users found.</td></tr>";
         }
         ?>
-            </tbody>
-          </table>
+        </tbody>
+      </table>
 
-          <!-- Edit User Form -->
-          <div id="editUserForm" class="form-container">
-            <h3>Edit User</h3>
-            <form method="POST" action="">
-              <input type="hidden" name="id" id="edit_id">
-              <label for="fname">First Name:</label>
-              <input type="text" name="fname" id="edit_fname" required>
-              <label for="mname">Middle Name:</label>
-              <input type="text" name="mname" id="edit_mname">
-              <label for="fathersName">Father's Name:</label>
-              <input type="text" name="fathersName" id="edit_fathersName" required>
-              <label for="phone">Phone:</label>
-              <input type="text" name="phone" id="edit_phone" required>
-              <label for="email">Email:</label>
-              <input type="email" name="email" id="edit_email" required>
-              <label for="role">Role:</label>
-              <select name="role" id="edit_role" required>
-                <option value="resident">Resident</option>
-                <option value="staff">Staff</option>
-                <option value="admin">Admin</option>
-              </select>
-              <button type="submit" name="edit_user">Save Changes</button>
-            </form>
+      <!-- Edit User Form -->
+      <div id="editUserForm" class="form-container <?php echo isset($_GET['edit_id']) ? 'active' : ''; ?>">
+        <h3>Edit User</h3>
+        <form method="POST" action="" id="editForm" onsubmit="return validateEditForm()">
+          <input type="hidden" name="id" id="edit_id"
+            value="<?php echo isset($_SESSION['edit_values']['id']) ? htmlspecialchars($_SESSION['edit_values']['id']) : ''; ?>">
+
+          <label for="fname">First Name:</label>
+          <input type="text" name="fname" id="edit_fname"
+            value="<?php echo isset($_SESSION['edit_values']['fname']) ? htmlspecialchars($_SESSION['edit_values']['fname']) : ''; ?>"
+            class="<?php echo isset($_SESSION['edit_errors']['fname']) ? 'invalid' : ''; ?>">
+          <div id="fname-error" class="error-message">
+            <?php echo isset($_SESSION['edit_errors']['fname']) ? htmlspecialchars($_SESSION['edit_errors']['fname']) : ''; ?>
+          </div>
+
+          <label for="mname">Middle Name:</label>
+          <input type="text" name="mname" id="edit_mname"
+            value="<?php echo isset($_SESSION['edit_values']['mname']) ? htmlspecialchars($_SESSION['edit_values']['mname']) : ''; ?>"
+            class="<?php echo isset($_SESSION['edit_errors']['mname']) ? 'invalid' : ''; ?>">
+          <div id="mname-error" class="error-message">
+            <?php echo isset($_SESSION['edit_errors']['mname']) ? htmlspecialchars($_SESSION['edit_errors']['mname']) : ''; ?>
+          </div>
+
+          <label for="fathersName">Father's Name:</label>
+          <input type="text" name="fathersName" id="edit_fathersName"
+            value="<?php echo isset($_SESSION['edit_values']['fathersName']) ? htmlspecialchars($_SESSION['edit_values']['fathersName']) : ''; ?>"
+            class="<?php echo isset($_SESSION['edit_errors']['fathersName']) ? 'invalid' : ''; ?>">
+          <div id="fathersName-error" class="error-message">
+            <?php echo isset($_SESSION['edit_errors']['fathersName']) ? htmlspecialchars($_SESSION['edit_errors']['fathersName']) : ''; ?>
+          </div>
+
+          <label for="phone">Phone:</label>
+          <input type="text" name="phone" id="edit_phone"
+            value="<?php echo isset($_SESSION['edit_values']['phone']) ? htmlspecialchars($_SESSION['edit_values']['phone']) : ''; ?>"
+            class="<?php echo isset($_SESSION['edit_errors']['phone']) ? 'invalid' : ''; ?>">
+          <div id="phone-error" class="error-message">
+            <?php echo isset($_SESSION['edit_errors']['phone']) ? htmlspecialchars($_SESSION['edit_errors']['phone']) : ''; ?>
+          </div>
+
+          <label for="email">Email:</label>
+          <input type="email" name="email" id="edit_email"
+            value="<?php echo isset($_SESSION['edit_values']['email']) ? htmlspecialchars($_SESSION['edit_values']['email']) : ''; ?>"
+            class="<?php echo isset($_SESSION['edit_errors']['email']) ? 'invalid' : ''; ?>">
+          <div id="email-error" class="error-message">
+            <?php echo isset($_SESSION['edit_errors']['email']) ? htmlspecialchars($_SESSION['edit_errors']['email']) : ''; ?>
+          </div>
+
+          <label for="role">Role:</label>
+          <select name="role" id="edit_role"
+            class="<?php echo isset($_SESSION['edit_errors']['role']) ? 'invalid' : ''; ?>">
+            <option value="resident"
+              <?php echo ((isset($_SESSION['edit_values']['role']) && $_SESSION['edit_values']['role'] === 'resident') ? 'selected' : ''); ?>>
+              Resident</option>
+            <option value="staff"
+              <?php echo ((isset($_SESSION['edit_values']['role']) && $_SESSION['edit_values']['role'] === 'staff') ? 'selected' : ''); ?>>
+              Staff</option>
+            <option value="admin"
+              <?php echo ((isset($_SESSION['edit_values']['role']) && $_SESSION['edit_values']['role'] === 'admin') ? 'selected' : ''); ?>>
+              Admin</option>
+          </select>
+          <div id="role-error" class="error-message">
+            <?php echo isset($_SESSION['edit_errors']['role']) ? htmlspecialchars($_SESSION['edit_errors']['role']) : ''; ?>
+          </div>
+
+          <button type="submit" name="edit_user">Save Changes</button>
+        </form>
+      </div>
+
+      <!-- Delete Confirmation Dialog -->
+      <div id="confirmationDialog" class="confirmation-dialog">
+        <div class="confirmation-content">
+          <h3>Confirm Deletion</h3>
+          <p>Are you sure you want to delete this user? This action cannot be undone.</p>
+          <div class="confirmation-buttons">
+            <button class="cancel-btn" onclick="hideConfirmation()">Cancel</button>
+            <button class="confirm-btn" id="confirmDeleteBtn">Delete</button>
           </div>
         </div>
+      </div>
+    </div>
+  </main>
+</body>
 
-        <script>
-        function editUser(id, fname, mname, fathersName, phone, email, role) {
-          document.getElementById('editUserForm').classList.add('active');
-          document.getElementById('edit_id').value = id;
-          document.getElementById('edit_fname').value = fname;
-          document.getElementById('edit_mname').value = mname;
-          document.getElementById('edit_fathersName').value = fathersName;
-          document.getElementById('edit_phone').value = phone;
-          document.getElementById('edit_email').value = email;
-          document.getElementById('edit_role').value = role;
-        }
-        </script>
+<script>
+// Clear any existing error messages when the page loads
+window.onload = function() {
+  <?php 
+      // Clear the error messages after displaying them
+      unset($_SESSION['edit_errors']);
+      unset($_SESSION['edit_values']);
+      ?>
+};
+
+function editUser(id, fname, mname, fathersName, phone, email, role) {
+  document.getElementById('editUserForm').classList.add('active');
+  document.getElementById('edit_id').value = id;
+  document.getElementById('edit_fname').value = fname;
+  document.getElementById('edit_mname').value = mname;
+  document.getElementById('edit_fathersName').value = fathersName;
+  document.getElementById('edit_phone').value = phone;
+  document.getElementById('edit_email').value = email;
+  document.getElementById('edit_role').value = role;
+
+  // Reset validation states
+  document.getElementById('edit_fname').classList.remove('invalid', 'valid');
+  document.getElementById('edit_mname').classList.remove('invalid', 'valid');
+  document.getElementById('edit_fathersName').classList.remove('invalid', 'valid');
+  document.getElementById('edit_phone').classList.remove('invalid', 'valid');
+  document.getElementById('edit_email').classList.remove('invalid', 'valid');
+  document.getElementById('edit_role').classList.remove('invalid', 'valid');
+
+  // Clear error messages
+  document.getElementById('fname-error').textContent = '';
+  document.getElementById('mname-error').textContent = '';
+  document.getElementById('fathersName-error').textContent = '';
+  document.getElementById('phone-error').textContent = '';
+  document.getElementById('email-error').textContent = '';
+  document.getElementById('role-error').textContent = '';
+}
+
+// Name validation function
+function validateName(name, fieldName) {
+  const nameRegex = /^[A-Za-z\s\-']{2,50}$/;
+  if (!nameRegex.test(name)) {
+    return `${fieldName} must contain only letters (2-50 characters)`;
+  }
+  if (/\d/.test(name)) {
+    return `${fieldName} cannot contain numbers`;
+  }
+  if (/[^A-Za-z\s\-']/.test(name)) {
+    return `${fieldName} cannot contain special characters`;
+  }
+  return '';
+}
+
+// Phone validation function
+function validatePhone(phone) {
+  const phoneRegex = /^(\+2519\d{8}|09\d{8})$/;
+  if (!phoneRegex.test(phone)) {
+    return "Phone must be a valid Ethiopian number (+2519xxxxxxxx or 09xxxxxxxx)";
+  }
+  return '';
+}
+
+// Email validation function
+function validateEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return "Please enter a valid email address";
+  }
+  return '';
+}
+
+// Role validation function
+function validateRole(role) {
+  const validRoles = ['resident', 'staff', 'admin'];
+  if (!validRoles.includes(role)) {
+    return "Invalid role selected";
+  }
+  return '';
+}
+
+// Form validation function
+function validateEditForm() {
+  let isValid = true;
+
+  // Validate first name
+  const fname = document.getElementById('edit_fname').value.trim();
+  const fnameError = validateName(fname, 'First name');
+  const fnameErrorElement = document.getElementById('fname-error');
+  const fnameField = document.getElementById('edit_fname');
+
+  if (fnameError) {
+    fnameErrorElement.textContent = fnameError;
+    fnameField.classList.add('invalid');
+    fnameField.classList.remove('valid');
+    isValid = false;
+  } else {
+    fnameErrorElement.textContent = '';
+    fnameField.classList.add('valid');
+    fnameField.classList.remove('invalid');
+  }
+
+  // Validate middle name (optional)
+  const mname = document.getElementById('edit_mname').value.trim();
+  const mnameErrorElement = document.getElementById('mname-error');
+  const mnameField = document.getElementById('edit_mname');
+
+  if (mname) {
+    const mnameError = validateName(mname, 'Middle name');
+    if (mnameError) {
+      mnameErrorElement.textContent = mnameError;
+      mnameField.classList.add('invalid');
+      mnameField.classList.remove('valid');
+      isValid = false;
+    } else {
+      mnameErrorElement.textContent = '';
+      mnameField.classList.add('valid');
+      mnameField.classList.remove('invalid');
+    }
+  } else {
+    mnameErrorElement.textContent = '';
+    mnameField.classList.remove('invalid', 'valid');
+  }
+
+  // Validate father's name
+  const fathersName = document.getElementById('edit_fathersName').value.trim();
+  const fathersNameError = validateName(fathersName, 'Father\'s name');
+  const fathersNameErrorElement = document.getElementById('fathersName-error');
+  const fathersNameField = document.getElementById('edit_fathersName');
+
+  if (fathersNameError) {
+    fathersNameErrorElement.textContent = fathersNameError;
+    fathersNameField.classList.add('invalid');
+    fathersNameField.classList.remove('valid');
+    isValid = false;
+  } else {
+    fathersNameErrorElement.textContent = '';
+    fathersNameField.classList.add('valid');
+    fathersNameField.classList.remove('invalid');
+  }
+
+  // Validate phone
+  const phone = document.getElementById('edit_phone').value.trim();
+  const phoneError = validatePhone(phone);
+  const phoneErrorElement = document.getElementById('phone-error');
+  const phoneField = document.getElementById('edit_phone');
+
+  if (phoneError) {
+    phoneErrorElement.textContent = phoneError;
+    phoneField.classList.add('invalid');
+    phoneField.classList.remove('valid');
+    isValid = false;
+  } else {
+    phoneErrorElement.textContent = '';
+    phoneField.classList.add('valid');
+    phoneField.classList.remove('invalid');
+  }
+
+  // Validate email
+  const email = document.getElementById('edit_email').value.trim();
+  const emailError = validateEmail(email);
+  const emailErrorElement = document.getElementById('email-error');
+  const emailField = document.getElementById('edit_email');
+
+  if (emailError) {
+    emailErrorElement.textContent = emailError;
+    emailField.classList.add('invalid');
+    emailField.classList.remove('valid');
+    isValid = false;
+  } else {
+    emailErrorElement.textContent = '';
+    emailField.classList.add('valid');
+    emailField.classList.remove('invalid');
+  }
+
+  // Validate role
+  const role = document.getElementById('edit_role').value;
+  const roleError = validateRole(role);
+  const roleErrorElement = document.getElementById('role-error');
+  const roleField = document.getElementById('edit_role');
+
+  if (roleError) {
+    roleErrorElement.textContent = roleError;
+    roleField.classList.add('invalid');
+    roleField.classList.remove('valid');
+    isValid = false;
+  } else {
+    roleErrorElement.textContent = '';
+    roleField.classList.add('valid');
+    roleField.classList.remove('invalid');
+  }
+
+  return isValid;
+}
+
+// Delete confirmation functions
+let userIdToDelete = null;
+
+function confirmDelete(userId) {
+  userIdToDelete = userId;
+  document.getElementById('confirmationDialog').style.display = 'flex';
+}
+
+function hideConfirmation() {
+  document.getElementById('confirmationDialog').style.display = 'none';
+  userIdToDelete = null;
+}
+
+document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+  if (userIdToDelete) {
+    window.location.href = '?delete_id=' + userIdToDelete;
+  }
+});
+
+// Field validation on blur
+document.getElementById('edit_fname').addEventListener('blur', function() {
+  const fname = this.value.trim();
+  const error = validateName(fname, 'First name');
+  const errorElement = document.getElementById('fname-error');
+
+  if (error) {
+    errorElement.textContent = error;
+    this.classList.add('invalid');
+    this.classList.remove('valid');
+  } else {
+    errorElement.textContent = '';
+    this.classList.add('valid');
+    this.classList.remove('invalid');
+  }
+});
+
+document.getElementById('edit_mname').addEventListener('blur', function() {
+  const mname = this.value.trim();
+  const errorElement = document.getElementById('mname-error');
+
+  if (mname) {
+    const error = validateName(mname, 'Middle name');
+    if (error) {
+      errorElement.textContent = error;
+      this.classList.add('invalid');
+      this.classList.remove('valid');
+    } else {
+      errorElement.textContent = '';
+      this.classList.add('valid');
+      this.classList.remove('invalid');
+    }
+  } else {
+    errorElement.textContent = '';
+    this.classList.remove('invalid', 'valid');
+  }
+});
+
+document.getElementById('edit_fathersName').addEventListener('blur', function() {
+  const fathersName = this.value.trim();
+  const error = validateName(fathersName, 'Father\'s name');
+  const errorElement = document.getElementById('fathersName-error');
+
+  if (error) {
+    errorElement.textContent = error;
+    this.classList.add('invalid');
+    this.classList.remove('valid');
+  } else {
+    errorElement.textContent = '';
+    this.classList.add('valid');
+    this.classList.remove('invalid');
+  }
+});
+
+document.getElementById('edit_phone').addEventListener('blur', function() {
+  const phone = this.value.trim();
+  const error = validatePhone(phone);
+  const errorElement = document.getElementById('phone-error');
+
+  if (error) {
+    errorElement.textContent = error;
+    this.classList.add('invalid');
+    this.classList.remove('valid');
+  } else {
+    errorElement.textContent = '';
+    this.classList.add('valid');
+    this.classList.remove('invalid');
+  }
+});
+
+document.getElementById('edit_email').addEventListener('blur', function() {
+  const email = this.value.trim();
+  const error = validateEmail(email);
+  const errorElement = document.getElementById('email-error');
+
+  if (error) {
+    errorElement.textContent = error;
+    this.classList.add('invalid');
+    this.classList.remove('valid');
+  } else {
+    errorElement.textContent = '';
+    this.classList.add('valid');
+    this.classList.remove('invalid');
+  }
+});
+
+document.getElementById('edit_role').addEventListener('change', function() {
+  const role = this.value;
+  const error = validateRole(role);
+  const errorElement = document.getElementById('role-error');
+
+  if (error) {
+    errorElement.textContent = error;
+    this.classList.add('invalid');
+    this.classList.remove('valid');
+  } else {
+    errorElement.textContent = '';
+    this.classList.add('valid');
+    this.classList.remove('invalid');
+  }
+});
+</script>
 </body>
 
 </html>

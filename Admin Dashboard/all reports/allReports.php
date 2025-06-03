@@ -22,6 +22,28 @@ $priorityFilter = $_GET['priority'] ?? '';
   <link rel="stylesheet" href="./allReports.css">
   <style>
   /* Responsive table styles */
+  :root {
+    --primary-color: #4a6fa5;
+    --secondary-color: #166088;
+    --accent-color: #4fc3f7;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+  }
+
+
+  .sidebar {
+    width: 250px;
+    background-color: var(--primary-color) !important;
+    color: white;
+    padding: 20px 0;
+    height: 100vh;
+    position: fixed;
+    transition: all 0.3s;
+  }
+
   .table-responsive {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -182,7 +204,7 @@ $priorityFilter = $_GET['priority'] ?? '';
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #0d6efd;
+    /* background: #0d6efd; */
   }
 
   .timeline-date {
@@ -192,6 +214,15 @@ $priorityFilter = $_GET['priority'] ?? '';
 
   .timeline-content {
     font-size: 0.9rem;
+  }
+
+
+  .main-content {
+    margin-left: 5rem;
+  }
+
+  .profile-bar .profile-info {
+    margin-left: 10rem;
   }
   </style>
 </head>
@@ -206,18 +237,16 @@ $priorityFilter = $_GET['priority'] ?? '';
         <li><a href="#"><i class="fas fa-folder"></i> <span>All Reports</span></a></li>
         <li><a href="../ResidentsManagement/residentsManagent.php"><i class="fas fa-users"></i>
             <span>Residents</span></a></li>
-        <li><a href="./ManageCatagories/manageCategories.php"><i class="fas fa-tags"></i> <span>Categories</span></a>
-        </li>
+
         <li><a href="../ScheduleAndAssignments/scheduleAndAssignments.php"><i class="fas fa-calendar-alt"></i>
             <span>Schedule</span></a></li>
-        <li><a href="../Hermata home/index.php"><i class="fas fa-user-shield"></i> <span>Login as Resident</span></a>
+        <li><a href="../../Hermata home/index.php"><i class="fas fa-user-shield"></i> <span>Login as Resident</span></a>
         </li>
-        <li><a href="../ReportsAndAnalytics/reportsAndAnalytics.php"><i class="fas fa-chart-bar"></i>
-            <span>Analytics</span></a></li>
-        <li><a href="../Notification/notification.php"><i class="fas fa-bell"></i> <span>Notifications</span></a></li>
+
+
         <li><a href="../ActivityLogs/activityLogs.php"><i class="fas fa-history"></i> <span>Activity Logs</span></a>
         </li>
-        <li><a href="../SystemSettings/systemSetting.php"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+
         <li><a href="../../login/logout.php"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
       </ul>
     </nav>
