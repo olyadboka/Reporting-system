@@ -94,6 +94,7 @@ session_start(); ?>
 
   <div class="name">
     <label class="form-label required" id="address">When the problem has Started?</label>
+<<<<<<< HEAD
     <input type="date" name="report_date" id="report_date" min="" max="">
     <p class="error-StartDate"></p>
   </div>
@@ -121,6 +122,21 @@ session_start(); ?>
   </div>
 
 
+=======
+    <input type="date" name="report_date" id="report_date">
+    <p class="error-StartDate"></p>
+  </div>
+
+
+  <div class="mb-3">
+    <label class="form-label required" id="uploadImagesLabel">Upload Images</label>
+    <input type="file" name="images[]" id="images" accept="image/*" multiple>
+    <p class="error-images"></p>
+  </div>
+
+
+
+>>>>>>> caa0e440608bf04a06fe2b50e8bb4420363ba971
   <div class="mb-3">
     <label class="form-label" id="uploadVideosLabel">Upload Videos</label>
     <input class="form-control" type="file" id="videos" name="videos" accept="video/*" multiple>
@@ -140,6 +156,7 @@ session_start(); ?>
 
   <script src="reportForm.js"></script>
   <script src="reportFromValidation.js"></script>
+<<<<<<< HEAD
   <script>
   document.addEventListener('DOMContentLoaded', function() {
     const reportDateInput = document.getElementById('report_date');
@@ -172,6 +189,8 @@ session_start(); ?>
     }
   });
   </script>
+=======
+>>>>>>> caa0e440608bf04a06fe2b50e8bb4420363ba971
 </body>
 
 </html>

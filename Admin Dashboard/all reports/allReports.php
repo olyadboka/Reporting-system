@@ -1,24 +1,16 @@
-<?php
-session_start();
-require_once '../dbConnection.php';
-$kebele_id = $_SESSION['kebele_id'] ?? '';
-
-// Get filter parameters from URL if they exist
-$categoryFilter = $_GET['category'] ?? '';
-$priorityFilter = $_GET['priority'] ?? '';
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>All Reports</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../dashboardHome.css">
+<<<<<<< HEAD
   <link rel="stylesheet" href="./allReports.css">
   <style>
   /* Responsive table styles */
@@ -251,360 +243,89 @@ $priorityFilter = $_GET['priority'] ?? '';
       </ul>
     </nav>
   </aside>
+=======
+  <link rel="stylesheet" href="allReports.css">
+</head>
 
-  <!-- Main Content -->
-  <div class="main-content">
-    <!-- Profile Bar -->
-    <header class="profile-bar">
-      <div class="profile-info">
+<body>
+  <?php include "../commonAdmin.php"; ?>
+  <?php include "../../reportDB/dbconnection.php"; ?>
+>>>>>>> caa0e440608bf04a06fe2b50e8bb4420363ba971
+
+  <div class="container py-5">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="m-0"><i class="fas fa-clipboard-list me-2"></i>All Reports</h4>
+        <div>
+          <button class="btn btn-sm btn-light"><i class="fas fa-download me-1"></i> Export</button>
+          <button class="btn btn-sm btn-light"><i class="fas fa-filter me-1"></i> Filter</button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
         <?php
-        $imageData = '';
-        if (!empty($kebele_id)) {
-            $stmt = mysqli_prepare($con, "SELECT photo FROM residents WHERE residence_id = ?");
-            if ($stmt) {
-                mysqli_stmt_bind_param($stmt, "s", $kebele_id);
-                mysqli_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
-                if ($row = mysqli_fetch_assoc($result)) {
-                    $imageData = base64_encode($row['photo']);
-                }
-                mysqli_stmt_close($stmt);
+        $sql = "SELECT * FROM reports";
+        $result = mysqli_query($con, $sql);
+        
+        if(mysqli_num_rows($result) > 0) {
+        ?>
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>#ID</th>
+              <th>User</th>
+              <th>Category</th>
+              <th class="description-cell">Description</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>Priority</th>
+              <th>Created</th>
+              <th>Count</th>
+              <th>Considered</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            while($row = mysqli_fetch_assoc($result)) {
+              echo "<tr>";
+              echo "<td><span class='fw-bold'>#".htmlspecialchars($row['report_id'])."</span></td>";
+              echo "<td><span class='badge bg-secondary'>".htmlspecialchars($row['user_id'])."</span></td>";
+              echo "<td><span class='badge bg-info text-dark'>".htmlspecialchars($row['category'])."</span></td>";
+              echo "<td class='description-cell'>".nl2br(htmlspecialchars($row['description']))."</td>";
+              echo "<td><i class='fas fa-map-marker-alt text-danger me-1'></i>".htmlspecialchars($row['location'])."</td>";
+              echo "<td><span class='badge badge-pill status- allStatus".strtolower(str_replace(' ', '-', $row['status']))."'>".htmlspecialchars($row['status'])."</span></td>";
+              echo "<td><span class='badge badge-pill priority-".strtolower($row['priority'])."'>".htmlspecialchars($row['priority'])."</span></td>";
+              echo "<td><small class='text-muted'>".htmlspecialchars($row['created_at'])."</small></td>";
+              echo "<td><span class='badge bg-dark rounded-circle'>".htmlspecialchars($row['count'])."</span></td>";
+              echo "<td>".($row['is_considered'] ? '<span class="badge bg-success"><i class="fas fa-check"></i> Yes</span>' : '<span class="badge bg-secondary"><i class="fas fa-times"></i> No</span>')."</td>";
+              echo "<td>
+                      <button class='btn btn-sm btn-outline-primary action-btn' title='View'><i class='fas fa-eye'></i></button>
+                      <button class='btn btn-sm btn-outline-warning action-btn' title='Edit'><i class='fas fa-edit'></i></button>
+                    </td>";
+              echo "</tr>";
             }
-        }
-
-        if ($imageData) {
-            echo '<a href="../editProfile/editProfile.php">';
-            echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width: 80px;height: 70px;border-radius:50%; object-fit:cover;">';
-            echo '</a>';
+            ?>
+          </tbody>
+        </table>
+        <?php
         } else {
-            echo '<img src="./images/default-profile.png" alt="Profile" style="width: 80px;height: 70px;border-radius:50%; object-fit:cover;">';
+          echo '<div class="p-4 text-center">
+                  <i class="fas fa-exclamation-circle fa-3x text-muted mb-3"></i>
+                  <h5 class="text-muted">No reports found</h5>
+                  <p class="text-muted">There are currently no reports in the system</p>
+                  <button class="btn btn-primary"><i class="fas fa-plus me-1"></i> Create New Report</button>
+                </div>';
         }
         ?>
-
-        <div>
-          <h4 class="admin-name"><?php echo htmlspecialchars($_SESSION["username"] ?? 'Admin'); ?></h4>
-          <p class="admin-role"><?php echo htmlspecialchars($_SESSION["role"] ?? 'Administrator'); ?></p>
-        </div>
-      </div>
-      <p style="color:gray; font-size: 1rem;">HERMATA MENTINA RMS</p>
-    </header>
-
-
-    <!-- Main Content -->
-    <div class="main-content">
-
-
-      <!-- Main Section -->
-      <!-- Reports Section -->
-      <section class="dashboard-content">
-        <div class="container-fluid py-3">
-          <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white d-flex flex-column flex-md-row justify-content-between align-items-center">
-              <h4 class="m-0"><i class="fas fa-clipboard-list me-2"></i>All Reports</h4>
-              <div class="mt-2 mt-md-0">
-                <div class="filter-container">
-                  <button class="btn btn-sm btn-outline-secondary filter-btn"><i class="fas fa-filter me-1"></i>
-                    Filter</button>
-                  <div class="filter-options" id="filterOptions">
-                    <div class="mb-2">
-                      <label class="form-label">Category</label>
-                      <select class="form-select form-select-sm filter-dropdown" id="categoryFilter">
-                        <option value="">All Categories</option>
-                        <?php
-                    // Get distinct categories from database
-                    $categorySql = "SELECT DISTINCT category FROM reports ORDER BY category";
-                    $categoryResult = mysqli_query($con, $categorySql);
-                    while($cat = mysqli_fetch_assoc($categoryResult)) {
-                      $selected = $cat['category'] == $categoryFilter ? 'selected' : '';
-                      echo '<option value="'.htmlspecialchars($cat['category']).'" '.$selected.'>'.htmlspecialchars($cat['category']).'</option>';
-                    }
-                    ?>
-                      </select>
-                    </div>
-                    <div class="mb-2">
-                      <label class="form-label">Priority</label>
-                      <select class="form-select form-select-sm filter-dropdown" id="priorityFilter">
-                        <option value="">All Priorities</option>
-                        <option value="Low" <?= $priorityFilter == 'Low' ? 'selected' : '' ?>>Low</option>
-                        <option value="Medium" <?= $priorityFilter == 'Medium' ? 'selected' : '' ?>>Medium</option>
-                        <option value="High" <?= $priorityFilter == 'High' ? 'selected' : '' ?>>High</option>
-                      </select>
-                    </div>
-                    <button class="btn btn-sm btn-primary filter-apply-btn w-100" id="applyFilters">Apply
-                      Filters</button>
-                    <?php if($categoryFilter || $priorityFilter): ?>
-                    <button class="btn btn-sm btn-outline-danger mt-2 w-100" id="clearFilters">Clear Filters</button>
-                    <?php endif; ?>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="table-responsive">
-              <?php
-          // Build the SQL query with filters
-          $sql = "SELECT * FROM reports WHERE 1=1";
-          $params = [];
-          $types = '';
-          
-          if(!empty($categoryFilter)) {
-            $sql .= " AND category = ?";
-            $params[] = $categoryFilter;
-            $types .= 's';
-          }
-          
-          if(!empty($priorityFilter)) {
-            $sql .= " AND priority = ?";
-            $params[] = $priorityFilter;
-            $types .= 's';
-          }
-          
-          $sql .= " ORDER BY created_at DESC";
-          
-          // Prepare and execute the query
-          $stmt = mysqli_prepare($con, $sql);
-          if(!empty($params)) {
-            mysqli_stmt_bind_param($stmt, $types, ...$params);
-          }
-          mysqli_stmt_execute($stmt);
-          $result = mysqli_stmt_get_result($stmt);
-          
-          if(mysqli_num_rows($result) > 0) {
-          ?>
-              <table class="table table-hover mb-0">
-                <thead class="table-light">
-                  <tr>
-                    <th>#ID</th>
-                    <th>User</th>
-                    <th>Category</th>
-                    <th class="description-cell">Description</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                    <th>Priority</th>
-                    <th>Created</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php
-              while($row = mysqli_fetch_assoc($result)) {
-                echo "<tr data-report-id='".htmlspecialchars($row['report_id'])."'>";
-                echo "<td><span class='fw-bold'>#".htmlspecialchars($row['report_id'])."</span></td>";
-                echo "<td><span class='badge bg-secondary'>".htmlspecialchars($row['user_id'])."</span></td>";
-                echo "<td><span class='badge bg-info text-dark'>".htmlspecialchars($row['category'])."</span></td>";
-                echo "<td class='description-cell'>".nl2br(htmlspecialchars(substr($row['description'], 0, 50)))."...</td>";
-                echo "<td><i class='fas fa-map-marker-alt text-danger me-1'></i>".htmlspecialchars($row['location'])."</td>";
-                echo "<td><span class='badge status-".strtolower(str_replace(' ', '-', $row['status']))."'>".htmlspecialchars($row['status'])."</span></td>";
-                echo "<td><span class='badge priority-".strtolower($row['priority'])."'>".htmlspecialchars($row['priority'])."</span></td>";
-                echo "<td><small class='text-muted'>".date('M d, Y', strtotime($row['created_at']))."</small></td>";
-                echo "<td>
-                        <button class='btn btn-sm btn-outline-primary view-btn' title='View' data-bs-toggle='modal' data-bs-target='#reportModal' data-id='".htmlspecialchars($row['report_id'])."'>
-                          <i class='fas fa-eye'></i>
-                        </button>
-                      </td>";
-                echo "</tr>";
-              }
-              ?>
-                </tbody>
-              </table>
-              <?php
-          } else {
-            echo '<div class="p-4 text-center">
-                    <i class="fas fa-exclamation-circle fa-3x text-muted mb-3"></i>
-                    <h5 class="text-muted">No reports found</h5>';
-            if($categoryFilter || $priorityFilter) {
-              echo '<p class="text-muted">No reports match the selected filters</p>';
-            } else {
-              echo '<p class="text-muted">There are currently no reports in the system</p>';
-            }
-            echo '<a href="../../Report/reportForm.php" class="btn btn-primary"><i class="fas fa-plus me-1"></i> Create New Report</a>
-                  </div>';
-          }
-          ?>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <!-- Report Details Modal -->
-    <div class="modal fade report-modal" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="reportModalLabel">Report Details</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body" id="reportDetails">
-            <!-- Content will be loaded via AJAX -->
-            <div class="text-center py-5">
-              <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
       </div>
     </div>
+  </div>
 
-    <!-- Image Preview Modal -->
-    <div class="modal fade image-modal" id="imageModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Image Preview</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body text-center">
-            <img id="modalImage" src="" alt="Report Image" class="img-fluid">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- JavaScript Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script>
-    $(document).ready(function() {
-
-      $('.view-btn').click(function() {
-        const reportId = $(this).data('id');
-        $('#reportModalLabel').text('Report Details #' + reportId);
-
-        $.ajax({
-          url: 'get_report_details.php',
-          type: 'GET',
-          data: {
-            id: reportId
-          },
-          beforeSend: function() {
-            $('#reportDetails').html(`
-              <div class="text-center py-5">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-              </div>
-            `);
-          },
-          success: function(response) {
-            $('#reportDetails').html(response);
-
-            $('.report-image').click(function() {
-              $('#modalImage').attr('src', $(this).attr('src'));
-              var imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
-              imageModal.show();
-            });
-          },
-          error: function() {
-            $('#reportDetails').html(`
-              <div class="alert alert-danger">
-                Failed to load report details. Please try again.
-              </div>
-            `);
-          }
-        });
-      });
-
-      // Make table rows clickable
-      $('tbody tr').click(function(e) {
-        // Don't trigger if clicking on action buttons
-        if (!$(e.target).closest('.view-btn, .btn').length) {
-          $(this).find('.view-btn').trigger('click');
-        }
-      });
-    });
-    $(document).ready(function() {
-      // Toggle filter dropdown - only this handler should toggle
-      $('.filter-btn').click(function(e) {
-        e.stopPropagation();
-        $('#filterOptions').toggleClass('show');
-      });
-
-      // Prevent dropdown from closing when clicking inside it
-      $('#filterOptions').click(function(e) {
-        e.stopPropagation();
-      });
-
-      // Close filter dropdown when clicking outside
-      $(document).click(function() {
-        $('#filterOptions').removeClass('show');
-      });
-
-      // Apply filters
-      $('#applyFilters').click(function() {
-        const category = $('#categoryFilter').val();
-        const priority = $('#priorityFilter').val();
-
-        // Build URL with filters
-        let url = 'allReports.php?';
-        if (category) url += `category=${encodeURIComponent(category)}&`;
-        if (priority) url += `priority=${encodeURIComponent(priority)}`;
-
-        // Remove trailing & if no priority filter
-        if (url.endsWith('&')) url = url.slice(0, -1);
-
-        window.location.href = url;
-      });
-
-      // Clear filters
-      $('#clearFilters').click(function() {
-        window.location.href = 'allReports.php';
-      });
-
-      // View report details
-      $('.view-btn').click(function() {
-        const reportId = $(this).data('id');
-        $('#reportModalLabel').text('Report Details #' + reportId);
-
-        $.ajax({
-          url: 'get_report_details.php',
-          type: 'GET',
-          data: {
-            id: reportId
-          },
-          beforeSend: function() {
-            $('#reportDetails').html(`
-          <div class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
-        `);
-          },
-          success: function(response) {
-            $('#reportDetails').html(response);
-
-            $('.report-image').click(function() {
-              $('#modalImage').attr('src', $(this).attr('src'));
-              var imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
-              imageModal.show();
-            });
-          },
-          error: function() {
-            $('#reportDetails').html(`
-          <div class="alert alert-danger">
-            Failed to load report details. Please try again.
-          </div>
-        `);
-          }
-        });
-      });
-
-      // Make table rows clickable
-      $('tbody tr').click(function(e) {
-        if (!$(e.target).closest('.view-btn, .btn').length) {
-          $(this).find('.view-btn').trigger('click');
-        }
-      });
-    });
-    </script>
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Font Awesome -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 </body>
 
 </html>

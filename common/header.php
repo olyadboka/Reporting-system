@@ -70,7 +70,7 @@ if (!isset($_SESSION['user_id'])) {
           </li>
 
           <li class="navbar-item">
-            <a href="#menu" class="navbar-link hover-underline">
+            <a href="#obj" class="navbar-link hover-underline">
               <div class="separator"></div>
               <span class="spans" id="spansss">Objectives</span>
             </a>
@@ -84,7 +84,7 @@ if (!isset($_SESSION['user_id'])) {
           </li>
 
           <li class="navbar-item">
-            <a href="#" class="navbar-link hover-underline">
+            <a href="#rep" class="navbar-link hover-underline">
               <div class="separator"></div>
               <span class="span" id="rep">Representative</span>
             </a>
@@ -116,18 +116,17 @@ if (!isset($_SESSION['user_id'])) {
           if ($row = mysqli_fetch_assoc($result)) {
             $imageData = base64_encode($row['photo']); 
           }
-   if ($imageData) {
+
+          if ($role === 'admin') {
+            echo '<a href="../Admin Dashboard/dashboardhome.php" class="btn btn-primary">Dashboard</a>';
+          } elseif ($role === 'staff') {
+            echo '<a href="../staffCSS/staff.php" class="btn btn-primary">Dashboard</a>';
+          }
+
+          if ($imageData) {
             echo '<a href="../editProfile/editProfile.php">';
             echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width: 80px;height: 70px;border-radius:50%; object-fit:cover;">';
             echo '</a>';
-          }
-          
-
-       
-          if ($role === 'admin') {
-            echo '<a href="../Admin Dashboard/dashboardhome.php" class="btn btn-primary" style="height:3rem;">Dashboard</a>';
-          } elseif ($role === 'staff') {
-            echo '<a href="../Staff/staff.php" class="btn btn-primary" style="height:3rem;">Dashboard</a>';
           }
 
           echo "<a href='../login/logout.php' class='btn btn-danger' style='height:3rem;'>Logout</a>";

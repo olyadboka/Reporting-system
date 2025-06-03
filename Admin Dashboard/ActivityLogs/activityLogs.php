@@ -1,23 +1,20 @@
-<?php
-session_start();
-require_once '../dbConnection.php'; 
-
-$kebele_id = $_SESSION['kebele_id'] ?? '';
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity Log</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../dashboardHome.css">
-  <link rel="stylesheet" href="./activityLogs.css">
+  <link rel="stylesheet" href="activityLogs.css">
 </head>
 
 <body>
+<<<<<<< HEAD
   <!-- Sidebar -->
   <aside class="sidebar">
     <h2 class="sidebar-title"><i class="fas fa-cogs"></i> Admin Panel</h2>
@@ -41,55 +38,14 @@ $kebele_id = $_SESSION['kebele_id'] ?? '';
       </ul>
     </nav>
   </aside>
+=======
+  <?php include "../commonAdmin.php"; ?>
+  <?php include "../../reportDB/dbconnection.php"; ?>
+  <div class="container">
+    <h1>Activity Logs</h1>
+>>>>>>> caa0e440608bf04a06fe2b50e8bb4420363ba971
 
-  <!-- Main Content -->
-  <div class="main-content">
-    <!-- Profile Bar -->
-    <header class="profile-bar">
-      <div class="profile-info">
-        <?php
-        $imageData = '';
-        if (!empty($kebele_id)) {
-            $stmt = mysqli_prepare($con, "SELECT photo FROM residents WHERE residence_id = ?");
-            if ($stmt) {
-                mysqli_stmt_bind_param($stmt, "s", $kebele_id);
-                mysqli_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
-                if ($row = mysqli_fetch_assoc($result)) {
-                    $imageData = base64_encode($row['photo']);
-                }
-                mysqli_stmt_close($stmt);
-            }
-        }
-
-        if ($imageData) {
-            echo '<a href="../editProfile/editProfile.php">';
-            echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width: 80px;height: 70px;border-radius:50%; object-fit:cover;">';
-            echo '</a>';
-        } else {
-            echo '<img src="./images/default-profile.png" alt="Profile" style="width: 80px;height: 70px;border-radius:50%; object-fit:cover;">';
-        }
-        ?>
-
-        <div>
-          <h4 class="admin-name"><?php echo htmlspecialchars($_SESSION["username"] ?? 'Admin'); ?></h4>
-          <p class="admin-role"><?php echo htmlspecialchars($_SESSION["role"] ?? 'Administrator'); ?></p>
-        </div>
-      </div>
-      <p style="color:gray; font-size: 1rem;">HERMATA MENTINA RMS</p>
-    </header>
-
-
-    <!-- Main Content -->
-    <div class="main-content">
-
-
-      <!-- Main Section -->
-      <section class="dashboard-content">
-        <div class="container">
-          <h1>Activity Logs</h1>
-
-          <?php
+    <?php
     // Database connection
     $servername = "localhost";
     $username = "root";
@@ -135,7 +91,7 @@ $kebele_id = $_SESSION['kebele_id'] ?? '';
 
     $conn->close();
     ?>
-        </div>
+  </div>
 </body>
 
 </html>
