@@ -56,44 +56,37 @@ if (!isset($_SESSION['user_id'])) {
           alt="flag- Home">
       </a>
 
-      <nav class="navbar" data-navbar>
-        <button class="close-btn" aria-label="close menu" data-nav-toggler>
-          <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
-        </button>
 
+
+      <nav class="navbar" data-navbar>
         <ul class="navbar-list">
           <li class="navbar-item">
             <a href="../Hermata home/index.php" class="navbar-link hover-underline active">
-              <div class="separator"></div>
               <span class="span">Home</span>
             </a>
           </li>
 
           <li class="navbar-item">
-            <a href="#obj" class="navbar-link hover-underline">
-              <div class="separator"></div>
-              <span class="spans" id="spansss">Objectives</span>
+            <a href="#menu" class="navbar-link hover-underline">
+              <span class="span">Objectives</span>
             </a>
           </li>
 
           <li class="navbar-item">
             <a href="#about" class="navbar-link hover-underline">
-              <div class="separator"></div>
               <span class="span">AboutUs</span>
             </a>
           </li>
 
           <li class="navbar-item">
-            <a href="#rep" class="navbar-link hover-underline">
-              <div class="separator"></div>
-              <span class="span" id="rep">Representative</span>
+            <a href="#" class="navbar-link hover-underline">
+              <span class="span">Representative</span>
             </a>
           </li>
 
           <li class="navbar-item">
             <a href="#" class="navbar-link hover-underline">
-              <div class="separator"></div>
-              <span class="span" id="contactsss">Contact</span>
+              <span class="span">Contact</span>
             </a>
           </li>
 
@@ -116,31 +109,30 @@ if (!isset($_SESSION['user_id'])) {
           if ($row = mysqli_fetch_assoc($result)) {
             $imageData = base64_encode($row['photo']); 
           }
+   if ($imageData) {
+            echo '<li class="navbar-item"><a href="../editProfile/editProfile.php">';
+            echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width: 48px;height: 48px;border-radius:50%; object-fit:cover; margin-right:8px;">';
+            echo '</a></li>';
+          }
+          
 
+       
           if ($role === 'admin') {
-            echo '<a href="../Admin Dashboard/dashboardhome.php" class="btn btn-primary">Dashboard</a>';
+            echo '<li class="navbar-item dash"><a href="../Admin Dashboard/dashboardhome.php" class="navbar-link btn btn-primary"><span class="span">Dashboard</span></a></li>';
           } elseif ($role === 'staff') {
-            echo '<a href="../staffCSS/staff.php" class="btn btn-primary">Dashboard</a>';
+            echo '<li class="navbar-item dash"><a href="../Staff/staff.php" class="navbar-link btn btn-primary"><span class="span">Dashboard</span></a></li>';
           }
 
-          if ($imageData) {
-            echo '<a href="../editProfile/editProfile.php">';
-            echo '<img src="data:image/jpeg;base64,' . $imageData . '" alt="Profile" style="width: 80px;height: 70px;border-radius:50%; object-fit:cover;">';
-            echo '</a>';
-          }
-
-          echo "<a href='../login/logout.php' class='btn btn-danger' style='height:3rem;'>Logout</a>";
+          echo "<li class='navbar-item logout'><a href='../login/logout.php' class='navbar-link btn btn-danger'><span class='span'>Logout</span></a></li>";
         }
         ?>
         </ul>
-        <button class="nav-open-btn" aria-label="open menu" data-nav-toggler>
-          <span class="line line-1"></span>
-          <span class="line line-2"></span>
-          <span class="line line-3"></span>
-        </button>
-
-        <div class="overlay" data-nav-toggler data-overlay></div>
       </nav>
+      <button class="nav-toggle-btn" aria-label="open menu" data-nav-toggler>
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </button>
 
     </div>
   </header>
